@@ -8,7 +8,9 @@ html {
 }
 
 body {
-  /* transparent: the character texture (fixed, z-index -1) shows through; <html> holds the toner */
+  /* the page ground (components/fx/Ground) is laid out against the whole body */
+  position: relative;
+  /* transparent: the ground (z-index -1) shows through; <html> holds the toner */
   background: transparent;
   color: var(--fg);
   font-family: var(--font-body);

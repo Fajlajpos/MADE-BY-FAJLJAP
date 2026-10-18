@@ -1,28 +1,14 @@
 /**
  * The page's ground: a field of characters printed onto the page itself. The pattern comes from
- * seeded noise at each cell's position on the page, so it is the same on every load, stays where
- * it is printed and scrolls with the content — new ground keeps arriving as you scroll. Each
- * section has its own variety of the pattern and the varieties blend across section borders.
- * The motion stays in place: glyphs shimmer and a slow swell of light passes through them.
+ * seeded noise at each cell's position on the page, so it is the same on every load and stays
+ * where it is printed. Each section has its own variety of the pattern and the varieties blend
+ * across section borders. Ground.tsx draws it on canvases that scroll with the page.
  */
 
 /** The varieties of the ground, one per section (`data-ground` on the section). */
 export type GroundStyle = 'smear' | 'lobes' | 'contour' | 'diagonal' | 'rain' | 'rings'
 
 export type GroundSpan = { top: number; bottom: number; style: GroundStyle }
-
-export type GroundView = {
-  /** Page row of the first source row (the canvas starts on a whole cell). */
-  row0: number
-  /** Character cell in CSS px. */
-  cellW: number
-  cellH: number
-  /** Viewport height and width in CSS px: the height is one unit of the pattern. */
-  unit: number
-  width: number
-  /** Section spans in page px, in order. */
-  spans: GroundSpan[]
-}
 
 const fract = (v: number) => v - Math.floor(v)
 
@@ -121,17 +107,33 @@ const STYLES: Record<GroundStyle, (x: number, y: number, at: Place) => number> =
 }
 
 /** The ceiling: the ground stops below the heaviest glyphs, those stay for the content. */
-const PEAK = 0.78
+export const PEAK = 0.78
 
-export function createGround() {
-  let image: ImageData | null = null
-  /** Printed rows, keyed by page row: computed once, then only the shimmer changes. */
+export type PrintLayout = {
+  /** Character cell in CSS px. */
+  cellW: number
+  cellH: number
+  /** Columns across the page. */
+  cols: number
+  /** Viewport height and width in CSS px: the height is one unit of the pattern. */
+  unit: number
+  width: number
+  /** Section spans in page px, in order. */
+  spans: GroundSpan[]
+}
+
+/**
+ * Prints the ground row by row: each page row's densities are computed once from its position on
+ * the page and kept, so scrolling back costs nothing and the pattern never changes.
+ */
+export function createPrinter() {
   const rows = new Map<number, Float32Array>()
+  let layout: PrintLayout | null = null
   let key = ''
 
-  const density = (x: number, yPx: number, view: GroundView) => {
-    const { spans, unit } = view
-    const aspect = view.width / unit
+  const density = (x: number, yPx: number, l: PrintLayout) => {
+    const { spans, unit } = l
+    const aspect = l.width / unit
     if (spans.length === 0) return STYLES.lobes(x, yPx / unit, { top: 0, bottom: 1, aspect })
     const zone = unit * 0.35
     let sum = 0
@@ -150,44 +152,40 @@ export function createGround() {
     return weight > 0 ? sum / weight : 0
   }
 
-  return (ctx: CanvasRenderingContext2D, w: number, h: number, t: number, view: GroundView) => {
-    if (!image || image.width !== w || image.height !== h) image = ctx.createImageData(w, h)
-    // a new width or a new layout reprints the page
-    const k = `${w}:${view.cellW}:${view.unit}:${view.width}:${view.spans.map((s) => `${s.top | 0}-${s.style}`).join(',')}`
-    if (k !== key) {
-      rows.clear()
+  return {
+    /** A new layout (width, cell, sections) reprints the page; returns whether it changed. */
+    setLayout(next: PrintLayout) {
+      const k = [
+        next.cols,
+        next.cellW.toFixed(3),
+        next.cellH,
+        next.unit,
+        next.width,
+        ...next.spans.map((s) => `${Math.round(s.top)}-${Math.round(s.bottom)}-${s.style}`),
+      ].join(':')
+      layout = next
+      if (k === key) return false
       key = k
-    }
-    const data = image.data
-
-    for (let py = 0; py < h; py++) {
-      const row = view.row0 + py
-      let printed = rows.get(row)
-      if (!printed) {
-        printed = new Float32Array(w)
-        const yPx = (row + 0.5) * view.cellH
-        for (let px = 0; px < w; px++) {
-          printed[px] = density(((px + 0.5) * view.cellW) / view.unit, yPx, view)
-        }
-        rows.set(row, printed)
-      }
-      // a slow swell of light travelling down the page, and each glyph shimmering on its own
-      const swell = 0.88 + 0.12 * Math.sin(row * 0.11 - t * 0.55)
-      for (let px = 0; px < w; px++) {
-        const base = printed[px]!
-        let level = 0
-        if (base > 0.004) {
-          const shimmer = 0.8 + 0.2 * Math.sin(t * 0.9 + hash(px, row) * 6.2832)
-          level = Math.min(1, (base * PEAK + 0.03) * shimmer * swell)
-        }
-        const o = (py * w + px) * 4
-        const g = level * 255
-        data[o] = g
-        data[o + 1] = g
-        data[o + 2] = g
-        data[o + 3] = 255
-      }
-    }
-    ctx.putImageData(image, 0, 0)
+      rows.clear()
+      return true
+    },
+    /** The row if it is printed already. */
+    peek(row: number) {
+      return rows.get(row)
+    },
+    /** Prints a row (or returns it, printed earlier). */
+    row(row: number): Float32Array {
+      const cached = rows.get(row)
+      if (cached || !layout) return cached ?? new Float32Array(0)
+      const l = layout
+      const out = new Float32Array(l.cols)
+      const yPx = (row + 0.5) * l.cellH
+      for (let c = 0; c < l.cols; c++) out[c] = density(((c + 0.5) * l.cellW) / l.unit, yPx, l)
+      rows.set(row, out)
+      return out
+    },
   }
 }
+
+/** A stable per-cell value 0–1, for each glyph's own shimmer phase. */
+export const cellPhase = (col: number, row: number) => hash(col, row)

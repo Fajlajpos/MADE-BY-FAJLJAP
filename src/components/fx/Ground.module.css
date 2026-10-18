@@ -1,24 +1,16 @@
-/* Fixed, a couple of cells taller than the screen: Ground.tsx slides it up by the part of the
-   scroll that is less than one cell, so the printed characters move with the page. */
+/* The ground lies on the page itself (body is its positioned parent): it scrolls with the
+   content natively, so it moves exactly as smoothly as the text. */
 .ground {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: calc(100vh + 2 * 11px);
+  position: absolute;
+  inset: 0;
   z-index: var(--z-ground);
   pointer-events: none;
-  background: var(--bg);
-  will-change: transform;
+  overflow: hidden;
 }
 
-/* quieter under the header strip, as on asciify.org */
-.ground > canvas {
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    rgb(0 0 0 / 0.26),
-    rgb(0 0 0 / 0.26) 56px,
-    #000 152px
-  );
-  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.26), rgb(0 0 0 / 0.26) 56px, #000 152px);
+.tile {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: calc(48 * 11px);
 }
