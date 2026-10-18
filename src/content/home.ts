@@ -54,6 +54,7 @@ fajlajp.napiš('hello@fajlajp.cz')`,
   work: {
     index: '02',
     label: 'Vybrané práce',
+    heading: 'Tři projekty, tři různé světy.',
     open: 'Otevřít projekt',
     allLabel: 'Všechny práce',
   },

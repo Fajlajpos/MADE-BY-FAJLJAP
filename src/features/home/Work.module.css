@@ -1,133 +1,133 @@
 .head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: var(--space-4);
-  margin-bottom: var(--space-6);
-}
-
-.count {
-  color: var(--fg-subtle);
-}
-
-.rows {
-  list-style: none;
-  padding: 0;
-  border-top: var(--hairline) solid var(--line);
-}
-
-.row {
   position: relative;
   z-index: var(--z-copy);
-  border-bottom: var(--hairline) solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5) var(--gutter);
+  margin-bottom: var(--space-7);
 }
 
-.link {
+.headCopy {
   display: grid;
+  gap: var(--space-4);
+}
+
+.heading {
+  font-size: var(--fs-h2);
+  line-height: var(--lh-tight);
+  max-width: 14ch;
+}
+
+.grid {
+  position: relative;
+  z-index: var(--z-copy);
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--space-7) var(--gutter);
+}
+
+.card {
+  display: grid;
+  align-content: start;
   gap: var(--space-3);
-  padding-block: var(--space-6) var(--space-5);
+  height: 100%;
+  padding: var(--space-3) var(--space-3) var(--space-5);
+  border: var(--hairline) solid var(--c-panel-line);
+  border-radius: var(--r-panel);
+  background: var(--c-panel);
   text-decoration: none;
-  color: var(--fg-subtle);
-  transition: color var(--dur-base) var(--ease-out);
+  color: inherit;
+  transition: border-color var(--dur-base) var(--ease-out);
 }
 
-.row[data-open='true'] .link,
-.link:hover {
-  color: var(--fg);
+.card:hover {
+  border-color: var(--line-strong);
 }
 
-.link:focus-visible {
-  outline-offset: 6px;
+.meta,
+.title,
+.summary,
+.more {
+  margin-inline: var(--space-3);
+}
+
+.card:focus-visible {
+  outline-offset: 4px;
+}
+
+.media {
+  border-radius: var(--r-inner);
+  overflow: hidden;
+  margin-bottom: var(--space-2);
+}
+
+.media figure {
+  transition: scale var(--dur-slow) var(--ease-out);
+}
+
+.card:hover .media figure {
+  scale: 1.02;
 }
 
 .meta {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-5);
+  gap: var(--space-4);
   color: var(--fg-subtle);
 }
 
+.meta span:last-child {
+  margin-left: auto;
+}
+
 .title {
-  font-size: clamp(2.25rem, 1rem + 5.4vw, 7rem);
-  font-weight: 600;
-  line-height: 0.95;
-  letter-spacing: -0.055em;
-  /* fixed ink: the characters take their colour from the heading once, when they mount */
-  color: var(--fg);
+  font-size: var(--fs-h3);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.15em;
+  transition: text-decoration-color var(--dur-base) var(--ease-out);
 }
 
-/* the preview opens under the name */
-.reveal {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 520ms var(--ease-out);
-}
-
-.row[data-open='true'] .reveal {
-  grid-template-rows: 1fr;
-}
-
-.revealInner {
-  min-height: 0;
-  overflow: hidden;
-  display: grid;
-  gap: var(--space-5) var(--gutter);
-}
-
-.row[data-open='true'] .revealInner {
-  padding-bottom: var(--space-7);
-}
-
-.detail {
-  display: grid;
-  gap: var(--space-4);
-  align-content: end;
-  justify-items: start;
+.card:hover .title {
+  text-decoration-color: currentColor;
 }
 
 .summary {
-  color: var(--fg-muted);
-  max-width: 28rem;
-}
-
-.open {
-  font-family: var(--font-mono);
   font-size: var(--fs-small);
+  color: var(--fg-muted);
+  max-width: 30rem;
+}
+
+.more {
+  margin-top: var(--space-2);
+  color: var(--fg-muted);
+  text-transform: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.card:hover .more {
   color: var(--fg);
-  text-decoration: none;
 }
 
-.open span {
-  display: inline-block;
-  transition: translate var(--dur-base) var(--ease-out);
-}
-
-.open:hover span {
-  translate: 0.3em 0;
-}
-
-.foot {
-  margin-top: var(--space-7);
-}
-
-/* touch screens: nothing to hover, every row stays open */
-@media (hover: none) {
-  .reveal {
-    grid-template-rows: 1fr;
-  }
-  .revealInner {
-    padding-bottom: var(--space-6);
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (min-width: 1024px) {
-  .revealInner {
-    grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+@media (min-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
+  .media figure {
     transition: none;
   }
 }

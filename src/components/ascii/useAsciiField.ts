@@ -2,7 +2,7 @@
 
 import { useEffect, type RefObject } from 'react'
 import { mountCpuField } from '@/lib/ascii/cpu'
-import { FLUID_WAKE, loadKit, monoFamily, onSpotChange, RAMP } from '@/lib/ascii/env'
+import { NO_TRAIL, loadKit, monoFamily, onSpotChange, RAMP } from '@/lib/ascii/env'
 import { trackPointer } from '@/lib/ascii/pointer'
 import type { ScenePainter } from '@/lib/ascii/scenes'
 
@@ -59,7 +59,7 @@ export function useAsciiField(
           contrast: 1.1,
           shade: 0.3,
           levels: 'none',
-          ...FLUID_WAKE,
+          ...NO_TRAIL,
           highlight: kit.resolveColor('--ascii-wake', host) ?? 'auto',
         }),
         ink: () => ink,
@@ -80,7 +80,7 @@ export function useAsciiField(
         return
       }
 
-      const cpu = mountCpuField({ host, paint: painter, cellSize: cell, ink })
+      const cpu = mountCpuField({ host, paint: painter, cellSize: cell, ink, trail: false })
       host.dataset.ascii = 'cpu'
       cleanup = () => cpu.destroy()
     })()

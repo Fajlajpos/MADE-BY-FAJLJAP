@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { mountCpuField } from '@/lib/ascii/cpu'
-import { FLUID_WAKE, loadKit, monoFamily, onSpotChange, RAMP } from '@/lib/ascii/env'
+import { NO_TRAIL, loadKit, monoFamily, onSpotChange, RAMP } from '@/lib/ascii/env'
 import { createTextScene } from '@/lib/ascii/scenes'
 import styles from './AsciiWordmark.module.css'
 
@@ -59,7 +59,7 @@ export function AsciiWordmark({
           contrast: 1,
           shade: 0.45,
           drift: 0.35,
-          ...FLUID_WAKE,
+          ...NO_TRAIL,
           highlight: kit.resolveColor('--ascii-wake', host) ?? 'auto',
         })
         const handle = kit.wordmark(host, {
@@ -86,6 +86,7 @@ export function AsciiWordmark({
         host,
         paint: createTextScene(text, family),
         cellSize: cell,
+        trail: false,
         fps: 20,
       })
       host.dataset.ascii = 'cpu'

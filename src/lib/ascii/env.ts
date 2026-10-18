@@ -22,13 +22,10 @@ export const RAMP_QUIET = ' .:+*#'
 export const SCRAMBLE_GLYPHS = '#%*+=-:./\\|<>[]{}01'
 
 /**
- * The signature: the cursor smears the characters like liquid and lifts them into the print
- * colour (the field's `highlight`). Shared by the wordmark and every media slot.
+ * Moving the cursor leaves no trail in the character fields (the wordmark, media slots and
+ * shapes): they keep their own motion and only the shapes lean toward the cursor.
  */
-export const FLUID_WAKE = {
-  hover: 'fluid',
-  fluid: { glow: 1, radius: 0.09, refraction: 0.05, curl: 10, dissipation: 1.2 },
-} as const
+export const NO_TRAIL = { hover: 'none' } as const
 
 export function prefersReducedMotion(): boolean {
   return (
