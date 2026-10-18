@@ -1,0 +1,81 @@
+.photo {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--r-inner);
+  background: var(--c-panel);
+  box-shadow: inset 0 0 0 1px var(--c-panel-line);
+}
+
+.frame > :not(.img) {
+  border-radius: inherit;
+}
+
+/* the photo: black and white, a touch of contrast; it lifts slightly on hover */
+.img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.1);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    scale var(--dur-slow) var(--ease-out);
+}
+
+/* the same photo in characters, waiting underneath */
+.dissolve {
+  position: absolute !important;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+.frame[data-has-photo='true']:hover .img {
+  opacity: 0;
+  scale: 1.03;
+}
+
+.frame[data-has-photo='true']:hover .dissolve {
+  opacity: 1;
+}
+
+.no {
+  position: absolute;
+  z-index: 2;
+  top: var(--space-3);
+  left: var(--space-3);
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--r-control);
+  background: rgb(10 10 10 / 0.75);
+  color: var(--fg);
+}
+
+.pending {
+  position: absolute;
+  z-index: 2;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  color: var(--fg-subtle);
+}
+
+.caption {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--fg-subtle);
+  text-transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img,
+  .dissolve {
+    transition: none;
+  }
+}

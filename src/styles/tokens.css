@@ -1,0 +1,123 @@
+/*
+ * FAJLAJP — design tokens, direction ZNAKY (v4, black and white)
+ * Toner, paper and greys only. Colour comes back later as one print colour; until then
+ * `--spot` is paper, so every component that will carry it already has a place for it.
+ * Contrast (WCAG) is noted against the surface the token is meant for.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* ── color: raw palette ─────────────────────────── */
+  --c-toner: #0a0a0a;
+  --c-toner-raised: #141414;
+  --c-panel: #171717;
+  --c-panel-line: #262626;
+  --c-grey-dark: #2a2a2a;
+  --c-grey-glyph: #4d4d4d; /* character grounds — never text */
+  --c-paper-muted: #4a4a4a; /* text on paper: 8.6:1 */
+  --c-grey-mid: #8c8c8c; /* on toner: 6.1:1 */
+  --c-grey-light: #b5b5b5; /* on toner: 9.6:1 */
+  --c-paper: #ededeb; /* on toner: 17.2:1 */
+
+  --spot: var(--c-paper);
+  --spot-ink: var(--c-toner); /* text on a spot fill: 17.2:1 */
+  --spot-text: var(--c-paper);
+
+  /* ── color: semantic ───────────────────────────── */
+  --bg: var(--c-toner);
+  --bg-raised: var(--c-toner-raised);
+  --panel: var(--c-panel);
+  --fg: var(--c-paper);
+  --fg-muted: var(--c-grey-light);
+  --fg-subtle: var(--c-grey-mid);
+  --line: var(--c-grey-dark);
+  --line-strong: var(--c-grey-mid);
+  --focus: var(--c-paper);
+
+  /* character fields (read by asciify-engine and the CPU fallback) */
+  --ascii-ink: var(--c-grey-glyph);
+  --ascii-ink-strong: var(--c-grey-light);
+  --ascii-wake: #ffffff;
+  --ascii-sweep: var(--c-grey-light);
+  --ascii-success: #b5b5b5;
+  --ascii-warning: #b5b5b5;
+  --ascii-error: #b5b5b5;
+
+  /* paper (use the .paper utility from globals.css) */
+  --paper-fg: var(--c-toner);
+  --paper-fg-muted: var(--c-paper-muted);
+  --paper-line: #c8c8c4;
+
+  /* ── type ──────────────────────────────────────── */
+  --font-mono: var(--font-martian), ui-monospace, 'Cascadia Mono', monospace;
+  --font-display: var(--font-archivo), 'Arial', sans-serif;
+  --font-body: var(--font-archivo), 'Arial', sans-serif;
+
+  --fs-meta: 0.75rem; /* 12px — mono metadata */
+  --fs-small: 0.875rem;
+  --fs-body: 1rem;
+  --fs-lead: clamp(1.0625rem, 0.95rem + 0.5vw, 1.3125rem);
+  --fs-h3: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  --fs-h2: clamp(2.5rem, 1.2rem + 5vw, 6.5rem);
+  --fs-h1: clamp(3rem, 1rem + 8.4vw, 10.5rem);
+  --fs-talk: clamp(1.6rem, 1rem + 2.4vw, 3.4rem);
+
+  --lh-tight: 0.92;
+  --lh-snug: 1.12;
+  --lh-body: 1.6;
+  --tracking-meta: 0.06em;
+  --tracking-display: -0.055em;
+
+  /* ── space (4px base) ──────────────────────────── */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 9rem;
+  --section-pad: clamp(var(--space-8), 8vw, 8rem);
+
+  /* ── grid ──────────────────────────────────────── */
+  --gutter: clamp(1rem, 0.6rem + 1.6vw, 2rem);
+  --margin: clamp(1rem, 0.4rem + 3vw, 3.5rem);
+  --max-width: 100rem;
+  --header-h: 3.5rem;
+
+  /* ── shape, layers ─────────────────────────────── */
+  --r-panel: 22px;
+  --r-inner: 14px;
+  --r-control: 999px;
+  --hairline: 1px;
+  --z-ground: -1;
+  --z-model: 0;
+  --z-copy: 1;
+  --z-nav: 100;
+  --z-overlay: 500;
+  --z-cursor: 1000;
+
+  /* ── motion ────────────────────────────────────── */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 140ms;
+  --dur-base: 240ms;
+  --dur-slow: 600ms;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 4rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0.01ms;
+    --dur-base: 0.01ms;
+    --dur-slow: 0.01ms;
+  }
+}

@@ -1,0 +1,27 @@
+.talk {
+  position: relative;
+  z-index: var(--z-copy);
+  max-width: 21em;
+  margin-top: var(--space-7);
+  font-family: var(--font-display);
+  font-size: var(--fs-talk);
+  font-weight: 500;
+  line-height: 1.22;
+  letter-spacing: -0.035em;
+  color: var(--fg);
+  text-wrap: pretty;
+}
+
+.facts {
+  position: relative;
+  z-index: var(--z-copy);
+  max-width: 30rem;
+  margin-top: var(--space-8);
+}
+
+@media (min-width: 1024px) {
+  .facts {
+    margin-left: auto;
+    margin-right: 0;
+  }
+}

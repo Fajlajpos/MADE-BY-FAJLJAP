@@ -1,0 +1,133 @@
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.count {
+  color: var(--fg-subtle);
+}
+
+.rows {
+  list-style: none;
+  padding: 0;
+  border-top: var(--hairline) solid var(--line);
+}
+
+.row {
+  position: relative;
+  z-index: var(--z-copy);
+  border-bottom: var(--hairline) solid var(--line);
+}
+
+.link {
+  display: grid;
+  gap: var(--space-3);
+  padding-block: var(--space-6) var(--space-5);
+  text-decoration: none;
+  color: var(--fg-subtle);
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.row[data-open='true'] .link,
+.link:hover {
+  color: var(--fg);
+}
+
+.link:focus-visible {
+  outline-offset: 6px;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  color: var(--fg-subtle);
+}
+
+.title {
+  font-size: clamp(2.25rem, 1rem + 5.4vw, 7rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+  /* fixed ink: the characters take their colour from the heading once, when they mount */
+  color: var(--fg);
+}
+
+/* the preview opens under the name */
+.reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 520ms var(--ease-out);
+}
+
+.row[data-open='true'] .reveal {
+  grid-template-rows: 1fr;
+}
+
+.revealInner {
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  gap: var(--space-5) var(--gutter);
+}
+
+.row[data-open='true'] .revealInner {
+  padding-bottom: var(--space-7);
+}
+
+.detail {
+  display: grid;
+  gap: var(--space-4);
+  align-content: end;
+  justify-items: start;
+}
+
+.summary {
+  color: var(--fg-muted);
+  max-width: 28rem;
+}
+
+.open {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.open span {
+  display: inline-block;
+  transition: translate var(--dur-base) var(--ease-out);
+}
+
+.open:hover span {
+  translate: 0.3em 0;
+}
+
+.foot {
+  margin-top: var(--space-7);
+}
+
+/* touch screens: nothing to hover, every row stays open */
+@media (hover: none) {
+  .reveal {
+    grid-template-rows: 1fr;
+  }
+  .revealInner {
+    padding-bottom: var(--space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .revealInner {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none;
+  }
+}

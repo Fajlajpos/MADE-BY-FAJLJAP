@@ -1,0 +1,130 @@
+@import './reset.css';
+@import './tokens.css';
+
+html {
+  background: var(--bg);
+  color: var(--fg);
+  scroll-padding-top: calc(var(--header-h) + var(--space-4));
+}
+
+body {
+  /* transparent: the character texture (fixed, z-index -1) shows through; <html> holds the toner */
+  background: transparent;
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+  hyphens: manual;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a,
+button,
+[role='button'],
+label[for],
+summary {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--spot);
+  color: var(--spot-ink);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* A sheet of paper laid on the toner: flips text, lines, focus and character inks. */
+.paper {
+  background: var(--c-paper);
+  color: var(--paper-fg);
+  --bg: var(--c-paper);
+  --fg: var(--paper-fg);
+  --fg-muted: var(--paper-fg-muted);
+  --fg-subtle: var(--paper-fg-muted);
+  --line: var(--paper-line);
+  --line-strong: var(--paper-fg);
+  --focus: var(--c-toner);
+  --ascii-ink: #a9a8a1;
+  --ascii-ink-strong: var(--c-toner);
+}
+
+/* Mono metadata: [01] SYSTEM, ROK 2026 … */
+.meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  font-weight: 500;
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+  line-height: 1.5;
+}
+
+/* Blinking block cursor. */
+.caret {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.05em;
+  margin-left: 0.1em;
+  vertical-align: -0.15em;
+  background: var(--spot);
+  animation: caret-blink 1.06s steps(1) infinite;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret {
+    animation: none;
+  }
+}
+
+.skip-link {
+  position: fixed;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: var(--z-cursor);
+  padding: var(--space-3) var(--space-4);
+  background: var(--c-paper);
+  color: var(--c-toner);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  transform: translateY(-200%);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline-color: var(--spot);
+}

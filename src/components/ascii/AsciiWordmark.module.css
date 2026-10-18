@@ -1,0 +1,16 @@
+/* The word in HTML: what shows without JS, and what stays selectable under the characters. */
+.word {
+  position: relative;
+  display: block;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-stretch: var(--wdth-wide);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.word[data-ascii='cpu'] {
+  color: transparent;
+}

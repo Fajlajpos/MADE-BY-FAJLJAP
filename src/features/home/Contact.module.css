@@ -1,0 +1,82 @@
+.contact {
+  display: grid;
+  gap: var(--space-8);
+  justify-items: center;
+  min-height: 100svh;
+  align-content: center;
+  text-align: center;
+}
+
+.copy {
+  position: relative;
+  z-index: var(--z-copy);
+  display: grid;
+  gap: var(--space-5);
+  justify-items: center;
+}
+
+.heading {
+  font-size: clamp(4rem, 1rem + 13vw, 15rem);
+  font-weight: 600;
+  line-height: 0.88;
+  letter-spacing: -0.065em;
+}
+
+.mail {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: clamp(1.125rem, 0.8rem + 1.6vw, 2rem);
+  letter-spacing: -0.02em;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.copyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 1ch;
+  min-height: 48px;
+  padding-inline: var(--space-6);
+  border-radius: var(--r-control);
+  background: var(--c-paper);
+  color: var(--c-toner);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.copyButton:hover {
+  background: #ffffff;
+}
+
+.copyButton span {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+}
+
+.now {
+  position: relative;
+  z-index: var(--z-copy);
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+  color: var(--fg-subtle);
+  text-transform: none;
+}
+
+.time {
+  margin-right: 1ch;
+  color: var(--fg-muted);
+  font-variant-numeric: tabular-nums;
+}

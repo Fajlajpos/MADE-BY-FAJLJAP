@@ -1,0 +1,116 @@
+.footer {
+  margin-top: var(--section-gap);
+  border-top: var(--hairline) solid var(--line-strong);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
+  gap: var(--space-7) var(--gutter);
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding: var(--space-8) var(--margin) var(--space-6);
+}
+
+.brand {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+
+.name {
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-stretch: var(--wdth-wide);
+  font-size: 1.5rem;
+  letter-spacing: -0.04em;
+}
+
+.name span {
+  color: var(--spot-text);
+}
+
+.tagline {
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+  max-width: 18rem;
+}
+
+.mail {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  text-decoration-color: var(--spot);
+  text-underline-offset: 0.25em;
+}
+
+.colTitle {
+  color: var(--fg-subtle);
+  margin-bottom: var(--space-3);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8ch;
+  min-height: 44px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  text-decoration: none;
+  color: var(--fg-muted);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.link:hover,
+.link[aria-current='page'] {
+  color: var(--fg);
+}
+
+.index {
+  color: var(--fg-subtle);
+  font-size: var(--fs-meta);
+}
+
+.facts {
+  display: grid;
+  gap: var(--space-3);
+  font-size: var(--fs-small);
+}
+
+.facts dt {
+  color: var(--fg-subtle);
+}
+
+.facts dd {
+  margin: 0;
+  color: var(--fg-muted);
+}
+
+.base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding: var(--space-5) var(--margin);
+  border-top: var(--hairline) dashed var(--line);
+  color: var(--fg-subtle);
+  text-transform: none;
+}
+
+/* the name in characters, cut by the bottom edge of the page */
+.mark {
+  font-size: clamp(4rem, 19vw, 22rem);
+  height: 0.78em;
+  overflow: hidden;
+  color: var(--fg-subtle);
+  margin-bottom: -0.06em;
+}

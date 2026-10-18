@@ -1,0 +1,95 @@
+.hero {
+  position: relative;
+  min-height: calc(100svh - var(--header-h));
+  /* the model may hang past the right edge, never into a sideways scroll */
+  overflow-x: clip;
+}
+
+.inner {
+  position: relative;
+  z-index: var(--z-copy);
+  display: grid;
+  gap: var(--space-7);
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding: var(--space-6) var(--margin) var(--space-9);
+}
+
+.tag {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  color: var(--fg-subtle);
+}
+
+.clock {
+  font-variant-numeric: tabular-nums;
+}
+
+.claim {
+  justify-self: start;
+}
+
+.title {
+  font-size: var(--fs-h1);
+  font-weight: 600;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+}
+
+.line {
+  display: block;
+}
+
+/* the middle line steps in, as if set by hand */
+.line[data-indent] {
+  padding-left: 0.9em;
+}
+
+.row {
+  display: grid;
+  gap: var(--space-7) var(--gutter);
+  align-items: end;
+}
+
+.copy {
+  display: grid;
+  gap: var(--space-6);
+  justify-items: start;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.code {
+  width: 100%;
+  max-width: 34rem;
+}
+
+/* the </>: in the flow on a phone, hung on the right edge across two sections on a wide screen */
+.model {
+  width: min(86vw, 26rem);
+  aspect-ratio: 1;
+  margin: calc(-1 * var(--space-7)) auto 0;
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .row {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  }
+  .code {
+    justify-self: end;
+  }
+  .model {
+    position: absolute;
+    z-index: var(--z-model);
+    right: max(-4vw, calc((100vw - var(--max-width)) / -2));
+    top: 0;
+    width: min(44vw, 42rem);
+    margin: 0;
+  }
+}

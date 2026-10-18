@@ -1,0 +1,78 @@
+.gallery {
+  padding-bottom: var(--space-8);
+  /* the strip and the cursor run to the screen edge, never into a sideways page scroll */
+  overflow-x: clip;
+}
+
+.head {
+  display: grid;
+  gap: var(--space-5);
+  justify-items: start;
+  margin-bottom: var(--space-7);
+}
+
+.hint {
+  color: var(--fg-subtle);
+  text-transform: none;
+}
+
+/* the strip runs to the right edge of the screen */
+.strip {
+  position: relative;
+  z-index: var(--z-copy);
+  list-style: none;
+  display: flex;
+  gap: var(--gutter);
+  margin-right: calc(-1 * var(--margin));
+  padding: var(--space-2) var(--margin) var(--space-5) 0;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--c-grey-dark) transparent;
+  cursor: grab;
+}
+
+.strip[data-dragging] {
+  cursor: grabbing;
+  scroll-snap-type: none;
+  user-select: none;
+}
+
+.strip:focus-visible {
+  outline-offset: 6px;
+}
+
+.cell {
+  flex: none;
+  height: clamp(16rem, 34vw, 28rem);
+  aspect-ratio: auto;
+  scroll-snap-align: start;
+}
+
+.cell figure {
+  height: 100%;
+  grid-template-rows: 1fr auto;
+}
+
+.cell figure > div {
+  height: 100%;
+  aspect-ratio: auto !important;
+}
+
+/* the cursor hangs off the strip into the contact section */
+.model {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .model {
+    display: block;
+    position: absolute;
+    z-index: var(--z-model);
+    right: 4%;
+    bottom: -18rem;
+    width: min(26vw, 24rem);
+    aspect-ratio: 1;
+    pointer-events: none;
+  }
+}

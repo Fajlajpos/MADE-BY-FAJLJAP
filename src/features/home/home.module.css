@@ -1,0 +1,151 @@
+/* Shared frame for the homepage sections. */
+
+.section {
+  position: relative;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding: var(--section-pad) var(--margin);
+  /* veils and models may reach past the sides; only vertical overhang is wanted */
+  overflow-x: clip;
+}
+
+/* 02 — Vybrané práce: a mono index and a label, no ornaments */
+.label {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--fg-subtle);
+}
+
+.label b {
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.h2 {
+  font-size: var(--fs-h2);
+  line-height: var(--lh-tight);
+}
+
+.body {
+  font-family: var(--font-body);
+  color: var(--fg-muted);
+  max-width: 36rem;
+}
+
+.lead {
+  font-family: var(--font-body);
+  font-size: var(--fs-lead);
+  color: var(--fg);
+  max-width: 36rem;
+}
+
+/* text standing on the ground gets a soft veil: the characters fade toward the words */
+.veil {
+  position: relative;
+  isolation: isolate;
+}
+
+.veil::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: -2.25rem -4rem;
+  pointer-events: none;
+  background: color-mix(in oklab, var(--bg) 62%, transparent);
+  -webkit-backdrop-filter: blur(9px) saturate(1.1);
+  backdrop-filter: blur(9px) saturate(1.1);
+  -webkit-mask-image: radial-gradient(closest-side, #000 52%, rgb(0 0 0 / 0.6) 74%, transparent);
+  mask-image: radial-gradient(closest-side, #000 52%, rgb(0 0 0 / 0.6) 74%, transparent);
+}
+
+@media (max-width: 639px) {
+  .veil::before {
+    inset: -1.5rem -1rem;
+  }
+}
+
+/* pills: a solid paper one and a quiet outlined one */
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9ch;
+  min-height: 48px;
+  padding-inline: var(--space-6);
+  border-radius: var(--r-control);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--c-toner);
+  background: var(--c-paper);
+  border: var(--hairline) solid var(--c-paper);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.button:hover {
+  background: #ffffff;
+}
+
+.ghost {
+  background: rgb(23 23 23 / 0.7);
+  color: var(--fg);
+  border-color: var(--c-panel-line);
+}
+
+.ghost:hover {
+  background: var(--c-grey-dark);
+}
+
+.arrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  transition: translate var(--dur-base) var(--ease-out);
+}
+
+.button:hover .arrow {
+  translate: 0.25em 0;
+}
+
+/* Fact lines with a dotted leader: Pracuju ............ sám */
+.facts {
+  display: grid;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+}
+
+.fact {
+  display: flex;
+  align-items: baseline;
+  gap: 1ch;
+  min-width: 0;
+}
+
+.fact dt {
+  color: var(--fg-subtle);
+  white-space: nowrap;
+}
+
+.fact dd {
+  margin: 0;
+  color: var(--fg);
+  text-align: right;
+}
+
+.leader {
+  flex: 1;
+  min-width: 2ch;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--line-strong);
+}
+
+.leader::before {
+  content: '................................................................................................................';
+}

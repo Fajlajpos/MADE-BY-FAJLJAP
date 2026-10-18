@@ -1,0 +1,23 @@
+.status {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6ch;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+
+.bracket {
+  color: var(--fg-subtle);
+}
+
+.spin {
+  display: inline-block;
+  width: 1ch;
+  text-align: center;
+  color: var(--spot);
+  font-weight: 700;
+}
+
+.bracket[data-open='false'] .spin {
+  color: var(--fg-subtle);
+}

@@ -1,0 +1,15 @@
+.ground {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-ground);
+  pointer-events: none;
+  background: var(--bg);
+  /* quieter under the header strip, as on asciify.org */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 0.26),
+    rgb(0 0 0 / 0.26) 56px,
+    #000 152px
+  );
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.26), rgb(0 0 0 / 0.26) 56px, #000 152px);
+}
