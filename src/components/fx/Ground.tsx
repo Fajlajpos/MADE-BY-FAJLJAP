@@ -55,6 +55,7 @@ export function Ground() {
       cellW: host.clientWidth / Math.max(1, w),
       cellH: CELL,
       unit: window.innerHeight,
+      width: window.innerWidth,
       spans,
     })
 

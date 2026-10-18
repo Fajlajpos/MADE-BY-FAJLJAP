@@ -17,8 +17,9 @@ export type GroundView = {
   /** Character cell in CSS px. */
   cellW: number
   cellH: number
-  /** Viewport height in CSS px: one unit of the pattern. */
+  /** Viewport height and width in CSS px: the height is one unit of the pattern. */
   unit: number
+  width: number
   /** Section spans in page px, in order. */
   spans: GroundSpan[]
 }
@@ -75,17 +76,25 @@ function lobes(x: number, y: number, s = 1.15) {
   return fbm(qx + wx * 1.3, qy + wy * 1.3)
 }
 
-/**
- * Each variety returns a density 0–1 for a point on the page (in viewport heights), `cy` being
- * the middle of its section, for the rings.
- */
-const STYLES: Record<GroundStyle, (x: number, y: number, cy: number) => number> = {
-  // hero: the identity smeared sideways — long horizontal bands
-  smear: (x, y) => {
-    const bands = smooth(0.3, 0.66, lobes(x * 0.35, y * 2.2, 1.3))
-    // thin streaks of light run through the bands, like a scan dragged sideways
-    const streak = smooth(0.62, 0.8, lobes(x * 0.12, y * 6.5, 1.1)) * 0.6
-    return Math.max(bands, streak)
+/** The section a point lies in, in viewport heights, and the viewport's width in the same unit. */
+type Place = { top: number; bottom: number; aspect: number }
+
+/** Each variety returns a density 0–1 for a point on the page (in viewport heights). */
+const STYLES: Record<GroundStyle, (x: number, y: number, at: Place) => number> = {
+  // hero: the asciify hero — full drifting lobes with a fine grain in them, densest along the
+  // edges and thinning softly round the name, so it frames the opening instead of covering it
+  smear: (x, y, at) => {
+    const n = lobes(x, y, 1.05)
+    const grain = fbm(x * 11, y * 11)
+    const field = smooth(0.24, 0.64, n * 0.82 + grain * 0.28)
+    const wide = at.aspect > 1
+    const cx = at.aspect * (wide ? 0.34 : 0.5)
+    const rx = at.aspect * (wide ? 0.42 : 0.62)
+    const cy = at.top + (at.bottom - at.top) * 0.4
+    const ry = (at.bottom - at.top) * 0.42
+    const d = ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2
+    const frame = 0.12 + 0.88 * smooth(0.45, 1.45, d)
+    return Math.min(1, field * frame * 1.4)
   },
   // the kit's drift: broad soft lobes
   lobes: (x, y) => smooth(0.38, 0.76, lobes(x, y)),
@@ -104,8 +113,8 @@ const STYLES: Record<GroundStyle, (x: number, y: number, cy: number) => number> 
   // streaks falling down the page
   rain: (x, y) => smooth(0.44, 0.8, lobes(x * 2.6, y * 0.32, 1.1)),
   // rings opening from the middle of the section, broken by the lobes
-  rings: (x, y, cy) => {
-    const r = Math.hypot(x - 0.9, y - cy)
+  rings: (x, y, at) => {
+    const r = Math.hypot(x - 0.9, y - (at.top + at.bottom) / 2)
     const ring = smooth(0.55, 0.95, 0.5 + 0.5 * Math.sin(r * 22))
     return ring * smooth(0.3, 0.6, lobes(x, y)) * smooth(0.05, 0.35, r)
   },
@@ -122,7 +131,8 @@ export function createGround() {
 
   const density = (x: number, yPx: number, view: GroundView) => {
     const { spans, unit } = view
-    if (spans.length === 0) return STYLES.lobes(x, yPx / unit, 0)
+    const aspect = view.width / unit
+    if (spans.length === 0) return STYLES.lobes(x, yPx / unit, { top: 0, bottom: 1, aspect })
     const zone = unit * 0.35
     let sum = 0
     let weight = 0
@@ -133,7 +143,8 @@ export function createGround() {
         (first ? 1 : smooth(s.top - zone, s.top + zone, yPx)) *
         (last ? 1 : 1 - smooth(s.bottom - zone, s.bottom + zone, yPx))
       if (win <= 0.001) continue
-      sum += win * STYLES[s.style](x, yPx / unit, (s.top + s.bottom) / 2 / unit)
+      const at = { top: s.top / unit, bottom: s.bottom / unit, aspect }
+      sum += win * STYLES[s.style](x, yPx / unit, at)
       weight += win
     }
     return weight > 0 ? sum / weight : 0
@@ -142,7 +153,7 @@ export function createGround() {
   return (ctx: CanvasRenderingContext2D, w: number, h: number, t: number, view: GroundView) => {
     if (!image || image.width !== w || image.height !== h) image = ctx.createImageData(w, h)
     // a new width or a new layout reprints the page
-    const k = `${w}:${view.cellW}:${view.unit}:${view.spans.map((s) => `${s.top | 0}-${s.style}`).join(',')}`
+    const k = `${w}:${view.cellW}:${view.unit}:${view.width}:${view.spans.map((s) => `${s.top | 0}-${s.style}`).join(',')}`
     if (k !== key) {
       rows.clear()
       key = k
