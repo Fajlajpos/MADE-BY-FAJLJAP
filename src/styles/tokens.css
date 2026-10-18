@@ -14,7 +14,7 @@
   --c-panel: #171717;
   --c-panel-line: #262626;
   --c-grey-dark: #2a2a2a;
-  --c-grey-glyph: #4d4d4d; /* character grounds — never text */
+  --c-grey-glyph: #5a5a5a; /* character grounds — never text */
   --c-paper-muted: #4a4a4a; /* text on paper: 8.6:1 */
   --c-grey-mid: #8c8c8c; /* on toner: 6.1:1 */
   --c-grey-light: #b5b5b5; /* on toner: 9.6:1 */
@@ -38,6 +38,7 @@
   /* character fields (read by asciify-engine and the CPU fallback) */
   --ascii-ink: var(--c-grey-glyph);
   --ascii-ink-strong: var(--c-grey-light);
+  --ascii-ground: #64625d; /* the kit's Drift graphite on dark */
   --ascii-wake: #ffffff;
   --ascii-sweep: var(--c-grey-light);
   --ascii-success: #b5b5b5;

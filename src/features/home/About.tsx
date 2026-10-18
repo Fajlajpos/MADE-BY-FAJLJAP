@@ -12,13 +12,18 @@ export function About() {
   const { about } = home
   let seed = 0
   return (
-    <section id="o-mne" data-ground="halo" className={shared.section} aria-labelledby="o-mne-title">
+    <section
+      data-ground="lobes"
+      id="o-mne"
+      className={shared.section}
+      aria-labelledby="o-mne-title"
+    >
       <h2 id="o-mne-title" className={shared.label}>
         <span>{about.index}</span>
         <b>{about.label}</b>
       </h2>
 
-      <div className={`${shared.veil} ${styles.talk}`} data-clear="">
+      <div className={`${shared.veil} ${styles.talk}`}>
         {about.talk.map((part, i) =>
           typeof part === 'string' ? (
             <span key={i}>{typo(part)}</span>

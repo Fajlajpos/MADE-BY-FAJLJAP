@@ -13,8 +13,8 @@ export function Contact() {
   const { contact } = home
   return (
     <section
+      data-ground="rings"
       id="kontakt"
-      data-ground="ripple"
       className={`${shared.section} ${styles.contact}`}
       aria-labelledby="kontakt-title"
     >
@@ -23,7 +23,7 @@ export function Contact() {
         <b>{contact.label}</b>
       </p>
 
-      <div className={`${shared.veil} ${styles.copy}`} data-clear="">
+      <div className={`${shared.veil} ${styles.copy}`}>
         <Glyphs as="h2" id="kontakt-title" className={styles.heading} cellSize={8} duration={1100}>
           {contact.heading}
         </Glyphs>

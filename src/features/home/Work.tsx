@@ -13,12 +13,12 @@ export function Work() {
 
   return (
     <section
-      id="prace"
       data-ground="contour"
+      id="prace"
       className={shared.section}
       aria-labelledby="prace-title"
     >
-      <div className={styles.head} data-clear="">
+      <div className={styles.head}>
         <h2 id="prace-title" className={shared.label}>
           <span>{work.index}</span>
           <b>{work.label}</b>

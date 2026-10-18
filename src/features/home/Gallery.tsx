@@ -14,12 +14,12 @@ export function Gallery() {
   const { gallery } = home
   return (
     <section
+      data-ground="rain"
       id="mimo"
-      data-ground="cascade"
       className={`${shared.section} ${styles.gallery}`}
       aria-labelledby="mimo-title"
     >
-      <div className={`${shared.veil} ${styles.head}`} data-clear="">
+      <div className={`${shared.veil} ${styles.head}`}>
         <h2 id="mimo-title" className={shared.label}>
           <span>{gallery.index}</span>
           <b>{gallery.label}</b>

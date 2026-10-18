@@ -3,18 +3,19 @@ import { CodePanel } from '@/components/ascii/CodePanel'
 import { Glyphs } from '@/components/ascii/Glyphs'
 import { Clock } from '@/components/ascii/Live'
 import { home } from '@/content/home'
+import { site } from '@/content/site'
 import { typo } from '@/lib/typo/czech'
 import shared from './home.module.css'
 import styles from './Hero.module.css'
 
 /**
- * The opening: the claim set huge in characters, the code that describes me writing itself in a
- * panel, and a </> turning in characters on the right — it hangs over into the next section.
+ * The opening: the name set huge in characters, the claim under it, the code that describes me
+ * writing itself in a panel, and a </> turning in characters on the right.
  */
 export function Hero() {
   const { hero } = home
   return (
-    <section data-ground="drift" className={styles.hero} aria-labelledby="hero-title">
+    <section data-ground="smear" className={styles.hero} aria-labelledby="hero-title">
       <div className={styles.inner}>
         <p className={`meta ${styles.tag}`}>
           <span>{hero.tag}</span>
@@ -23,14 +24,17 @@ export function Hero() {
           </span>
         </p>
 
-        <div className={`${shared.veil} ${styles.claim}`} data-clear="">
-          <Glyphs as="h1" id="hero-title" className={styles.title} cellSize={7} duration={1100}>
+        <div className={`${shared.veil} ${styles.claim}`}>
+          <Glyphs as="h1" id="hero-title" className={styles.name} cellSize={8} duration={1200}>
+            {site.brand}
+          </Glyphs>
+          <p className={styles.title}>
             {hero.title.map((line, i) => (
               <span key={line} className={styles.line} data-indent={i === 1 ? '' : undefined}>
                 {line}
               </span>
             ))}
-          </Glyphs>
+          </p>
         </div>
 
         <div className={styles.row}>

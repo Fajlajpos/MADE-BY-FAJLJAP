@@ -46,12 +46,12 @@ export function Craft() {
   const { craft } = home
   return (
     <section
+      data-ground="diagonal"
       id="co-delam"
-      data-ground="constellation"
       className={shared.section}
       aria-labelledby="co-delam-title"
     >
-      <div className={`${shared.veil} ${styles.head}`} data-clear="">
+      <div className={`${shared.veil} ${styles.head}`}>
         <h2 id="co-delam-title" className={shared.label}>
           <span>{craft.index}</span>
           <b>{craft.label}</b>

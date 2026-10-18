@@ -1,10 +1,19 @@
+/* Fixed, a couple of cells taller than the screen: Ground.tsx slides it up by the part of the
+   scroll that is less than one cell, so the printed characters move with the page. */
 .ground {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(100vh + 2 * 11px);
   z-index: var(--z-ground);
   pointer-events: none;
   background: var(--bg);
-  /* quieter under the header strip, as on asciify.org */
+  will-change: transform;
+}
+
+/* quieter under the header strip, as on asciify.org */
+.ground > canvas {
   -webkit-mask-image: linear-gradient(
     to bottom,
     rgb(0 0 0 / 0.26),

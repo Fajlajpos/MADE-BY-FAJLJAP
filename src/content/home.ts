@@ -12,15 +12,15 @@ export type CraftItem = { title: string; body: string; tag?: string }
 export const home = {
   hero: {
     tag: 'Grafik a webdesignér · Česko',
-    title: ['Kód', 'a grafika', 's rukopisem.'],
+    title: ['Webdesignér.', 'Weby, e-shopy, grafika', 'od A do Z.'],
     intro:
-      'Jsem FAJLAJP. Navrhuju a stavím weby, vizuální identity a plakáty. Sám, od první skici po spuštění, takže mluvíš přímo se mnou.',
+      'Navrhuju a stavím celé weby a e-shopy, k nim logo, vizuál i tiskoviny. Všechno sám, od první skici po spuštění, takže mluvíš přímo se mnou.',
     ctaPrimary: 'Napiš mi',
     ctaSecondary: 'Práce',
     codeFile: 'fajlajp.ts',
     code: `const fajlajp = {
   role: 'grafik + webdesignér',
-  dělám: ['weby', 'identity', 'plakáty'],
+  dělám: ['weby', 'e-shopy', 'grafika'],
   nástroje: ['tužka', 'Figma', 'kód'],
   nejlíp: '22:00 – 03:00',
   šablony: false,

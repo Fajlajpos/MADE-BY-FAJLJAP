@@ -42,29 +42,10 @@
   max-width: 36rem;
 }
 
-/* text standing on the ground gets a soft veil: the characters fade toward the words */
+/* copy standing on the ground: lifted above it, nothing cut out behind it */
 .veil {
   position: relative;
-  isolation: isolate;
-}
-
-.veil::before {
-  content: '';
-  position: absolute;
-  z-index: -1;
-  inset: -2.25rem -4rem;
-  pointer-events: none;
-  background: color-mix(in oklab, var(--bg) 62%, transparent);
-  -webkit-backdrop-filter: blur(9px) saturate(1.1);
-  backdrop-filter: blur(9px) saturate(1.1);
-  -webkit-mask-image: radial-gradient(closest-side, #000 52%, rgb(0 0 0 / 0.6) 74%, transparent);
-  mask-image: radial-gradient(closest-side, #000 52%, rgb(0 0 0 / 0.6) 74%, transparent);
-}
-
-@media (max-width: 639px) {
-  .veil::before {
-    inset: -1.5rem -1rem;
-  }
+  z-index: var(--z-copy);
 }
 
 /* pills: a solid paper one and a quiet outlined one */
