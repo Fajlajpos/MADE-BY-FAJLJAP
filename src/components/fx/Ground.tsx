@@ -13,7 +13,6 @@ import {
 } from '@/lib/ascii/drift'
 import { monoFamily, prefersReducedMotion } from '@/lib/ascii/env'
 import type { GroundBatch, GroundFocus, GroundJob } from '@/lib/ascii/ground.worker'
-import { isScrolling } from '@/lib/ascii/scrolling'
 import styles from './Ground.module.css'
 
 /** Character cell height in CSS px. */
@@ -36,6 +35,12 @@ const KEEP_BELOW = 2
 const PREDRAW_ROWS = 64
 /** Canvases kept for reuse instead of being made again while scrolling. */
 const POOL = 3
+/**
+ * Share of a screen above and below it kept shimmering too. The page scrolls ahead of the main
+ * thread, so rows just past the edge come into view before a frame knows; drawn fresh they slide
+ * in matching their neighbours instead of jumping from an old frame (which read as a blink).
+ */
+const REACH = 0.5
 
 type Tile = {
   index: number
@@ -53,8 +58,7 @@ type Tile = {
  * tiles that scroll with the content exactly like the text does. The pattern is computed from
  * each cell's position on the page (the same on every load) in a worker, nearest the screen
  * first, and sections choose their variety with `data-ground`. Tiles near the screen are drawn
- * before they arrive; while the page scrolls the shimmer holds still so the scroll gets every
- * frame. A click sends a ring of lit characters through it; moving the cursor leaves no trail.
+ * before they arrive, and the shimmer keeps going while the page scrolls. A click sends a ring of lit characters through it; moving the cursor leaves no trail.
  */
 export function Ground() {
   const ref = useRef<HTMLDivElement>(null)
@@ -266,6 +270,12 @@ export function Ground() {
       const top = screenTop(tile)
       return top + TILE_H > 0 && top < window.innerHeight
     }
+    /** On screen or within REACH of it. */
+    const inReach = (tile: Tile) => {
+      const top = screenTop(tile)
+      const reach = window.innerHeight * REACH
+      return top + TILE_H > -reach && top < window.innerHeight + reach
+    }
 
     /** Each glyph's shimmer phase, fixed per page cell; computed once per row. */
     const phases = new Map<number, Float32Array>()
@@ -285,15 +295,16 @@ export function Ground() {
 
     /**
      * Draws a tile's rows: ones not drawn with their current pattern always (off screen only
-     * within `budget`), and with `shimmer` the rows on screen again for the next frame.
+     * within `budget`), and with `shimmer` the rows on screen and within REACH again.
      */
     const draw = (tile: Tile, t: number, shimmer: boolean, budget: { rows: number }) => {
       const { ctx, heat, drawn } = tile
       const width = host.clientWidth
       const top = screenTop(tile)
-      const visible = top + TILE_H > 0 && top < window.innerHeight
-      const from = Math.max(0, Math.floor(-top / CELL) - 4)
-      const to = Math.min(TILE_ROWS, Math.ceil((window.innerHeight - top) / CELL) + 4)
+      const reach = window.innerHeight * REACH
+      const visible = top + TILE_H > -reach && top < window.innerHeight + reach
+      const from = Math.max(0, Math.floor((-top - reach) / CELL))
+      const to = Math.min(TILE_ROWS, Math.ceil((window.innerHeight + reach - top) / CELL))
       const bands = INKS.length
       if (lines.length !== bands + 1 || lines[0]!.length !== cols) {
         lines = Array.from({ length: bands + 1 }, () => new Uint16Array(cols))
@@ -395,17 +406,16 @@ export function Ground() {
     const frame = (now: number) => {
       raf = 0
       if (cancelled || document.hidden || !layout) return
-      if (!worker) printHere(isScrolling(now) ? 2 : 5)
+      if (!worker) printHere(4)
       const due = now - last >= 1000 / FPS
       if (due) {
         last = now
         warm(now)
       }
-      const still = !isScrolling(now)
       const budget = { rows: PREDRAW_ROWS }
       const order = [...tiles.values()].sort((a, b) => Number(onScreen(b)) - Number(onScreen(a)))
       for (const tile of order) {
-        const shimmer = due && onScreen(tile) && ((still && !reduced) || tile.dirty)
+        const shimmer = due && inReach(tile) && (!reduced || tile.dirty)
         draw(tile, now / 1000, shimmer, budget)
       }
       if (!reduced || pending.size > 0 || pulses.length > 0 || undrawn()) {
