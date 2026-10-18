@@ -1,14 +1,14 @@
-import Link from 'next/link'
 import { Glyphs } from '@/components/ascii/Glyphs'
 import { Scramble } from '@/components/ascii/Scramble'
 import { home } from '@/content/home'
 import { site } from '@/content/site'
 import { typo } from '@/lib/typo/czech'
 import { CopyEmail } from './CopyEmail'
+import { Receipt } from './Receipt'
 import shared from './home.module.css'
 import styles from './Contact.module.css'
 
-/** The close: „Napiš mi." drawn huge in characters, the address, and tonight's log. */
+/** The close: „Napiš mi." drawn huge in characters, the address, the receipt and tonight's log. */
 export function Contact() {
   const { contact } = home
   return (
@@ -33,14 +33,16 @@ export function Contact() {
         </a>
         <div className={styles.actions}>
           <CopyEmail email={site.contact.email} label={contact.copyLabel} copied={contact.copied} />
-          <Link className={`${shared.button} ${shared.ghost}`} href="/kontakt">
+          <a className={`${shared.button} ${shared.ghost}`} href="#poptavka">
             {contact.formLabel}
             <span className={shared.arrow} aria-hidden="true">
               -&gt;
             </span>
-          </Link>
+          </a>
         </div>
       </div>
+
+      <Receipt />
 
       <ol className={`meta ${styles.now}`} role="list" aria-label="Na čem teď dělám">
         {contact.now.map((item) => (

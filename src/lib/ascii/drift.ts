@@ -122,69 +122,61 @@ export type PrintLayout = {
   spans: GroundSpan[]
 }
 
+function density(x: number, yPx: number, l: PrintLayout) {
+  const { spans, unit } = l
+  const aspect = l.width / unit
+  if (spans.length === 0) return STYLES.lobes(x, yPx / unit, { top: 0, bottom: 1, aspect })
+  const zone = unit * 0.35
+  let sum = 0
+  let weight = 0
+  for (const s of spans) {
+    const first = s === spans[0]
+    const last = s === spans[spans.length - 1]
+    const win =
+      (first ? 1 : smooth(s.top - zone, s.top + zone, yPx)) *
+      (last ? 1 : 1 - smooth(s.bottom - zone, s.bottom + zone, yPx))
+    if (win <= 0.001) continue
+    const at = { top: s.top / unit, bottom: s.bottom / unit, aspect }
+    sum += win * STYLES[s.style](x, yPx / unit, at)
+    weight += win
+  }
+  return weight > 0 ? sum / weight : 0
+}
+
+/** One page row's densities, from its position on the page alone (pure: runs in a worker too). */
+export function printRow(l: PrintLayout, row: number, out = new Float32Array(l.cols)) {
+  const yPx = (row + 0.5) * l.cellH
+  for (let c = 0; c < l.cols; c++) out[c] = density(((c + 0.5) * l.cellW) / l.unit, yPx, l)
+  return out
+}
+
+/** Everything that shapes the pattern; rows printed under the same key stay valid. */
+export function layoutKey(l: PrintLayout) {
+  return [l.cols, l.cellW.toFixed(3), l.cellH, l.unit, l.width].join(':')
+}
+
 /**
- * Prints the ground row by row: each page row's densities are computed once from its position on
- * the page and kept, so scrolling back costs nothing and the pattern never changes.
+ * The first page row a change of sections can reach: rows above it keep their pattern (the
+ * sections above did not move), rows from it down are printed again. -1 when nothing changed.
  */
-export function createPrinter() {
-  const rows = new Map<number, Float32Array>()
-  let layout: PrintLayout | null = null
-  let key = ''
-
-  const density = (x: number, yPx: number, l: PrintLayout) => {
-    const { spans, unit } = l
-    const aspect = l.width / unit
-    if (spans.length === 0) return STYLES.lobes(x, yPx / unit, { top: 0, bottom: 1, aspect })
-    const zone = unit * 0.35
-    let sum = 0
-    let weight = 0
-    for (const s of spans) {
-      const first = s === spans[0]
-      const last = s === spans[spans.length - 1]
-      const win =
-        (first ? 1 : smooth(s.top - zone, s.top + zone, yPx)) *
-        (last ? 1 : 1 - smooth(s.bottom - zone, s.bottom + zone, yPx))
-      if (win <= 0.001) continue
-      const at = { top: s.top / unit, bottom: s.bottom / unit, aspect }
-      sum += win * STYLES[s.style](x, yPx / unit, at)
-      weight += win
-    }
-    return weight > 0 ? sum / weight : 0
+export function firstChangedRow(prev: GroundSpan[], next: GroundSpan[], l: PrintLayout) {
+  const n = Math.max(prev.length, next.length)
+  for (let i = 0; i < n; i++) {
+    const a = prev[i]
+    const b = next[i]
+    if (
+      a &&
+      b &&
+      a.style === b.style &&
+      Math.round(a.top) === Math.round(b.top) &&
+      Math.round(a.bottom) === Math.round(b.bottom)
+    )
+      continue
+    // a span's style and the blend zone above its top reach back 0.35 of a unit
+    const top = Math.min(a?.top ?? Infinity, b?.top ?? Infinity) - l.unit * 0.35
+    return Math.max(0, Math.floor(top / l.cellH))
   }
-
-  return {
-    /** A new layout (width, cell, sections) reprints the page; returns whether it changed. */
-    setLayout(next: PrintLayout) {
-      const k = [
-        next.cols,
-        next.cellW.toFixed(3),
-        next.cellH,
-        next.unit,
-        next.width,
-        ...next.spans.map((s) => `${Math.round(s.top)}-${Math.round(s.bottom)}-${s.style}`),
-      ].join(':')
-      layout = next
-      if (k === key) return false
-      key = k
-      rows.clear()
-      return true
-    },
-    /** The row if it is printed already. */
-    peek(row: number) {
-      return rows.get(row)
-    },
-    /** Prints a row (or returns it, printed earlier). */
-    row(row: number): Float32Array {
-      const cached = rows.get(row)
-      if (cached || !layout) return cached ?? new Float32Array(0)
-      const l = layout
-      const out = new Float32Array(l.cols)
-      const yPx = (row + 0.5) * l.cellH
-      for (let c = 0; c < l.cols; c++) out[c] = density(((c + 0.5) * l.cellW) / l.unit, yPx, l)
-      rows.set(row, out)
-      return out
-    },
-  }
+  return -1
 }
 
 /** A stable per-cell value 0–1, for each glyph's own shimmer phase. */

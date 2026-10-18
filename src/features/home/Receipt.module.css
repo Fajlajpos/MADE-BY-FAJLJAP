@@ -1,0 +1,783 @@
+/* The inquiry form as a till receipt lying on the toner, printed line by line as it comes in. */
+
+.wrap {
+  position: relative;
+  z-index: var(--z-copy);
+  width: min(100%, 30rem);
+  margin-top: var(--space-7);
+  text-align: left;
+  scroll-margin-top: calc(var(--header-h) + var(--space-4));
+}
+
+/* it lies a little askew on the desk and straightens while you write */
+.feed {
+  transition: rotate var(--dur-base) var(--ease-out);
+}
+
+@media (min-width: 768px) {
+  .feed {
+    rotate: -1.6deg;
+  }
+
+  .feed:focus-within {
+    rotate: 0deg;
+  }
+}
+
+/* ── the paper ───────────────────────────────────── */
+
+.receipt {
+  --tooth: 12px;
+  --pad: var(--space-5);
+  container-type: inline-size;
+  position: relative;
+  display: grid;
+  gap: var(--space-3);
+  padding: calc(var(--space-6) + var(--tooth) / 2) var(--pad) calc(var(--space-6) + var(--tooth));
+  color-scheme: light;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  /* its shadow on the desk: a box-shadow, cheap to paint (a drop-shadow filter was not) */
+  box-shadow:
+    0 2px 3px rgb(0 0 0 / 0.5),
+    0 28px 40px -10px rgb(0 0 0 / 0.6);
+  /* thermal paper: two creases from a pocket, edges curling a touch */
+  background-image:
+    linear-gradient(
+      transparent calc(36% - 18px),
+      rgb(0 0 0 / 0.05) 36%,
+      rgb(255 255 255 / 0.7) calc(36% + 1px),
+      transparent calc(36% + 22px)
+    ),
+    linear-gradient(
+      transparent calc(70% - 18px),
+      rgb(0 0 0 / 0.05) 70%,
+      rgb(255 255 255 / 0.7) calc(70% + 1px),
+      transparent calc(70% + 22px)
+    ),
+    linear-gradient(90deg, rgb(0 0 0 / 0.06), transparent 5%, transparent 95%, rgb(0 0 0 / 0.06));
+}
+
+/* torn off the roll at both ends: notches in the toner's colour bitten out of the edges (a mask
+   over the whole paper cost a long frame the first time it came on screen) */
+.receipt::before,
+.receipt::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: calc(var(--tooth) / 2);
+  pointer-events: none;
+}
+
+.receipt::before {
+  top: 0;
+  background: conic-gradient(from 135deg at top, #0000 90deg, var(--c-toner) 0) top / var(--tooth)
+    100%;
+}
+
+.receipt::after {
+  bottom: 0;
+  background: conic-gradient(from -45deg at bottom, #0000 90deg, var(--c-toner) 0) bottom /
+    var(--tooth) 100%;
+}
+
+/* printed top to bottom in steps, like a thermal head pulling paper; the sides and the bottom
+   reach out far enough to keep the shadow */
+.feed[data-view='armed'] .receipt {
+  clip-path: inset(-4rem -4rem 100% -4rem);
+}
+
+.feed[data-view='shown'] .receipt {
+  clip-path: inset(-4rem);
+  transition: clip-path 800ms steps(40, jump-end);
+}
+
+.receipt[data-reprint] {
+  animation: print 800ms steps(40, jump-end) both;
+}
+
+@keyframes print {
+  from {
+    clip-path: inset(-4rem -4rem 100% -4rem);
+  }
+  to {
+    clip-path: inset(-4rem);
+  }
+}
+
+.head {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  text-align: center;
+  font-size: var(--fs-meta);
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+}
+
+/* the logo printed in characters, like a till's bitmap logo: 82 columns across the paper */
+.logo {
+  width: 100%;
+  margin: 0 0 var(--space-2);
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: calc(100cqi / (82 * 0.7));
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: left;
+  text-transform: none;
+  color: var(--paper-fg);
+  user-select: none;
+}
+
+.block {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0 1ch;
+}
+
+/* double-height print: the till's way of shouting */
+.tall {
+  display: inline-block;
+  scale: 1 1.9;
+  transform-origin: 50% 100%;
+}
+
+.title {
+  padding-top: 0.9em;
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  font-weight: 800;
+  font-stretch: var(--wdth-wide, 112.5%);
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.info {
+  gap: 0;
+  font-size: var(--fs-meta);
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+  color: var(--paper-fg-muted);
+}
+
+.muted {
+  color: var(--paper-fg-muted);
+}
+
+/* reverse print: white type on a black band across the whole paper */
+.bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1ch;
+  min-height: 44px;
+  margin: var(--space-2) calc(-1 * var(--pad)) 0;
+  padding: 0 var(--pad);
+  background: var(--c-toner);
+  color: var(--c-paper);
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.bar h4 {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+.bar > span {
+  font-weight: 500;
+  color: var(--c-grey-light);
+}
+
+/* [upravit] on a printed step: the whole band's height is the target */
+.edit {
+  align-self: stretch;
+  margin-right: calc(-1 * var(--space-2));
+  padding: 0 var(--space-2);
+  color: var(--c-grey-light);
+  font: inherit;
+  letter-spacing: inherit;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.edit:hover {
+  color: var(--c-paper);
+}
+
+.edit:focus-visible {
+  outline-color: var(--c-paper);
+  outline-offset: -4px;
+}
+
+/* one step of the form */
+.step {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.step[hidden] {
+  display: none;
+}
+
+/* a step or a printed summary comes out of the head line by line */
+.printIn {
+  animation: print-in 420ms steps(14, jump-end) both;
+}
+
+@keyframes print-in {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 -40px 0);
+  }
+}
+
+/* ------ and ====== across the paper */
+.rule {
+  overflow: hidden;
+  white-space: nowrap;
+  line-height: 1;
+  color: var(--paper-fg-muted);
+  user-select: none;
+}
+
+.rule::before {
+  content: '------------------------------------------------------------------------';
+}
+
+.double::before {
+  content: '========================================================================';
+}
+
+.label {
+  display: block;
+  font-size: var(--fs-meta);
+  font-weight: 700;
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+}
+
+/* the message's label is the question itself, in plain case */
+.ask {
+  font-size: var(--fs-small);
+  font-weight: 500;
+}
+
+/* ── fields ──────────────────────────────────────── */
+
+.field {
+  display: grid;
+  gap: 0 var(--space-3);
+}
+
+@container (min-width: 22rem) {
+  .field {
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    align-items: baseline;
+  }
+
+  .field .error {
+    grid-column: 2;
+  }
+}
+
+.input,
+.textarea {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+  color: var(--paper-fg);
+  caret-color: var(--paper-fg);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.input {
+  min-height: 44px;
+  padding: var(--space-2) 0;
+  border-bottom: var(--hairline) dashed var(--paper-fg-muted);
+  line-height: 1.4;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--paper-fg-muted);
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+.input:hover,
+.textarea:hover {
+  border-bottom-color: var(--paper-fg);
+}
+
+.input:focus-visible,
+.textarea:focus-visible {
+  outline-offset: 2px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--paper-fg);
+  background-color: rgb(10 10 10 / 0.04);
+}
+
+.input[aria-invalid='true'],
+.textarea[aria-invalid='true'] {
+  border-bottom: 2px solid var(--paper-fg);
+}
+
+/* autofill keeps the paper, not the browser's tint */
+.input:autofill {
+  -webkit-text-fill-color: var(--paper-fg);
+  box-shadow: 0 0 0 100px var(--c-paper) inset;
+}
+
+/* budget and deadline: a native picker dressed as a till line, [v] at the end */
+.selectWrap {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+
+.selectWrap::after {
+  content: '[v]';
+  content: '[v]' / '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  translate: 0 -50%;
+  font-size: var(--fs-meta);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.select {
+  appearance: none;
+  padding-right: 4ch;
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+
+/* ruled like a note pad */
+.textarea {
+  --lh: 1.75rem;
+  display: block;
+  min-height: calc(var(--lh) * 5 + 2px);
+  padding: 0 0 2px;
+  border-bottom: var(--hairline) dashed var(--paper-fg-muted);
+  line-height: var(--lh);
+  resize: vertical;
+  background-image: repeating-linear-gradient(
+    transparent 0 calc(var(--lh) - 1px),
+    var(--paper-line) calc(var(--lh) - 1px) var(--lh)
+  );
+  background-attachment: local;
+}
+
+.error {
+  font-size: var(--fs-meta);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding-top: var(--space-1);
+}
+
+.error a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  overflow-wrap: anywhere;
+}
+
+/* ── options: [x] chips and (*) radios ───────────── */
+
+.options {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.options legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: var(--space-3) var(--space-4);
+  border: var(--hairline) solid var(--paper-fg);
+  border-radius: var(--r-control);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.chip input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.chip span::before {
+  content: '[ ]';
+  content: '[ ]' / '';
+  margin-right: 0.7ch;
+  white-space: pre;
+}
+
+.chip input:checked + span::before {
+  content: '[x]';
+  content: '[x]' / '';
+}
+
+.radio span::before {
+  content: '( )';
+  content: '( )' / '';
+}
+
+.radio input:checked + span::before {
+  content: '(*)';
+  content: '(*)' / '';
+}
+
+.chip:hover {
+  background: rgb(10 10 10 / 0.07);
+}
+
+.chip:has(input:checked) {
+  background: var(--c-toner);
+  color: var(--c-paper);
+}
+
+.chip:has(input:focus-visible) {
+  outline: 2px solid var(--c-toner);
+  outline-offset: 2px;
+}
+
+/* ── summary ─────────────────────────────────────── */
+
+.sum {
+  --line-strong: var(--paper-line);
+  list-style: none;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+.sum dt,
+.sum .qty {
+  color: var(--paper-fg);
+  white-space: nowrap;
+}
+
+.sum dd {
+  font-variant-numeric: tabular-nums;
+}
+
+.value {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-transform: none;
+}
+
+.total {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.9em 1ch;
+  padding-top: 0.9em;
+  font-size: 1.125rem;
+  font-weight: 800;
+  font-stretch: var(--wdth-wide, 112.5%);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* ── consent, submit ─────────────────────────────── */
+
+.consent {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 1ch;
+  min-height: 44px;
+  padding-block: var(--space-2);
+  font-size: var(--fs-small);
+}
+
+.consent input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.consent > span::before {
+  content: '[ ]';
+  content: '[ ]' / '';
+  margin-right: 0.7ch;
+  font-weight: 700;
+  white-space: pre;
+}
+
+.consent input:checked + span::before {
+  content: '[x]';
+  content: '[x]' / '';
+}
+
+.consent:has(input:focus-visible) {
+  outline: 2px solid var(--c-toner);
+  outline-offset: 2px;
+}
+
+.consent a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.submit,
+.next,
+.again {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1ch;
+  width: 100%;
+  min-height: 52px;
+  padding-inline: var(--space-5);
+  border-radius: var(--r-control);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.submit > span,
+.next > span,
+.again > span {
+  white-space: nowrap;
+}
+
+.submit,
+.next {
+  background: var(--c-toner);
+  color: var(--c-paper);
+}
+
+.submit:hover,
+.next:hover {
+  background: #262626;
+}
+
+.submit:hover > span,
+.next:hover > span,
+.again:hover > span {
+  translate: 0.25em 0;
+}
+
+.submit:active,
+.next:active,
+.again:active {
+  transform: translateY(1px);
+}
+
+.submit:disabled {
+  background: #333333;
+  cursor: progress;
+}
+
+.again {
+  margin-top: var(--space-2);
+  border: var(--hairline) solid var(--paper-fg);
+  color: var(--paper-fg);
+}
+
+.again:hover {
+  background: rgb(10 10 10 / 0.07);
+}
+
+/* the honeypot: off-screen for people, still in the form for bots */
+.trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ── after sending ───────────────────────────────── */
+
+.printed {
+  position: relative;
+  display: grid;
+  gap: var(--space-4);
+}
+
+.stamp {
+  position: absolute;
+  top: calc(-1 * var(--space-2));
+  right: 0;
+  padding: 0.15em 0.5em;
+  border: 3px solid var(--c-toner);
+  border-radius: 6px;
+  font-size: 1.375rem;
+  font-weight: 800;
+  font-stretch: var(--wdth-wide, 112.5%);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  rotate: -9deg;
+  opacity: 0.86;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  animation: stamp var(--dur-base) var(--ease-out) both;
+}
+
+@keyframes stamp {
+  from {
+    opacity: 0;
+    scale: 1.6;
+  }
+}
+
+.thanks {
+  font-family: var(--font-mono);
+  font-size: 1.375rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  padding-right: 9rem;
+}
+
+.thanks:focus {
+  outline: none;
+}
+
+.note {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+}
+
+.message {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* ── foot ────────────────────────────────────────── */
+
+.foot {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  margin-top: var(--space-4);
+  text-align: center;
+  font-size: var(--fs-meta);
+  letter-spacing: var(--tracking-meta);
+  text-transform: uppercase;
+}
+
+.barcode {
+  width: 100%;
+  height: 2.5rem;
+  margin-bottom: var(--space-1);
+  color: var(--paper-fg);
+}
+
+.code {
+  margin-bottom: var(--space-3);
+  letter-spacing: 0.4em;
+}
+
+.end {
+  margin-top: var(--space-3);
+  color: var(--paper-fg-muted);
+}
+
+/* 8< ------ utrhni tady ------ */
+.cut {
+  display: flex;
+  align-items: center;
+  gap: 1ch;
+  width: 100%;
+  margin-top: var(--space-5);
+  color: var(--paper-fg-muted);
+}
+
+.cut::before,
+.cut::after {
+  content: '';
+  flex: 1;
+  border-top: var(--hairline) dashed currentColor;
+}
+
+.cut::before {
+  order: 1;
+}
+
+.cut > span:last-child {
+  order: 2;
+}
+
+.cut::after {
+  order: 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feed .receipt,
+  .receipt[data-reprint],
+  .printIn,
+  .stamp {
+    animation: none;
+    transition: none;
+    clip-path: none;
+  }
+}

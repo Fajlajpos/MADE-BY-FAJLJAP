@@ -1,5 +1,6 @@
 import { monoFamily, prefersReducedMotion, RAMP } from './env'
 import type { Pointer, ScenePainter } from './scenes'
+import { isScrolling } from './scrolling'
 
 /**
  * The CPU character renderer: the fallback when the GPU field is unavailable (no WebGL2,
@@ -239,7 +240,8 @@ export function mountCpuField(options: CpuFieldOptions): CpuField {
   const loop = (now: number) => {
     raf = 0
     if (disposed || !visible || document.hidden) return
-    if (now - lastFrame >= 1000 / fps) {
+    // while the page scrolls, a field that has a frame keeps it (see lib/ascii/scrolling)
+    if (now - lastFrame >= 1000 / fps && !(lastFrame > 0 && isScrolling(now))) {
       lastFrame = now
       draw(now)
     }

@@ -3,12 +3,17 @@
 import { useEffect, useRef } from 'react'
 import {
   cellPhase,
-  createPrinter,
+  firstChangedRow,
+  layoutKey,
   PEAK,
+  printRow,
   type GroundSpan,
   type GroundStyle,
+  type PrintLayout,
 } from '@/lib/ascii/drift'
 import { monoFamily, prefersReducedMotion } from '@/lib/ascii/env'
+import type { GroundBatch, GroundFocus, GroundJob } from '@/lib/ascii/ground.worker'
+import { isScrolling } from '@/lib/ascii/scrolling'
 import styles from './Ground.module.css'
 
 /** Character cell height in CSS px. */
@@ -23,25 +28,33 @@ const LAST = CHARSET.length - 1
 const INKS = ['#4b4a46', '#64625d', '#7f7d77']
 const WAKE = '#cfcdc5'
 /** Redraws per second for the shimmer; scrolling itself is the browser's, always smooth. */
-const FPS = 30
+const FPS = 24
+/** Screens of ground kept as canvases above and below the screen. */
+const KEEP_ABOVE = 1
+const KEEP_BELOW = 2
+/** Rows per frame drawn into tiles just off screen, so they scroll in already drawn. */
+const PREDRAW_ROWS = 64
+/** Canvases kept for reuse instead of being made again while scrolling. */
+const POOL = 3
 
 type Tile = {
   index: number
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
   heat: Float32Array
-  /** Heat is still settling, or the tile has never been drawn. */
+  /** Heat is still settling. */
   dirty: boolean
-  /** Rows painted at least once since the last layout. */
+  /** Rows painted with their current pattern. */
   drawn: Uint8Array
 }
 
 /**
  * The ground of characters, printed onto the page. It lives in the page itself, cut into canvas
- * tiles that scroll with the content exactly like the text does; only the tiles on screen are
- * redrawn, for the shimmer and the rings. The pattern is computed from each cell's position on
- * the page (the same on every load) and sections choose their variety with `data-ground`.
- * A click sends a ring of lit characters through it; moving the cursor leaves no trail.
+ * tiles that scroll with the content exactly like the text does. The pattern is computed from
+ * each cell's position on the page (the same on every load) in a worker, nearest the screen
+ * first, and sections choose their variety with `data-ground`. Tiles near the screen are drawn
+ * before they arrive; while the page scrolls the shimmer holds still so the scroll gets every
+ * frame. A click sends a ring of lit characters through it; moving the cursor leaves no trail.
  */
 export function Ground() {
   const ref = useRef<HTMLDivElement>(null)
@@ -49,22 +62,93 @@ export function Ground() {
   useEffect(() => {
     const host = ref.current
     if (!host) return
-    const printer = createPrinter()
     const reduced = prefersReducedMotion()
     const tiles = new Map<number, Tile>()
+    const pool: HTMLCanvasElement[] = []
     const pulses: { x: number; y: number; t0: number }[] = []
+    /** Printed densities per page row; a row stays drawn until its new print arrives. */
+    const rows = new Map<number, Float32Array>()
+    /** Rows asked for and not printed yet. */
+    const pending = new Set<number>()
+    let layout: PrintLayout | null = null
+    let key = ''
+    let gen = 0
+    let printedTo = 0
     let cols = 0
     let charW = CELL * 0.62
     let font = ''
     let dpr = 1
+    /** One unit of the pattern: the viewport height, taken only when the width changes, so a
+     * phone's toolbar sliding away mid-scroll never reprints the page. */
+    let unit = 0
+    let unitWidth = -1
+    /** The ground's top in page px. */
+    let pageTop = 0
     let raf = 0
+    let measureRaf = 0
     let last = 0
+    let sentFocus = -1
     let cancelled = false
 
-    const pageHeight = () => host.clientHeight
+    const viewTop = () => window.scrollY - pageTop
+    const focusRow = () => Math.floor((viewTop() + window.innerHeight / 2) / CELL)
 
-    /** Sections, width and cell size → the printer's layout. */
+    let worker: Worker | null = null
+    try {
+      worker = new Worker(new URL('../../lib/ascii/ground.worker.ts', import.meta.url), {
+        type: 'module',
+      })
+      worker.onmessage = (event: MessageEvent<GroundBatch>) => {
+        const { gen: from, rows: list, data } = event.data
+        if (from !== gen || !layout) return
+        list.forEach((row, i) => store(row, data.subarray(i * cols, (i + 1) * cols)))
+        kick()
+      }
+      worker.onerror = () => {
+        // no worker after all: print on the main thread, a little each frame
+        worker?.terminate()
+        worker = null
+        kick()
+      }
+    } catch {
+      worker = null
+    }
+
+    const store = (row: number, data: Float32Array) => {
+      rows.set(row, data)
+      pending.delete(row)
+      const tile = tiles.get(Math.floor(row / TILE_ROWS))
+      if (tile) tile.drawn[row % TILE_ROWS] = 0
+    }
+
+    /** Asks for rows [from, to), keeping whatever an earlier request has not delivered yet. */
+    const print = (from: number, to: number) => {
+      if (!layout) return
+      for (const row of pending) from = Math.min(from, row)
+      pending.clear()
+      for (let r = from; r < to; r++) pending.add(r)
+      gen++
+      sentFocus = focusRow()
+      const job: GroundJob = { type: 'print', gen, layout, from, to, focus: sentFocus }
+      worker?.postMessage(job)
+      kick()
+    }
+
+    /** Without a worker: the pending rows nearest the screen, within a time budget. */
+    const printHere = (budgetMs: number) => {
+      if (!layout || pending.size === 0) return
+      const start = performance.now()
+      const focus = focusRow()
+      const order = [...pending].sort((a, b) => Math.abs(a - focus) - Math.abs(b - focus))
+      for (const row of order) {
+        store(row, printRow(layout, row))
+        if (performance.now() - start > budgetMs) return
+      }
+    }
+
+    /** Sections, width and cell size → the layout; reprints only what the change can reach. */
     const measure = () => {
+      measureRaf = 0
       dpr = Math.min(window.devicePixelRatio || 1, 2)
       const probe = document.createElement('canvas').getContext('2d')
       font = `500 ${(CELL * 0.86).toFixed(2)}px ${monoFamily()}`
@@ -73,63 +157,90 @@ export function Ground() {
         const w = probe.measureText('M').width
         if (w > 0) charW = w
       }
-      cols = Math.ceil(host.clientWidth / charW) + 1
+      const nextCols = Math.ceil(host.clientWidth / charW) + 1
+      if (window.innerWidth !== unitWidth) {
+        unitWidth = window.innerWidth
+        unit = window.innerHeight
+      }
+      const hostRect = host.getBoundingClientRect()
+      pageTop = hostRect.top + window.scrollY
       const spans: GroundSpan[] = []
-      const top0 = host.getBoundingClientRect().top
       for (const el of document.querySelectorAll<HTMLElement>('[data-ground]')) {
         const r = el.getBoundingClientRect()
         spans.push({
-          top: r.top - top0,
-          bottom: r.bottom - top0,
+          top: r.top - hostRect.top,
+          bottom: r.bottom - hostRect.top,
           style: el.dataset.ground as GroundStyle,
         })
       }
-      const changed = printer.setLayout({
+      const next: PrintLayout = {
         cellW: charW,
         cellH: CELL,
-        cols,
-        unit: window.innerHeight,
-        width: window.innerWidth,
+        cols: nextCols,
+        unit,
+        width: unitWidth,
         spans,
-      })
-      for (const tile of tiles.values()) {
-        sizeTile(tile)
-        if (changed) tile.heat = new Float32Array(TILE_ROWS * cols)
-        tile.drawn.fill(0)
-        tile.dirty = true
       }
+      const nextKey = layoutKey(next)
+      const total = Math.ceil(host.clientHeight / CELL)
+      let from: number
+      if (nextKey !== key) {
+        // a new grid: rows of the old width cannot be drawn into it
+        if (nextCols !== cols) rows.clear()
+        from = 0
+      } else {
+        const changed = layout ? firstChangedRow(layout.spans, spans, next) : 0
+        from = Math.min(changed < 0 ? total : changed, printedTo)
+      }
+      key = nextKey
+      cols = nextCols
+      layout = next
+      printedTo = total
+      for (const tile of tiles.values()) sizeTile(tile)
       sync()
+      if (from < total) print(from, total)
       kick()
     }
 
+    const scheduleMeasure = () => {
+      if (!measureRaf && !cancelled) measureRaf = requestAnimationFrame(measure)
+    }
+
+    /** Fits a tile's canvas to the page width; resizing clears it, so its rows draw again. */
     const sizeTile = (tile: Tile) => {
-      const width = host.clientWidth
-      tile.canvas.width = Math.round(width * dpr)
-      tile.canvas.height = Math.round(TILE_H * dpr)
+      const w = Math.round(host.clientWidth * dpr)
+      const h = Math.round(TILE_H * dpr)
+      if (tile.canvas.width !== w || tile.canvas.height !== h) {
+        tile.canvas.width = w
+        tile.canvas.height = h
+        tile.drawn.fill(0)
+      }
+      if (tile.heat.length !== TILE_ROWS * cols) tile.heat = new Float32Array(TILE_ROWS * cols)
       tile.ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       tile.ctx.font = font
       tile.ctx.textBaseline = 'top'
       if ('letterSpacing' in tile.ctx) tile.ctx.letterSpacing = '0px'
     }
 
-    /** Keeps canvases for the tiles near the screen and lets the far ones go. */
+    /** Keeps canvases for the tiles near the screen; far ones go back to the pool. */
     const sync = () => {
-      // how far down the ground the top of the screen is
-      const viewTop = -host.getBoundingClientRect().top
-      const first = Math.max(0, Math.floor((viewTop - window.innerHeight) / TILE_H))
+      if (!layout) return
+      const top = viewTop()
+      const h = window.innerHeight
+      const first = Math.max(0, Math.floor((top - h * KEEP_ABOVE) / TILE_H))
       const lastTile = Math.min(
-        Math.floor(pageHeight() / TILE_H),
-        Math.floor((viewTop + window.innerHeight * 3) / TILE_H),
+        Math.floor(host.clientHeight / TILE_H),
+        Math.floor((top + h * (1 + KEEP_BELOW)) / TILE_H),
       )
       for (const [i, tile] of tiles) {
-        if (i < first - 1 || i > lastTile + 1) {
-          tile.canvas.remove()
-          tiles.delete(i)
-        }
+        if (i >= first && i <= lastTile) continue
+        tile.canvas.remove()
+        if (pool.length < POOL) pool.push(tile.canvas)
+        tiles.delete(i)
       }
       for (let i = first; i <= lastTile; i++) {
         if (tiles.has(i)) continue
-        const canvas = document.createElement('canvas')
+        const canvas = pool.pop() ?? document.createElement('canvas')
         canvas.className = styles.tile!
         canvas.style.top = `${i * TILE_H}px`
         const ctx = canvas.getContext('2d')
@@ -139,19 +250,21 @@ export function Ground() {
           canvas,
           ctx,
           heat: new Float32Array(TILE_ROWS * cols),
-          dirty: true,
+          dirty: false,
           drawn: new Uint8Array(TILE_ROWS),
         }
         sizeTile(tile)
+        ctx.clearRect(0, 0, host.clientWidth, TILE_H)
         host.appendChild(canvas)
         tiles.set(i, tile)
       }
     }
 
-    /** Is any of the tile on screen? */
+    /** The tile's top relative to the top of the screen, from the scroll alone (no layout). */
+    const screenTop = (tile: Tile) => tile.index * TILE_H - viewTop()
     const onScreen = (tile: Tile) => {
-      const r = tile.canvas.getBoundingClientRect()
-      return r.bottom > 0 && r.top < window.innerHeight
+      const top = screenTop(tile)
+      return top + TILE_H > 0 && top < window.innerHeight
     }
 
     /** Each glyph's shimmer phase, fixed per page cell; computed once per row. */
@@ -171,15 +284,16 @@ export function Ground() {
     let lines: Uint16Array[] = []
 
     /**
-     * Redraws the rows of a tile that are on screen (plus a few either side), and any row printed
-     * since the last pass; rows further off keep their last frame until they come into view.
+     * Draws a tile's rows: ones not drawn with their current pattern always (off screen only
+     * within `budget`), and with `shimmer` the rows on screen again for the next frame.
      */
-    const draw = (tile: Tile, t: number) => {
+    const draw = (tile: Tile, t: number, shimmer: boolean, budget: { rows: number }) => {
       const { ctx, heat, drawn } = tile
       const width = host.clientWidth
-      const rect = tile.canvas.getBoundingClientRect()
-      const from = Math.max(0, Math.floor(-rect.top / CELL) - 4)
-      const to = Math.min(TILE_ROWS, Math.ceil((window.innerHeight - rect.top) / CELL) + 4)
+      const top = screenTop(tile)
+      const visible = top + TILE_H > 0 && top < window.innerHeight
+      const from = Math.max(0, Math.floor(-top / CELL) - 4)
+      const to = Math.min(TILE_ROWS, Math.ceil((window.innerHeight - top) / CELL) + 4)
       const bands = INKS.length
       if (lines.length !== bands + 1 || lines[0]!.length !== cols) {
         lines = Array.from({ length: bands + 1 }, () => new Uint16Array(cols))
@@ -188,9 +302,14 @@ export function Ground() {
       let warm = false
       for (let r = 0; r < TILE_ROWS; r++) {
         const row = tile.index * TILE_ROWS + r
-        const base = printer.peek(row)
-        if (!base) continue
-        if ((r < from || r >= to) && drawn[r]) continue
+        const base = rows.get(row)
+        if (!base || base.length !== cols) continue
+        const inView = r >= from && r < to
+        if (drawn[r] && !(shimmer && inView)) continue
+        if (!drawn[r] && !visible) {
+          if (budget.rows <= 0) continue
+          budget.rows--
+        }
         drawn[r] = 1
         ctx.clearRect(0, r * CELL, width, CELL)
         const phase = phaseRow(row)
@@ -205,8 +324,8 @@ export function Ground() {
           const b = base[c]!
           let level = 0
           if (b > 0.004) {
-            const shimmer = reduced ? 1 : 0.8 + 0.2 * Math.sin(t * 0.9 + phase[c]!)
-            level = (b * PEAK + 0.03) * shimmer * swell
+            const shimmerAt = reduced ? 1 : 0.8 + 0.2 * Math.sin(t * 0.9 + phase[c]!)
+            level = (b * PEAK + 0.03) * shimmerAt * swell
           }
           if (h > 0) level = Math.min(1, level + h * 0.6)
           const idx = Math.round(level * LAST)
@@ -225,7 +344,7 @@ export function Ground() {
           )
         }
       }
-      tile.dirty = warm
+      if (shimmer) tile.dirty = warm
     }
 
     /** Rings from clicks warm a travelling circle of cells, which then cool down. */
@@ -264,43 +383,34 @@ export function Ground() {
         if (now - pulses[i]!.t0 > 1400) pulses.splice(i, 1)
     }
 
-    /** Prints rows ahead of the screen in small batches, so a new tile never stalls a frame. */
-    const printAhead = (budgetMs: number) => {
-      const start = performance.now()
-      const order = [...tiles.values()].sort((a, b) => Number(onScreen(b)) - Number(onScreen(a)))
-      for (const tile of order) {
+    const undrawn = () => {
+      for (const tile of tiles.values()) {
         for (let r = 0; r < TILE_ROWS; r++) {
-          const row = tile.index * TILE_ROWS + r
-          if (printer.peek(row)) continue
-          printer.row(row)
-          tile.dirty = true
-          if (performance.now() - start > budgetMs) return false
+          if (!tile.drawn[r] && rows.has(tile.index * TILE_ROWS + r)) return true
         }
       }
-      return true
+      return false
     }
 
     const frame = (now: number) => {
       raf = 0
-      if (cancelled || document.hidden) return
-      const done = printAhead(onScreenUnprinted() ? 5 : 2.5)
+      if (cancelled || document.hidden || !layout) return
+      if (!worker) printHere(isScrolling(now) ? 2 : 5)
       const due = now - last >= 1000 / FPS
       if (due) {
         last = now
         warm(now)
-        for (const tile of tiles.values()) {
-          if (onScreen(tile) && (tile.dirty || !reduced)) draw(tile, now / 1000)
-        }
       }
-      if (!reduced || !done || pulses.length > 0) raf = requestAnimationFrame(frame)
-    }
-
-    const onScreenUnprinted = () => {
-      for (const tile of tiles.values()) {
-        if (!onScreen(tile)) continue
-        if (!printer.peek(tile.index * TILE_ROWS + TILE_ROWS - 1)) return true
+      const still = !isScrolling(now)
+      const budget = { rows: PREDRAW_ROWS }
+      const order = [...tiles.values()].sort((a, b) => Number(onScreen(b)) - Number(onScreen(a)))
+      for (const tile of order) {
+        const shimmer = due && onScreen(tile) && ((still && !reduced) || tile.dirty)
+        draw(tile, now / 1000, shimmer, budget)
       }
-      return false
+      if (!reduced || pending.size > 0 || pulses.length > 0 || undrawn()) {
+        raf = requestAnimationFrame(frame)
+      }
     }
 
     const kick = () => {
@@ -309,20 +419,23 @@ export function Ground() {
 
     const onScroll = () => {
       sync()
+      // the worker prints next to where the reader now is
+      const focus = focusRow()
+      if (worker && pending.size > 0 && Math.abs(focus - sentFocus) > 24) {
+        sentFocus = focus
+        const msg: GroundFocus = { type: 'focus', focus }
+        worker.postMessage(msg)
+      }
       kick()
     }
     const onClick = (event: MouseEvent) => {
       if (reduced) return
-      pulses.push({
-        x: event.clientX,
-        y: event.clientY - host.getBoundingClientRect().top,
-        t0: performance.now(),
-      })
+      pulses.push({ x: event.clientX, y: event.clientY + viewTop(), t0: performance.now() })
       kick()
     }
     const onVisibility = () => kick()
 
-    const ro = new ResizeObserver(() => measure())
+    const ro = new ResizeObserver(scheduleMeasure)
     void document.fonts?.ready.then(() => {
       if (cancelled) return
       measure()
@@ -336,6 +449,8 @@ export function Ground() {
     return () => {
       cancelled = true
       cancelAnimationFrame(raf)
+      cancelAnimationFrame(measureRaf)
+      worker?.terminate()
       ro.disconnect()
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('click', onClick)
