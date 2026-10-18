@@ -12,7 +12,6 @@ type Props = {
   cellSize?: number
   /** Height of the 1800 px wide art canvas (kit `artHeight`); lower sets the word larger. */
   artHeight?: number
-  eager?: boolean
   className?: string
   /** Rendered element; the word itself stays in it for selection and screen readers. */
   as?: 'p' | 'div' | 'span'
@@ -28,7 +27,6 @@ export function AsciiWordmark({
   text,
   cellSize = 10,
   artHeight = 380,
-  eager = false,
   className,
   as: Tag = 'p',
   decorative = false,
@@ -67,7 +65,7 @@ export function AsciiWordmark({
           fontWeight: 800,
           artHeight,
           ink: '--ascii-ink-strong',
-          lazy: !eager,
+          lazy: false,
           look: look(),
         })
         if (handle.supported) {
@@ -98,7 +96,7 @@ export function AsciiWordmark({
       cleanup()
       delete host.dataset.ascii
     }
-  }, [text, cellSize, artHeight, eager])
+  }, [text, cellSize, artHeight])
 
   return (
     <Tag

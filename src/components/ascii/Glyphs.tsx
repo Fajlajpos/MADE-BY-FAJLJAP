@@ -45,6 +45,8 @@ export function Glyphs({
         duration,
         settle: roomy ? 'glyphs' : 'text',
         replayOnHover: true,
+        // kept mounted: a re-made field flashed a blank canvas when scrolling fast
+        lazy: false,
         look: { font: monoFamily(), cellAspect: 0.62, ...(cellSize ? { cellSize } : {}) },
       })
       cleanup = () => handle.destroy()

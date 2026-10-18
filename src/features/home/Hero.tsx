@@ -65,7 +65,7 @@ export function Hero() {
       </div>
 
       <div className={styles.model}>
-        <AsciiShape shape="code" eager cellSize={8} />
+        <AsciiShape shape="code" cellSize={8} />
       </div>
     </section>
   )

@@ -10,7 +10,6 @@ type Props = {
   seed?: number
   /** Cell height in CSS px. */
   cellSize?: number
-  eager?: boolean
   className?: string
 }
 
@@ -18,13 +17,12 @@ type Props = {
  * A solid shape turning in characters — the site's recurring form. Decorative: it says nothing
  * the text beside it does not.
  */
-export function AsciiShape({ shape, seed = 0, cellSize = 8, eager = false, className }: Props) {
+export function AsciiShape({ shape, seed = 0, cellSize = 8, className }: Props) {
   const ref = useRef<HTMLDivElement>(null)
-  useAsciiField(ref, () => createShape(shape, seed), { cellSize, eager, detail: 0.4 }, [
+  useAsciiField(ref, () => createShape(shape, seed), { cellSize, detail: 0.4 }, [
     shape,
     seed,
     cellSize,
-    eager,
   ])
   return (
     <div

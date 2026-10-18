@@ -54,7 +54,6 @@ export function Photo({
           slot={slot}
           seed={seed}
           cellSize={cellSize}
-          eager={eager}
           decorative={Boolean(media.src)}
           className={media.src ? styles.dissolve : undefined}
         />

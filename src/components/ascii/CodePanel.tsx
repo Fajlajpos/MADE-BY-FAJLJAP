@@ -37,7 +37,13 @@ export function CodePanel({ filename, code, replay, className }: Props) {
 
     void loadKit().then((kit) => {
       if (cancelled || !kit) return
-      const out = kit.streamText(el, { transition: 'roll', roll: 220, stagger: 6, caret: true })
+      const out = kit.streamText(el, {
+        transition: 'roll',
+        lazy: false,
+        roll: 220,
+        stagger: 6,
+        caret: true,
+      })
       const run = () => {
         window.clearTimeout(timer)
         out.reset()

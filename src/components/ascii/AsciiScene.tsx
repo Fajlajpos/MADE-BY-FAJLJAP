@@ -12,8 +12,6 @@ type Props = {
   seed?: number
   /** Cell height in CSS px. */
   cellSize?: number
-  /** Mount at once instead of near the viewport (the hero). */
-  eager?: boolean
   /** Hidden from assistive tech (when a real <img> beside it already says what it shows). */
   decorative?: boolean
   className?: string
@@ -28,7 +26,6 @@ export function AsciiScene({
   slot,
   seed = 1,
   cellSize = 9,
-  eager = false,
   decorative = false,
   className,
   children,
@@ -42,8 +39,9 @@ export function AsciiScene({
       const image = media.src ? await loadImage(media.src) : null
       return createScene(media.placeholder, { seed, image })
     },
-    { cellSize, eager },
-    [media.src, media.placeholder, seed, cellSize, eager],
+    // placeholders and photos draw on the CPU: many of them, and none may cost a WebGL context
+    { cellSize, gpu: false },
+    [media.src, media.placeholder, seed, cellSize],
   )
 
   return (

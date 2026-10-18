@@ -9,8 +9,12 @@ import type { ScenePainter } from '@/lib/ascii/scenes'
 type Options = {
   /** Cell height in CSS px. */
   cellSize: number
-  /** Mount at once instead of near the viewport. */
-  eager?: boolean
+  /**
+   * Draw on the GPU field (asciify kit). Default true. GPU fields stay mounted for the life of the
+   * page — never released and re-made while scrolling, which flashed blank canvases — so keep them
+   * few; everything else uses the CPU renderer, which needs no WebGL context at all.
+   */
+  gpu?: boolean
   /** Source pixels per CSS pixel; shapes want more detail than photos. */
   detail?: number
   /** Ink token for the characters. */
@@ -19,14 +23,14 @@ type Options = {
 
 /**
  * Mounts a character field in `ref`'s element and feeds it a painter each frame: the GPU field
- * (asciify kit `mountSurface`, with the liquid wake in the print colour) or, without a GPU, the
- * CPU renderer. `makePainter` may be async (a photo to load) and runs once per mount.
+ * (asciify kit `mountSurface`) or the CPU renderer (when asked for, or without a GPU).
+ * `makePainter` may be async (a photo to load) and runs once per mount.
  * Sets `data-ascii="gpu" | "cpu"` on the element once something draws.
  */
 export function useAsciiField(
   ref: RefObject<HTMLElement | null>,
   makePainter: () => ScenePainter | Promise<ScenePainter>,
-  { cellSize, eager = false, detail = 1 / 3, ink = '--ascii-ink-strong' }: Options,
+  { cellSize, gpu = true, detail = 1 / 3, ink = '--ascii-ink-strong' }: Options,
   deps: readonly unknown[],
 ) {
   useEffect(() => {
@@ -37,13 +41,17 @@ export function useAsciiField(
     const tracked = trackPointer(host)
 
     void (async () => {
-      const [painter, kit] = await Promise.all([makePainter(), loadKit(), document.fonts?.ready])
+      const [painter, kit] = await Promise.all([
+        makePainter(),
+        gpu ? loadKit() : Promise.resolve(null),
+        document.fonts?.ready,
+      ])
       if (cancelled) return
       const cell = host.clientWidth < 360 ? Math.max(6, cellSize - 2) : cellSize
 
       const surface = kit?.mountSurface({
         host,
-        kit: { current: { lazy: !eager } },
+        kit: { current: { lazy: false } },
         layer: 'under',
         resolution: (w, h) => [
           Math.max(8, Math.round(w * detail)),
