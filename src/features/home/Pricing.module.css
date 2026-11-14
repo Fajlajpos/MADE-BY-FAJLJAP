@@ -1,0 +1,255 @@
+/* Ceník: heading beside the chrome tag, ruled price rows, FAQ as native <details>. */
+
+.top {
+  display: grid;
+  gap: var(--space-6);
+  align-items: center;
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+
+.intro {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.title {
+  max-width: 11ch;
+}
+
+.tag {
+  width: min(70vw, 22rem);
+  aspect-ratio: 1;
+  justify-self: center;
+  pointer-events: none;
+}
+
+/* ── price list ─────────────────────────────────── */
+.items {
+  border-top: 1px solid var(--line-strong);
+}
+
+.item {
+  display: grid;
+  gap: var(--space-3);
+  padding-block: var(--space-6);
+  border-bottom: 1px solid var(--line);
+}
+
+.what {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.itemTitle {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  font-stretch: 92%;
+  line-height: 1;
+  letter-spacing: var(--tracking-h);
+}
+
+.itemBody {
+  max-width: 34rem;
+  color: var(--fg-muted);
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35ch;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.from,
+.currency {
+  font-size: var(--fs-small);
+  color: var(--fg-subtle);
+}
+
+.amount {
+  font-size: clamp(2rem, 1.3rem + 2.8vw, 3.75rem);
+  font-weight: 500;
+  font-stretch: 90%;
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+}
+
+.note {
+  margin-top: var(--space-4);
+  font-size: var(--fs-label);
+  color: var(--fg-subtle);
+}
+
+/* ── FAQ ────────────────────────────────────────── */
+.faq {
+  display: grid;
+  gap: var(--space-6);
+  margin-top: var(--space-10);
+}
+
+.faqHead {
+  display: grid;
+  justify-items: start;
+  align-content: start;
+  gap: var(--space-5);
+}
+
+.faqTitle {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  font-stretch: 92%;
+  letter-spacing: var(--tracking-h);
+}
+
+.qas {
+  border-top: 1px solid var(--line-strong);
+}
+
+.qa {
+  border-bottom: 1px solid var(--line);
+}
+
+.q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  min-height: 64px;
+  padding-block: var(--space-4);
+  font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  list-style: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.q::-webkit-details-marker {
+  display: none;
+}
+
+.q:hover {
+  color: var(--fg);
+}
+
+.q:hover .icon {
+  border-color: var(--line-strong);
+  background: var(--bg-high);
+}
+
+.icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+.iconV {
+  transform-origin: 12px 12px;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.qa[open] .icon {
+  transform: rotate(180deg);
+}
+
+.qa[open] .iconV {
+  transform: scaleY(0);
+}
+
+.a {
+  max-width: 40rem;
+  padding-bottom: var(--space-6);
+  padding-right: var(--space-8);
+  color: var(--fg-muted);
+}
+
+.qa[open] .a {
+  animation: answer var(--dur-base) var(--ease-out);
+}
+
+@keyframes answer {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (min-width: 768px) {
+  .item {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--space-6);
+  }
+
+  .price {
+    justify-content: flex-end;
+  }
+}
+
+@media (min-width: 1024px) {
+  .top {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    margin-bottom: var(--space-7);
+  }
+
+  .intro {
+    grid-column: 1 / 8;
+  }
+
+  .tag {
+    grid-column: 8 / 13;
+    width: 100%;
+    max-width: 30rem;
+    justify-self: end;
+  }
+
+  .item {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    padding-block: var(--space-7);
+  }
+
+  .what {
+    grid-column: 1 / 8;
+  }
+
+  .price {
+    grid-column: 8 / 13;
+  }
+
+  .faq {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+  }
+
+  .faqHead {
+    grid-column: 1 / 5;
+    align-self: start;
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-6));
+  }
+
+  .qas {
+    grid-column: 6 / 13;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qa[open] .a {
+    animation: none;
+  }
+}

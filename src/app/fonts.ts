@@ -1,17 +1,13 @@
-import { Archivo, Martian_Mono } from 'next/font/google'
+import { Instrument_Sans } from 'next/font/google'
 
-// Martian Mono: the machine voice — headlines, UI, metadata and every character field.
-// The wdth axis (75–112.5 %) stretches the same letter sideways: the typographic smear.
-export const martian = Martian_Mono({
+// One family for everything: Instrument Sans. Quiet, precise, a little narrow when it is set
+// large (the wdth axis), so the chrome and the work carry the page, not the type.
+export const instrument = Instrument_Sans({
   subsets: ['latin', 'latin-ext'],
   axes: ['wdth'],
   display: 'swap',
-  variable: '--font-martian',
+  variable: '--font-instrument',
 })
 
-// Archivo: the human voice, only for longer paragraphs.
-export const archivo = Archivo({
-  subsets: ['latin', 'latin-ext'],
-  display: 'swap',
-  variable: '--font-archivo',
-})
+/** All font variables, for the className on <html>. */
+export const fontVariables = instrument.variable

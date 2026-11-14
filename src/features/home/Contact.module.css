@@ -1,82 +1,524 @@
-.contact {
-  display: grid;
-  gap: var(--space-8);
-  justify-items: center;
-  min-height: 100svh;
-  align-content: center;
-  text-align: center;
-}
+/* Kontakt: a huge "Napiš mi", the address on the left, the form on a raised panel on the right. */
 
-.copy {
-  position: relative;
-  z-index: var(--z-copy);
-  display: grid;
-  gap: var(--space-5);
-  justify-items: center;
+.section {
+  padding-bottom: var(--section-pad);
 }
 
 .heading {
-  font-size: clamp(4rem, 1rem + 13vw, 15rem);
-  font-weight: 600;
-  line-height: 0.88;
-  letter-spacing: -0.065em;
+  margin-top: var(--space-7);
+  font-size: clamp(4.25rem, 0.8rem + 15vw, 15rem);
+  font-weight: 500;
+  font-stretch: 88%;
+  line-height: 0.86;
+  letter-spacing: -0.055em;
+  white-space: nowrap;
+}
+
+/* the one orange thing in the section */
+.dot {
+  color: var(--accent);
+}
+
+.layout {
+  display: grid;
+  gap: var(--space-9);
+  margin-top: var(--space-8);
+}
+
+/* ── left: words and the address ───────────────── */
+.copy {
+  display: grid;
+  align-content: start;
+  gap: var(--space-7);
+  min-width: 0;
+}
+
+.body {
+  max-width: 30rem;
+  font-size: var(--fs-lead);
+  line-height: 1.4;
+  color: var(--fg-muted);
+}
+
+.mailBlock {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+}
+
+.mailLabel {
+  font-size: var(--fs-label);
+  color: var(--fg-subtle);
 }
 
 .mail {
-  font-family: var(--font-mono);
+  display: inline-block;
+  max-width: 100%;
+  font-size: clamp(1.6rem, 1rem + 2.4vw, 2.9rem);
   font-weight: 500;
-  font-size: clamp(1.125rem, 0.8rem + 1.6vw, 2rem);
-  letter-spacing: -0.02em;
+  font-stretch: 92%;
+  line-height: 1.15;
+  letter-spacing: var(--tracking-h);
   text-decoration: underline;
+  text-decoration-color: var(--line-strong);
   text-decoration-thickness: 1px;
-  text-underline-offset: 0.25em;
+  text-underline-offset: 0.18em;
   overflow-wrap: anywhere;
+  transition: text-decoration-color var(--dur-base) var(--ease-out);
 }
 
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-3);
+.mail:hover {
+  text-decoration-color: var(--fg);
 }
 
 .copyButton {
   display: inline-flex;
   align-items: center;
-  gap: 1ch;
-  min-height: 48px;
-  padding-inline: var(--space-6);
+  gap: var(--space-2);
+  min-height: 44px;
+  margin-top: var(--space-2);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line-strong);
   border-radius: var(--r-control);
-  background: var(--c-paper);
-  color: var(--c-toner);
-  font-family: var(--font-body);
-  font-size: var(--fs-body);
+  background: transparent;
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: var(--fs-small);
   font-weight: 500;
-  transition: background-color var(--dur-fast) var(--ease-out);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
 }
 
 .copyButton:hover {
-  background: #ffffff;
+  border-color: var(--fg);
+  color: var(--fg);
 }
 
-.copyButton span {
-  font-family: var(--font-mono);
-  font-size: var(--fs-small);
+.copyButton[data-state='done'] {
+  border-color: var(--fg);
+  background: var(--fg);
+  color: var(--bg);
 }
 
-.now {
+.status {
+  white-space: normal;
+}
+
+/* ── right: the form ───────────────────────────── */
+.stage {
   position: relative;
-  z-index: var(--z-copy);
-  list-style: none;
+  min-width: 0;
+}
+
+.plane {
+  position: absolute;
+  top: calc(-1 * clamp(4rem, 12vw, 7rem));
+  right: calc(-1 * clamp(0.5rem, 2vw, 2rem));
+  width: clamp(8rem, 30vw, 15rem);
+  aspect-ratio: 1;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.card {
+  position: relative;
+  padding: clamp(1.25rem, 0.6rem + 3vw, 3rem);
+  border: 1px solid var(--line);
+  border-radius: var(--r-l);
+  background: var(--bg-raised);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.formHead {
+  display: grid;
+  gap: var(--space-5);
+  /* keep the title clear of the plane */
+  padding-right: clamp(4rem, 18vw, 9rem);
+}
+
+.formTitle {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  font-stretch: 92%;
+  line-height: 1;
+  letter-spacing: var(--tracking-h);
+}
+
+/* the steps as 1/3 2/3 3/3, each over a hairline that turns white when reached */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
   padding: 0;
+  list-style: none;
+}
+
+.steps li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.5ch;
+  padding-top: var(--space-3);
+  border-top: 2px solid var(--line);
+  font-size: var(--fs-label);
+  color: var(--fg-subtle);
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+
+.steps li[data-done] {
+  border-color: var(--line-strong);
+  color: var(--fg-muted);
+}
+
+.steps li[data-current] {
+  border-color: var(--fg);
+  color: var(--fg);
+}
+
+.stepNo {
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.stepName {
+  font-weight: 400;
+}
+
+.step {
+  display: grid;
+  gap: var(--space-5);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* with JS only the current step shows; without, the whole form is one long page */
+:global(.js) .step:not([data-current]) {
+  display: none;
+}
+
+.step[data-current] {
+  animation: stepIn var(--dur-base) var(--ease-out);
+}
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* the step list above already shows where you are: the legend is for screen readers (and focus) */
+.legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.legend:focus {
+  outline: none;
+}
+
+.row {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.field {
   display: grid;
   gap: var(--space-2);
-  color: var(--fg-subtle);
-  text-transform: none;
+  min-width: 0;
 }
 
-.time {
-  margin-right: 1ch;
+.fieldLabel {
+  font-size: var(--fs-small);
+  font-weight: 500;
   color: var(--fg-muted);
+}
+
+.req {
+  color: var(--fg-subtle);
+}
+
+.field input:not([type='checkbox']),
+.field textarea {
+  width: 100%;
+  min-height: 52px;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-s);
+  background: var(--bg-high);
+  color: var(--fg);
+  font: inherit;
+  font-size: 1rem;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.field textarea {
+  min-height: 9rem;
+  line-height: var(--lh-body);
+  resize: vertical;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--fg-subtle);
+  opacity: 1;
+}
+
+.field input:not([type='checkbox']):hover,
+.field textarea:hover {
+  border-color: var(--line-strong);
+}
+
+.field input:not([type='checkbox']):focus,
+.field textarea:focus {
+  border-color: var(--fg);
+  background: var(--c-ink-3);
+  outline: none;
+}
+
+.field input:not([type='checkbox']):focus-visible,
+.field textarea:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.field [aria-invalid='true'] {
+  border-color: var(--accent);
+}
+
+.help {
+  font-size: var(--fs-label);
+  color: var(--fg-subtle);
+}
+
+.error {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.error a {
+  color: var(--fg);
+}
+
+/* choice groups: toggle chips, the picked ones white */
+.group {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.groupLabel {
+  padding: 0;
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+
+.groupHint {
+  font-weight: 400;
+  color: var(--fg-subtle);
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.choice {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-s);
+  background: transparent;
+  color: var(--fg-muted);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.choice:hover {
+  border-color: var(--fg);
+  color: var(--fg);
+}
+
+.choice[data-checked] {
+  border-color: var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.choice input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.choice:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-height: 44px;
+  padding-block: var(--space-2);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+  cursor: pointer;
+}
+
+.consent input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 0.15em 0 0;
+  accent-color: var(--fg);
+  cursor: pointer;
+}
+
+.consent a {
+  color: var(--fg);
+}
+
+/* bots fill everything; people never see this */
+.trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-top: var(--space-3);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+}
+
+.nav > :only-child {
+  margin-left: auto;
+}
+
+.nav button[disabled] {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* the quiet back link as a <button> */
+.back {
+  border: 0;
+  font: inherit;
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+
+.back:hover {
+  color: var(--fg);
+}
+
+/* ── sent ──────────────────────────────────────── */
+.sent {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+  min-height: 22rem;
+  align-content: center;
+  animation: stepIn var(--dur-slow) var(--ease-out);
+}
+
+.sentNo {
+  font-size: var(--fs-label);
+  color: var(--fg-subtle);
   font-variant-numeric: tabular-nums;
+}
+
+.sentTitle {
+  font-size: clamp(2.4rem, 1.4rem + 3.6vw, 4.5rem);
+  font-weight: 500;
+  font-stretch: 90%;
+  line-height: 0.95;
+  letter-spacing: var(--tracking-display);
+}
+
+.sentBody {
+  max-width: 28rem;
+  color: var(--fg-muted);
+}
+
+@media (min-width: 640px) {
+  .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    margin-top: var(--space-9);
+  }
+
+  .copy {
+    grid-column: 1 / 6;
+  }
+
+  .stage {
+    grid-column: 6 / 13;
+  }
+
+  .plane {
+    top: -7.5rem;
+    right: -2rem;
+    width: 15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step[data-current],
+  .sent {
+    animation: none;
+  }
 }

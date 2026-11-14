@@ -1,71 +1,54 @@
-import { AsciiShape } from '@/components/ascii/AsciiShape'
-import { CodePanel } from '@/components/ascii/CodePanel'
-import { Glyphs } from '@/components/ascii/Glyphs'
-import { Clock } from '@/components/ascii/Live'
+import { Arrow } from '@/components/ui/Arrow'
 import { home } from '@/content/home'
 import { site } from '@/content/site'
 import { typo } from '@/lib/typo/czech'
+import { HeroStage } from './HeroStage'
 import shared from './home.module.css'
 import styles from './Hero.module.css'
 
 /**
- * The opening: the name set huge in characters, the claim under it, the code that describes me
- * writing itself in a panel, and a </> turning in characters on the right.
+ * The opening: one screen, a cluster of polished chrome behind the copy — the things I make,
+ * which you can push around with the cursor and knock with a click. The title is set large and
+ * plain at the bottom left; the intro and the two ways on sit at the bottom right.
  */
 export function Hero() {
   const { hero } = home
   return (
-    <section data-ground="smear" className={styles.hero} aria-labelledby="hero-title">
-      <div className={styles.inner}>
-        <p className={`meta ${styles.tag}`}>
-          <span>{hero.tag}</span>
-          <span className={styles.clock}>
-            <Clock />
-          </span>
-        </p>
+    <section className={styles.hero} aria-labelledby="hero-title">
+      <HeroStage />
 
-        <div className={`${shared.veil} ${styles.claim}`}>
-          <Glyphs as="h1" id="hero-title" className={styles.name} cellSize={8} duration={1200}>
-            {site.brand}
-          </Glyphs>
-          <p className={styles.title}>
-            {hero.title.map((line, i) => (
-              <span key={line} className={styles.line} data-indent={i === 1 ? '' : undefined}>
-                {line}
-              </span>
-            ))}
+      <div className={styles.inner}>
+        <div className={styles.top}>
+          <p className="label">{typo(hero.tag)}</p>
+          <p className={`label ${styles.status}`}>
+            <span className={styles.dot} data-open={site.availability.open} aria-hidden="true" />
+            {typo(site.availability.label)}
           </p>
         </div>
 
-        <div className={styles.row}>
-          <div className={`${shared.veil} ${styles.copy}`}>
-            <p className={shared.lead}>{typo(hero.intro)}</p>
+        <div className={styles.bottom}>
+          <h1 id="hero-title" className={styles.title}>
+            {hero.title.map((line) => (
+              <span key={line} className={styles.line}>
+                {typo(line)}
+              </span>
+            ))}
+          </h1>
+
+          <div className={styles.aside}>
+            <p className={styles.intro}>{typo(hero.intro)}</p>
             <div className={styles.actions}>
               <a className={shared.button} href="#kontakt">
                 {hero.ctaPrimary}
-                <span className={shared.arrow} aria-hidden="true">
-                  -&gt;
-                </span>
+                <Arrow className={shared.arrow} />
               </a>
-              <a className={`${shared.button} ${shared.ghost}`} href="#prace">
+              <a className={shared.link} href="#co-delam">
                 {hero.ctaSecondary}
-                <span className={shared.arrow} aria-hidden="true">
-                  v
-                </span>
               </a>
             </div>
           </div>
-          <CodePanel
-            className={styles.code}
-            filename={hero.codeFile}
-            code={hero.code}
-            replay={hero.replay}
-          />
         </div>
-      </div>
 
-      <div className={styles.model}>
-        <AsciiShape shape="code" cellSize={8} />
       </div>
     </section>
   )

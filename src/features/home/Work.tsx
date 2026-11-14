@@ -1,62 +1,78 @@
-import Link from 'next/link'
-import { Photo } from '@/components/media/Photo'
+import type { CSSProperties } from 'react'
+import { Media } from '@/components/media/Media'
+import { Showcase, type Corner, type Hue } from '@/components/showcase/Showcase'
 import { home } from '@/content/home'
+import { getSlot } from '@/content/media'
 import { categoryLabels, projects } from '@/content/projects'
 import { typo } from '@/lib/typo/czech'
 import shared from './home.module.css'
 import styles from './Work.module.css'
 
-/** Selected work: a plain row of project cards — preview, a line of facts, the name, one sentence. */
+const SIZES = ['(min-width: 768px) 92vw, 100vw', '(min-width: 768px) 46vw, 100vw']
+const HUES: Hue[] = ['cold', 'warm', 'violet']
+const CORNERS: Corner[] = ['tr', 'tl', 'tr']
+
+/**
+ * 04 Práce — three projects on metal plates, the first across the full width, the other two
+ * side by side. Until a project has its photo, the plate shows a drawn picture of it; its chrome
+ * object sits on the corner either way.
+ */
 export function Work() {
   const { work } = home
-  const featured = projects.filter((p) => p.featured)
-
+  const featured = projects.filter((p) => p.featured).slice(0, 3)
   return (
-    <section
-      data-ground="contour"
-      id="prace"
-      className={shared.section}
-      aria-labelledby="prace-title"
-    >
-      <div className={styles.head}>
-        <div className={styles.headCopy}>
-          <p className={shared.label}>
-            <span>{work.index}</span>
-            <b>{work.label}</b>
-          </p>
-          <h2 id="prace-title" className={styles.heading}>
-            {typo(work.heading)}
-          </h2>
-        </div>
-        <Link className={`${shared.button} ${shared.ghost}`} href="/prace">
-          {work.allLabel}
-          <span className={shared.arrow} aria-hidden="true">
-            -&gt;
-          </span>
-        </Link>
-      </div>
+    <section id="prace" className={shared.section} aria-labelledby="prace-title">
+      <header className={styles.head}>
+        <p className={shared.label} data-reveal="">
+          <b>{work.index}</b> {work.label}
+        </p>
+        <h2
+          id="prace-title"
+          className={`${shared.h2} ${styles.h2}`}
+          data-reveal=""
+          style={{ '--reveal-i': 1 } as CSSProperties}
+        >
+          {typo(work.heading)}
+        </h2>
+      </header>
 
-      <ul className={styles.grid} role="list">
-        {featured.map((p, i) => (
-          <li key={p.slug}>
-            <Link href={`/prace/${p.slug}`} className={styles.card}>
-              <div className={styles.media}>
-                <Photo slot={p.slot} ratio="4 / 3" seed={i + 3} cellSize={7} />
-              </div>
-              <p className={`meta ${styles.meta}`}>
-                <span>{p.index}</span>
-                <span>{p.categories.map((c) => categoryLabels[c]).join(' / ')}</span>
-                <span>{p.year}</span>
-              </p>
-              <h3 className={styles.title}>{typo(p.title)}</h3>
-              <p className={styles.summary}>{typo(p.summary)}</p>
-              <span className={`meta ${styles.more}`} aria-hidden="true">
-                {work.open} -&gt;
-              </span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <ol className={styles.grid} role="list">
+        {featured.map((project, i) => {
+          const hasPhoto = Boolean(getSlot(project.slot).src)
+          return (
+            <li
+              key={project.slug}
+              className={styles.cell}
+              data-reveal=""
+              style={{ '--reveal-i': i % 2 } as CSSProperties}
+            >
+              <article className={styles.project} aria-labelledby={`projekt-${project.slug}`}>
+                <Showcase
+                  mock={project.mock}
+                  object={project.object}
+                  hue={HUES[i % HUES.length]}
+                  corner={CORNERS[i % CORNERS.length]}
+                  wide={i === 0}
+                >
+                  {hasPhoto ? <Media slot={project.slot} className={styles.media} sizes={SIZES[i === 0 ? 0 : 1]} /> : undefined}
+                </Showcase>
+                <div className={styles.caption}>
+                  <div className={styles.titleRow}>
+                    <h3 id={`projekt-${project.slug}`} className={styles.title}>
+                      {project.title}
+                    </h3>
+                    <p className={styles.year}>{project.year}</p>
+                  </div>
+                  <p className={styles.meta}>
+                    {project.categories.map((c) => categoryLabels[c]).join(', ')}
+                  </p>
+                  <p className={styles.summary}>{typo(project.summary)}</p>
+                </div>
+              </article>
+            </li>
+          )
+        })}
+      </ol>
     </section>
   )
 }

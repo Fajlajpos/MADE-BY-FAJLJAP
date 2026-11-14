@@ -1,9 +1,13 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { NavList } from '@/components/layout/NavList'
+import { Arrow } from '@/components/ui/Arrow'
+import shared from '@/features/home/home.module.css'
 import { typo } from '@/lib/typo/czech'
-import { HomeLink, LostArt, LostSignal } from './NotFoundArt'
+import { Slot3D } from '@/three/site/Slot3D'
+import { ThreeRoot } from '@/three/site/ThreeRoot'
 import styles from './not-found.module.css'
 
 export const metadata: Metadata = {
@@ -11,53 +15,44 @@ export const metadata: Metadata = {
   robots: { index: false },
 }
 
-/** Renders outside the (site) layout, so it brings its own shell. */
+/** 404: a huge number, a short line, the way back, and the chrome browser window that found nothing. */
 export default function NotFound() {
   return (
-    <>
+    <ThreeRoot>
       <a className="skip-link" href="#obsah">
         Přeskočit na obsah
       </a>
       <Header />
       <main id="obsah" tabIndex={-1} className={styles.main}>
-        <LostSignal>
-          <div className={`meta ${styles.strip}`} aria-hidden="true">
-            <span>[ERR] 404</span>
-            <span>signál: žádný</span>
-            <span>znaků: 0 / 0</span>
-          </div>
-
-          <LostArt className={styles.art} />
-
+        <div className={styles.inner}>
           <div className={styles.copy}>
-            <h1 className={styles.title}>{typo('Tahle stránka se rozpadla na znaky.')}</h1>
-            <div className={styles.side}>
-              <p className={styles.lead}>
-                {typo(
-                  'Buď jsem ji přesunul, nebo nikdy neexistovala. Zbylo z ní jen pár teček a dvojteček. Chyba 404.',
-                )}
-              </p>
-              <HomeLink className={styles.home}>
-                <span className={styles.homeArrow} aria-hidden="true">
-                  &lt;-
-                </span>
-                Zpátky na úvod
-              </HomeLink>
-              <nav className={styles.nav} aria-labelledby="nf-kam">
-                <p id="nf-kam" className={`meta ${styles.navTitle}`}>
-                  Nebo zkus jinou stránku (nebo Ctrl K)
-                </p>
-                <NavList
-                  className={styles.list}
-                  linkClassName={styles.link}
-                  indexClassName={`meta ${styles.index}`}
-                />
-              </nav>
-            </div>
+            <p className={styles.code}>Chyba 404</p>
+            <h1 className={styles.title}>
+              <span className={styles.number} aria-hidden="true">
+                404
+              </span>
+              <span className={styles.heading}>{typo('Tahle stránka tu není.')}</span>
+            </h1>
+            <p className={styles.lead}>
+              {typo('Buď jsem ji přesunul, nebo nikdy neexistovala. Zbytek webu je v pořádku.')}
+            </p>
+            <Link href="/" className={`${shared.button} ${styles.home}`}>
+              Zpátky na úvod
+              <Arrow className={shared.arrow} />
+            </Link>
           </div>
-        </LostSignal>
+
+          <Slot3D object="browser" className={styles.object} />
+
+          <nav className={styles.nav} aria-labelledby="nf-kam">
+            <p id="nf-kam" className={styles.navTitle}>
+              Nebo rovnou sem
+            </p>
+            <NavList className={styles.list} linkClassName={styles.link} indexClassName={styles.index} indexes />
+          </nav>
+        </div>
       </main>
       <Footer />
-    </>
+    </ThreeRoot>
   )
 }

@@ -4,12 +4,14 @@
  * (SiteText, Setting, MediaSlot, Project) and these files become the seed.
  */
 
-/** Generative stand-in shown in a media slot until a real photo is uploaded. */
-export type PlaceholderVariant = 'bust' | 'facade' | 'eye' | 'desk'
+/** The light of the generative stand-in shown in a media slot until a real photo is uploaded. */
+export type PlaceholderVariant = 'warm' | 'cold' | 'dusk'
 
 export type MediaSlot = {
   /** Path under /public (e.g. '/photos/portrait.jpg'). Empty = generative placeholder. */
   src?: string
+  /** A video (e.g. '/video/reel.mp4'); `src` then serves as its poster. */
+  video?: string
   /** Required — describes the photo for screen readers and search engines. */
   alt: string
   placeholder: PlaceholderVariant
@@ -31,6 +33,10 @@ export type ProjectSummary = {
   role: string
   /** Key into mediaSlots, e.g. 'project.seda-zona'. */
   slot: string
+  /** The chrome symbol shown on the card until the project has a photo. */
+  object: 'browser' | 'parcel' | 'pen' | 'phone' | 'mug' | 'play' | 'tag' | 'plane'
+  /** The drawn picture of the work shown on the card until the photo comes. */
+  mock: 'web' | 'shop' | 'brand' | 'app' | 'poster'
   featured: boolean
 }
 

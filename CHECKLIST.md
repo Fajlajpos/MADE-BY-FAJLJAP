@@ -5,7 +5,9 @@
 - [x] Fáze 0: plán, stack, datový model, rozbor moodboardu (`PLAN.md`)
 - [x] Fáze 1: tři vizuální směry (zamítnuté, zůstal jen tečkovaný rastr)
 - [x] Fáze 1b: směr RASTR (nahrazený, záloha v `.backup/`)
-- [x] Fáze 1c: redesign do ASCII, směr ZNAKY: úvod, hlavička, mobilní menu, Ctrl K paleta, patička, 404 (**čeká na tvoje potvrzení + výběr barvy tisku**)
+- [x] Fáze 1c: redesign do ASCII, směr ZNAKY (nahrazený, záloha v `.backup/znaky-2026-11-14/`)
+- [x] Fáze 1d: 3D úvod „Noční stůl“ (přepracovaný ve fázi 1e)
+- [x] Fáze 1e: konec ASCII, směr CHROM A DVĚ SVĚTLA: stůl se službami a lift-off do chromu, sekce Služby s 3D prstencem, Práce, O mně, Mimo obrazovku, Kontakt (formulář po krocích), nová hlavička, menu, Ctrl K, patička, 404 (**čeká na tvoje potvrzení**)
 - [ ] Fáze 2: MVP (Docker, DB, stránky, formulář + e-maily, admin, SEO)
 - [ ] Fáze 3: umění (3D, shadery, přechody, kurzor, zvuk)
 - [ ] Fáze 4: navíc (journal admin, lab, kalkulačka, rezervace, notifikace, video, náhledy webů, verze, PWA)
@@ -23,15 +25,21 @@
 
 ### Značka a obsah
 - [ ] Moodboard fotky uložit do `/moodboard` (ze chatu je agenti nevidí)
-- [ ] **Vybrat barvu tisku** přepínačem v patičce (Ultramarín / Signální oranžová / Riso růžová)
-- [ ] **Tvoje fotky do slotů** (automaticky se převedou do znaků): soubor do `public/photos/`, pak v `src/content/media.ts` doplnit `src` a `alt`. Sloty: `home.hero` (portrét), `home.about`, `home.studio.1–4` (z dílny: stůl v noci, skici, obrazovka, cesta), `project.*`. Ve fázi 2 to půjde přes admin.
-- [ ] Potvrdit fakta v textech úvodu (`src/content/home.ts`): „odpovím do dvou dnů“, pracovní doba „22:00 – 03:00“, tři položky v sekci „Teď“
+- [ ] **Tvoje fotky do slotů**: soubor do `public/photos/`, pak v `src/content/media.ts` doplnit `src` a `alt` (fotka zůstane barevná, ořízne se podle `focal`). Sloty: `home.about` (portrét v O mně), `home.studio.1–6` (pás Mimo obrazovku), `project.*` (karty projektů: s fotkou zmizí chromový objekt), `desk.photo` (polaroid na stole). Ve fázi 2 to půjde přes admin.
+- [ ] Potvrdit texty v `src/content/home.ts`: nadpis úvodu, popisy a body služeb, text O mně (paneláky, „22:00 – 03:00“, „odpovím do dvou dnů“)
 - [ ] Logo, nebo potvrzení, že zůstane typografický wordmark FAJLAJP
 - [ ] Fotky a videa do mediálních slotů (hero, O mně, přechody)
 - [ ] Reálné projekty (texty, fotky, odkazy) místo 3 smyšlených
 - [ ] Kontrola a úprava textů. **Potvrdit tykání** návštěvníkům.
 - [ ] Rozpočtové rozsahy pro formulář (zatím návrh)
 - [ ] Ceny a parametry pro kalkulačku (fáze 4)
+
+### 3D úvod (Noční stůl)
+- [ ] **Potvrdit texty štítků** v `src/content/desk.ts` (Weby, E-shopy #0042, Aplikace, Grafika a logo, Lampa) a závěrečnou větu „Z rozdělaných věcí na stole hotová práce…“
+- [ ] **Fotka na stole** (polaroid): soubor do `public/photos/`, pak `src` u slotu `desk.photo` v `src/content/media.ts`. Je barevná, oříznutá na čtverec podle `focal`.
+- [ ] **Vlastní 3D modely** (volitelné): `.glb` do `public/models/`, cestu do `src/content/models.ts` (postup je v hlavičce souboru). Bez nich zůstávají modely z kódu.
+- [ ] Po změně scény nebo objektu znovu vyrenderovat statické obrázky: `npm run dev` a pak `node scripts/scene-poster.mjs`
+- [ ] Podstránky projektů zatím nejsou (fáze 2), karty v Práce proto nikam nevedou; navigace vede na sekce úvodní stránky
 
 ### Přístupy a služby (stačí doplnit do `.env`)
 - [ ] Gmail / Google Workspace: OAuth2 údaje (client ID, secret, refresh token), nebo heslo aplikace

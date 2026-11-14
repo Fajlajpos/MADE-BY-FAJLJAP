@@ -1,0 +1,66 @@
+.media {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-high);
+  isolation: isolate;
+}
+
+.img {
+  object-fit: cover;
+}
+
+/* a photo keeps its own colours; the props below exist for older callers */
+.dots {
+  display: none;
+}
+
+/* the stand-in until a photo comes: a studio backdrop under one warm lamp, a pool of light on
+   the floor, brushed metal grain and a lit top edge, so the empty slot already has a mood */
+.media:has(.wash) {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.08),
+    inset 0 0 0 1px rgb(255 255 255 / 0.05);
+}
+
+.wash {
+  position: absolute;
+  inset: 0;
+  background:
+    /* the lamp, above */
+    radial-gradient(45% 55% at 50% -8%, rgb(255 196 150 / 0.2), rgb(255 196 150 / 0) 72%),
+    /* where its light lands */
+    radial-gradient(42% 14% at 50% 86%, rgb(255 170 120 / 0.1), rgb(255 170 120 / 0) 75%),
+    /* the backdrop curving into the floor */
+    linear-gradient(180deg, rgb(255 255 255 / 0) 62%, rgb(255 255 255 / 0.025) 78%, rgb(0 0 0 / 0) 100%),
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.013) 0 1px, rgb(0 0 0 / 0) 1px 3px),
+    linear-gradient(180deg, #1b1a1e 0%, #111114 60%, #0a0a0c 100%);
+}
+
+.media[data-tone='cold'] .wash {
+  background:
+    radial-gradient(45% 55% at 50% -8%, rgb(150 180 255 / 0.18), rgb(150 180 255 / 0) 72%),
+    radial-gradient(42% 14% at 50% 86%, rgb(120 150 255 / 0.09), rgb(120 150 255 / 0) 75%),
+    linear-gradient(180deg, rgb(255 255 255 / 0) 62%, rgb(255 255 255 / 0.025) 78%, rgb(0 0 0 / 0) 100%),
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.013) 0 1px, rgb(0 0 0 / 0) 1px 3px),
+    linear-gradient(180deg, #191a1f 0%, #101114 60%, #0a0a0c 100%);
+}
+
+.mark {
+  position: absolute;
+  left: var(--space-5);
+  bottom: var(--space-4);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: rgb(244 244 242 / 0.08);
+}
+
+.caption {
+  position: absolute;
+  left: var(--space-4);
+  top: var(--space-4);
+  max-width: 70%;
+  font-size: var(--fs-label);
+  color: var(--fg-subtle);
+}

@@ -1,133 +1,123 @@
+/* 04 Práce — large images with short captions: one across, two side by side. */
+
 .head {
-  position: relative;
-  z-index: var(--z-copy);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--space-5) var(--gutter);
-  margin-bottom: var(--space-7);
-}
-
-.headCopy {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
 }
 
-.heading {
-  font-size: var(--fs-h2);
-  line-height: var(--lh-tight);
-  max-width: 14ch;
+.h2 {
+  max-width: 12ch;
 }
+
+/* ── the grid ────────────────────────────────────────────────── */
 
 .grid {
-  position: relative;
-  z-index: var(--z-copy);
-  list-style: none;
+  display: grid;
+  gap: var(--space-8);
+  margin: 0;
   padding: 0;
+  list-style: none;
+}
+
+.cell {
+  min-width: 0;
+}
+
+.project {
   display: grid;
-  gap: var(--space-7) var(--gutter);
-}
-
-.card {
-  display: grid;
-  align-content: start;
-  gap: var(--space-3);
-  height: 100%;
-  padding: var(--space-3) var(--space-3) var(--space-5);
-  border: var(--hairline) solid var(--c-panel-line);
-  border-radius: var(--r-panel);
-  background: var(--c-panel);
-  text-decoration: none;
-  color: inherit;
-  transition: border-color var(--dur-base) var(--ease-out);
-}
-
-.card:hover {
-  border-color: var(--line-strong);
-}
-
-.meta,
-.title,
-.summary,
-.more {
-  margin-inline: var(--space-3);
-}
-
-.card:focus-visible {
-  outline-offset: 4px;
+  gap: var(--space-6);
+  /* room for the object sticking out over the top edge */
+  padding-top: var(--space-8);
 }
 
 .media {
-  border-radius: var(--r-inner);
-  overflow: hidden;
-  margin-bottom: var(--space-2);
+  position: absolute;
+  inset: 0;
 }
 
-.media figure {
-  transition: scale var(--dur-slow) var(--ease-out);
+/* ── caption ─────────────────────────────────────────────────── */
+
+.caption {
+  display: grid;
+  gap: var(--space-2);
 }
 
-.card:hover .media figure {
-  scale: 1.02;
-}
-
-.meta {
+.titleRow {
   display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   gap: var(--space-4);
-  color: var(--fg-subtle);
-}
-
-.meta span:last-child {
-  margin-left: auto;
 }
 
 .title {
-  font-size: var(--fs-h3);
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2.2rem);
+  font-weight: 500;
   line-height: 1.1;
-  letter-spacing: -0.035em;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.15em;
-  transition: text-decoration-color var(--dur-base) var(--ease-out);
+  letter-spacing: var(--tracking-h);
 }
 
-.card:hover .title {
-  text-decoration-color: currentColor;
+.year,
+.meta {
+  margin: 0;
+  font-size: var(--fs-label);
+  font-weight: 500;
+  color: var(--fg-subtle);
+}
+
+.year {
+  flex: none;
+  font-variant-numeric: tabular-nums;
 }
 
 .summary {
-  font-size: var(--fs-small);
-  color: var(--fg-muted);
-  max-width: 30rem;
-}
-
-.more {
+  max-width: 34rem;
   margin-top: var(--space-2);
+  font-size: var(--fs-small);
+  line-height: var(--lh-body);
   color: var(--fg-muted);
-  text-transform: none;
-  transition: color var(--dur-fast) var(--ease-out);
 }
 
-.card:hover .more {
-  color: var(--fg);
-}
-
-@media (min-width: 700px) {
+/* ── wider: the first across, the other two side by side ─────── */
+@media (min-width: 768px) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    row-gap: var(--space-9);
+  }
+
+  .cell:first-child {
+    grid-column: 1 / -1;
+  }
+
+  /* the third one sits a step lower: one quiet asymmetry */
+  .cell:nth-child(3) {
+    margin-top: var(--space-9);
+  }
+
+}
+
+@media (min-width: 1024px) {
+  .head {
+    margin-bottom: var(--space-9);
+  }
+
+  /* the wide project's caption: title and meta on the left, summary on the right */
+  .cell:first-child .caption {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    align-items: start;
+  }
+
+  .cell:first-child .titleRow,
+  .cell:first-child .meta {
+    grid-column: 1 / 6;
+  }
+
+  .cell:first-child .summary {
+    grid-column: 7 / -1;
+    grid-row: 1 / span 2;
+    margin-top: 0.4rem;
   }
 }
 
-@media (min-width: 1100px) {
-  .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .media figure {
-    transition: none;
-  }
-}

@@ -1,0 +1,160 @@
+/* 03 Jak to probíhá — four steps on one horizontal axis. */
+
+/* ── head ────────────────────────────────────────────────────── */
+
+.head {
+  display: grid;
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+
+.h2 {
+  max-width: 11ch;
+}
+
+.lead {
+  max-width: 26rem;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+/* ── the steps ───────────────────────────────────────────────── */
+
+.steps {
+  display: grid;
+  gap: var(--space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: grid;
+  align-content: start;
+}
+
+.num {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  font-stretch: 90%;
+  line-height: 1;
+  letter-spacing: var(--tracking-h);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+/* the axis: a hairline with a small dot where the step sits on it */
+.rule {
+  position: relative;
+  height: 1px;
+  margin-block: var(--space-5) var(--space-6);
+  background: var(--line-strong);
+  transform-origin: 0 50%;
+  transition: transform var(--dur-slow) var(--ease-out);
+  transition-delay: calc(var(--reveal-i, 0) * 90ms + 120ms);
+}
+
+.rule::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--fg);
+}
+
+.step:first-child .rule::before {
+  background: var(--accent);
+}
+
+:global(.js) .step:not([data-in]) .rule {
+  transform: scaleX(0);
+}
+
+.title {
+  font-size: clamp(1.5rem, 1.2rem + 0.9vw, 2rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: var(--tracking-h);
+}
+
+.time {
+  margin: var(--space-2) 0 0;
+  font-size: var(--fs-label);
+  font-weight: 500;
+  color: var(--fg-subtle);
+}
+
+.body {
+  max-width: 30rem;
+  margin: var(--space-4) 0 0;
+  font-size: var(--fs-small);
+  line-height: var(--lh-body);
+  color: var(--fg-muted);
+}
+
+/* ── tablet: two by two ──────────────────────────────────────── */
+@media (min-width: 768px) {
+  .steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    row-gap: var(--space-9);
+  }
+
+  /* the axis runs on through the gutter to the next step */
+  .step:nth-child(odd) .rule {
+    margin-right: calc(-1 * var(--gutter));
+  }
+}
+
+/* ── wide: one axis, four columns ────────────────────────────── */
+@media (min-width: 1024px) {
+  .head {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    row-gap: var(--space-8);
+    align-items: end;
+    margin-bottom: var(--space-9);
+  }
+
+  .label {
+    grid-column: 1 / -1;
+  }
+
+  .h2 {
+    grid-column: 1 / 9;
+  }
+
+  .lead {
+    grid-column: 9 / -1;
+    padding-bottom: 0.5rem;
+  }
+
+  .steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .step .rule {
+    margin-right: calc(-1 * var(--gutter));
+  }
+
+  .step:last-child .rule {
+    margin-right: 0;
+  }
+
+  .num {
+    font-size: clamp(2.6rem, 1.6rem + 2vw, 4rem);
+  }
+
+  .body {
+    padding-right: var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rule {
+    transition: none;
+  }
+}

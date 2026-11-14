@@ -1,0 +1,177 @@
+/* 02 Co dělám — four large cards, each a metal plate with a picture of the work and a chrome
+   object on its corner, the text beside it. */
+
+/* ── head ────────────────────────────────────────────────────── */
+
+.head {
+  display: grid;
+  gap: var(--space-6);
+  margin-bottom: var(--space-9);
+}
+
+.h2 {
+  max-width: 11ch;
+}
+
+.lead {
+  max-width: 26rem;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+/* ── the cards ───────────────────────────────────────────────── */
+
+.list {
+  display: grid;
+  gap: calc(var(--space-9) * 1.25);
+}
+
+.item {
+  display: grid;
+  gap: var(--space-7);
+  align-items: center;
+  scroll-margin-top: calc(var(--header-h) + var(--space-8));
+}
+
+.visual {
+  min-width: 0;
+  /* room for the object sticking out over the top edge */
+  padding-top: var(--space-8);
+}
+
+.text {
+  display: grid;
+  align-content: start;
+  gap: var(--space-5);
+}
+
+.num {
+  margin: 0;
+  font-size: var(--fs-label);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-subtle);
+}
+
+.titleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-5);
+}
+
+.title {
+  font-size: clamp(2.4rem, 1.4rem + 3.2vw, 4.6rem);
+  font-weight: 500;
+  font-stretch: 90%;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-display);
+}
+
+.tag {
+  margin: 0;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-size: var(--fs-label);
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+
+.body {
+  max-width: 34rem;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--fg-muted);
+}
+
+/* what you get: a plain list split by hairlines */
+.points {
+  display: grid;
+  max-width: 34rem;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-small);
+  color: var(--fg);
+}
+
+.points li {
+  display: flex;
+  gap: 0.8rem;
+  padding-block: 0.85rem;
+  border-top: 1px solid var(--line);
+}
+
+.points li::before {
+  content: '';
+  flex: none;
+  width: 5px;
+  height: 5px;
+  margin-top: 0.55em;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.points li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.cta {
+  margin-top: var(--space-9);
+}
+
+/* ── wide: picture and text side by side, alternating ───────── */
+@media (min-width: 1024px) {
+  .head {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    row-gap: var(--space-8);
+    align-items: end;
+    margin-bottom: calc(var(--space-9) * 1.25);
+  }
+
+  .label {
+    grid-column: 1 / -1;
+  }
+
+  .h2 {
+    grid-column: 1 / 9;
+  }
+
+  .lead {
+    grid-column: 9 / -1;
+    padding-bottom: 0.5rem;
+  }
+
+  .list {
+    gap: calc(var(--space-9) * 1.6);
+  }
+
+  .item {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+  }
+
+  .visual {
+    grid-column: 1 / 8;
+    grid-row: 1;
+  }
+
+  .text {
+    grid-column: 9 / -1;
+    grid-row: 1;
+  }
+
+  .item:nth-child(even) .visual {
+    grid-column: 6 / -1;
+  }
+
+  .item:nth-child(even) .text {
+    grid-column: 1 / 5;
+  }
+
+  .cta {
+    text-align: center;
+  }
+}

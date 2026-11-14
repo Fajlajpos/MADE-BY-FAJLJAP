@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { prefersReducedMotion } from '@/lib/ascii/env'
+import { prefersReducedMotion } from '@/lib/dom'
 
 /**
  * Parallax for the objects lying on the world: every `[data-depth="0.1"]` element drifts by that

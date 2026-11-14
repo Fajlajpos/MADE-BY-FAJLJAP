@@ -1,0 +1,169 @@
+/* ── Overprint: two inks off register ───────────────────────────── */
+
+.overprint {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+}
+
+.base {
+  position: relative;
+  color: var(--c-ink);
+}
+
+/* the readable layer in blue ink instead of white */
+.overprint[data-ink='blue'] .base {
+  color: var(--c-blue);
+}
+
+.over {
+  position: absolute;
+  inset: 0;
+  color: var(--c-orange);
+  mix-blend-mode: var(--ink-blend);
+  pointer-events: none;
+  user-select: none;
+  /* a resting offset of 3 px, plus whatever the scroll speed adds */
+  translate: calc(3px + var(--mis) * 1px) calc(-2px - var(--mis) * 0.4px);
+  opacity: 0.92;
+}
+
+/* ── Marked: ballpoint over text ────────────────────────────────── */
+
+.marked {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.mark {
+  position: absolute;
+  pointer-events: none;
+  overflow: visible;
+  fill: none;
+  stroke: var(--c-blue);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  filter: url(#rough);
+}
+
+.mark path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 900ms var(--ease-out) 200ms;
+}
+
+:global(.js) .mark:not([data-in]) path {
+  stroke-dashoffset: 1;
+}
+
+/* the mark is drawn, not faded */
+.mark[data-reveal] {
+  opacity: 1 !important;
+  translate: none !important;
+}
+
+.marked[data-mark='circle'] .mark {
+  inset: -0.32em -0.4em -0.28em -0.45em;
+  width: calc(100% + 0.85em);
+  height: calc(100% + 0.6em);
+}
+
+.marked[data-mark='underline'] .mark {
+  left: -0.1em;
+  right: -0.1em;
+  bottom: -0.32em;
+  width: calc(100% + 0.2em);
+  height: 0.45em;
+}
+
+.marked[data-mark='strike'] .mark {
+  left: -0.05em;
+  top: 50%;
+  width: calc(100% + 0.1em);
+  height: 0.3em;
+  translate: 0 -50%;
+}
+
+.marked[data-mark='arrow'] .mark {
+  right: calc(100% + 0.3em);
+  top: -0.2em;
+  width: 2.4em;
+  height: 1.2em;
+}
+
+/* ── Stamp ──────────────────────────────────────────────────────── */
+
+.stamp {
+  display: inline-block;
+  padding: 0.35em 0.7em;
+  border: 2.5px solid currentColor;
+  color: var(--c-orange);
+  font-family: var(--font-note);
+  font-weight: 700;
+  font-size: var(--fs-small);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  rotate: var(--rot, -6deg);
+  mix-blend-mode: var(--ink-blend);
+  filter: url(#rough);
+  opacity: 0.9;
+}
+
+/* ── Sheet: paper with crop marks ───────────────────────────────── */
+
+.sheet {
+  position: relative;
+  background: var(--c-paper);
+}
+
+.sheet[data-shade] {
+  background: var(--c-paper-shade);
+}
+
+/* crop marks: two short lines at each corner, just outside the sheet */
+.sheet[data-marks]::before {
+  content: '';
+  position: absolute;
+  inset: -14px;
+  pointer-events: none;
+  --m: var(--c-ink-faint);
+  background:
+    linear-gradient(var(--m), var(--m)) 0 14px / 10px 1px no-repeat,
+    linear-gradient(var(--m), var(--m)) 14px 0 / 1px 10px no-repeat,
+    linear-gradient(var(--m), var(--m)) 100% 14px / 10px 1px no-repeat,
+    linear-gradient(var(--m), var(--m)) calc(100% - 14px) 0 / 1px 10px no-repeat,
+    linear-gradient(var(--m), var(--m)) 0 calc(100% - 14px) / 10px 1px no-repeat,
+    linear-gradient(var(--m), var(--m)) 14px 100% / 1px 10px no-repeat,
+    linear-gradient(var(--m), var(--m)) 100% calc(100% - 14px) / 10px 1px no-repeat,
+    linear-gradient(var(--m), var(--m)) calc(100% - 14px) 100% / 1px 10px no-repeat;
+  opacity: 0.7;
+}
+
+.folio {
+  position: absolute;
+  right: var(--space-4);
+  bottom: var(--space-3);
+  color: var(--fg-subtle);
+}
+
+/* ── utilities other components can compose ────────────────────── */
+
+/* a field of riso dots fading across a box (blue by default) */
+.halftone {
+  background-image: radial-gradient(circle, var(--dot, var(--c-blue)) 0 32%, transparent 34%);
+  background-size: var(--dot-size, 7px) var(--dot-size, 7px);
+  mix-blend-mode: var(--ink-blend);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .over {
+    translate: 3px -2px;
+  }
+  .mark path {
+    transition: none;
+  }
+}

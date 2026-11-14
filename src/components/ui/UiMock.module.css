@@ -1,0 +1,421 @@
+/* Mock "screenshots" of work. Everything is sized in container units, so a mock looks the same
+   at 300 px or 900 px wide. */
+
+.mock {
+  container-type: inline-size;
+  width: 100%;
+  font-family: var(--font-body);
+  line-height: 1.1;
+  user-select: none;
+}
+
+/* ── a browser window ─────────────────────────────── */
+
+.window {
+  overflow: hidden;
+  border-radius: 3cqw;
+  background: #f3f1ec;
+  color: #16161a;
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.08),
+    0 6cqw 12cqw -4cqw rgb(0 0 0 / 0.7);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 3cqw;
+  padding: 1.8cqw 2.6cqw;
+  background: #e3e0d9;
+}
+
+.dots {
+  display: flex;
+  gap: 1cqw;
+}
+
+.dots i {
+  width: 1.6cqw;
+  height: 1.6cqw;
+  border-radius: 50%;
+  background: #c6c2b9;
+}
+
+.url {
+  flex: 1;
+  padding: 0.8cqw 2cqw;
+  border-radius: 2cqw;
+  background: #f3f1ec;
+  font-size: 2cqw;
+  color: #77736b;
+}
+
+/* web: an architecture studio */
+.webPage {
+  padding: 3cqw 4cqw 4cqw;
+}
+
+.webNav {
+  display: flex;
+  gap: 4cqw;
+  align-items: baseline;
+  font-size: 1.9cqw;
+  color: #6c6962;
+}
+
+.webNav b {
+  margin-right: auto;
+  color: #16161a;
+  letter-spacing: 0.08em;
+}
+
+.webHero {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 4cqw;
+  align-items: end;
+  margin-top: 6cqw;
+}
+
+.webTitle {
+  font-size: 7.4cqw;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.webPhoto {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border-radius: 1.4cqw;
+  background: linear-gradient(160deg, #9aa2ab 0%, #5f666e 55%, #3b3f45 100%);
+  overflow: hidden;
+}
+
+.webPhoto span {
+  position: absolute;
+  left: 18%;
+  right: 30%;
+  bottom: 0;
+  height: 62%;
+  background: linear-gradient(180deg, #c9ced3, #8d949b);
+  box-shadow: 9cqw 3cqw 0 -2cqw #707880;
+}
+
+.webRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2cqw;
+  margin-top: 4cqw;
+}
+
+.webRow span {
+  height: 9cqw;
+  border-radius: 1.2cqw;
+  background: #dedad2;
+}
+
+/* shop: coffee */
+.shopPage {
+  padding: 3cqw 4cqw 4cqw;
+  background: #efe6d6;
+}
+
+.shopHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 2.2cqw;
+}
+
+.shopHead b {
+  font-size: 3.4cqw;
+  letter-spacing: -0.03em;
+}
+
+.cart {
+  padding: 1cqw 2.4cqw;
+  border-radius: 3cqw;
+  background: #1b1a18;
+  color: #efe6d6;
+}
+
+.shopGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3cqw;
+  margin-top: 4cqw;
+}
+
+.product {
+  font-size: 2cqw;
+}
+
+.bag {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  margin-bottom: 1.6cqw;
+  border-radius: 1.4cqw 1.4cqw 0.6cqw 0.6cqw;
+  clip-path: polygon(8% 0, 92% 0, 100% 12%, 100% 100%, 0 100%, 0 12%);
+  color: rgb(255 255 255 / 0.85);
+  font-weight: 700;
+  font-size: 2.6cqw;
+  letter-spacing: 0.1em;
+}
+
+.price {
+  margin-top: 0.4cqw;
+  font-weight: 700;
+}
+
+.buy {
+  margin-top: 4cqw;
+  padding: 2.2cqw;
+  border-radius: 4cqw;
+  background: #c4592b;
+  color: #fff;
+  text-align: center;
+  font-size: 2.4cqw;
+  font-weight: 600;
+}
+
+/* ── a brand board ────────────────────────────────── */
+
+.board {
+  display: grid;
+  gap: 3cqw;
+  padding: 5cqw;
+  border-radius: 3cqw;
+  background: #efe6d6;
+  color: #1b1a18;
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.08),
+    0 6cqw 12cqw -4cqw rgb(0 0 0 / 0.7);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 3cqw;
+}
+
+.logoMark {
+  display: grid;
+  place-items: center;
+  width: 16cqw;
+  height: 16cqw;
+  border-radius: 50%;
+  background: #c4592b;
+  color: #efe6d6;
+  font-size: 9cqw;
+  font-weight: 700;
+}
+
+.logoWord {
+  font-size: 13cqw;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+}
+
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2cqw;
+}
+
+.swatches span {
+  display: flex;
+  align-items: flex-end;
+  aspect-ratio: 1;
+  padding: 1.4cqw;
+  border-radius: 1.4cqw;
+  color: #fff;
+  font-size: 1.7cqw;
+  box-shadow: inset 0 0 0 0.3cqw rgb(27 26 24 / 0.18);
+}
+
+.specimen {
+  display: flex;
+  align-items: center;
+  gap: 4cqw;
+  padding-top: 3cqw;
+  border-top: 0.3cqw solid #1b1a18;
+}
+
+.aa {
+  font-size: 14cqw;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.abc {
+  font-size: 2.4cqw;
+  line-height: 1.5;
+  color: #55524c;
+}
+
+/* ── a phone app ──────────────────────────────────── */
+
+.phone {
+  position: relative;
+  width: 58%;
+  margin-inline: auto;
+  padding: 7cqw 4cqw 5cqw;
+  border-radius: 7cqw;
+  background: #111114;
+  color: #f4f4f2;
+  box-shadow:
+    0 0 0 1.2cqw #26262b,
+    0 0 0 1.5cqw #3a3a40,
+    0 8cqw 14cqw -4cqw rgb(0 0 0 / 0.8);
+}
+
+.notch {
+  position: absolute;
+  top: 2.2cqw;
+  left: 50%;
+  width: 14cqw;
+  height: 2.6cqw;
+  border-radius: 2cqw;
+  background: #000;
+  translate: -50% 0;
+}
+
+.appTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 3.4cqw;
+}
+
+.appTop span {
+  font-size: 2.6cqw;
+  color: #8a8a90;
+}
+
+.map {
+  position: relative;
+  margin-top: 3cqw;
+  aspect-ratio: 4 / 3;
+  border-radius: 3cqw;
+  background:
+    linear-gradient(90deg, rgb(255 255 255 / 0.05) 1px, transparent 1px) 0 0 / 5cqw 5cqw,
+    linear-gradient(0deg, rgb(255 255 255 / 0.05) 1px, transparent 1px) 0 0 / 5cqw 5cqw,
+    linear-gradient(150deg, #1f3550, #13202f);
+  overflow: hidden;
+}
+
+.map svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #ff6a2b;
+  stroke-width: 1.4;
+  stroke-dasharray: 3 2;
+}
+
+.map i {
+  position: absolute;
+  right: 6%;
+  top: 12%;
+  width: 3.4cqw;
+  height: 3.4cqw;
+  border-radius: 50%;
+  background: #ff6a2b;
+  box-shadow: 0 0 0 1.4cqw rgb(255 106 43 / 0.3);
+}
+
+.steps {
+  display: grid;
+  gap: 2cqw;
+  margin: 4cqw 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 2.8cqw;
+}
+
+.steps li {
+  display: flex;
+  align-items: center;
+  gap: 2cqw;
+  color: #8a8a90;
+}
+
+.steps li::before {
+  content: '';
+  width: 2.4cqw;
+  height: 2.4cqw;
+  border-radius: 50%;
+  border: 0.4cqw solid #5a5a60;
+}
+
+.steps li[data-done] {
+  color: #f4f4f2;
+}
+
+.steps li[data-done]::before {
+  border-color: #ff6a2b;
+  background: #ff6a2b;
+}
+
+.appBtn {
+  margin-top: 4cqw;
+  padding: 2.4cqw;
+  border-radius: 4cqw;
+  background: #f4f4f2;
+  color: #111114;
+  text-align: center;
+  font-size: 2.8cqw;
+  font-weight: 600;
+}
+
+/* ── a festival poster ────────────────────────────── */
+
+.poster {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  width: 72%;
+  margin-inline: auto;
+  overflow: hidden;
+  padding: 6cqw;
+  border-radius: 1.4cqw;
+  background: radial-gradient(70% 50% at 50% 38%, #3d2a8c 0%, #160f33 60%, #0a0716 100%);
+  color: #f1ecff;
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.08),
+    0 8cqw 14cqw -4cqw rgb(0 0 0 / 0.8);
+}
+
+.posterEye {
+  position: absolute;
+  left: 50%;
+  top: 34%;
+  width: 46cqw;
+  height: 24cqw;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #0a0716 0 18%, #ff6a2b 19% 26%, #f1ecff 27% 100%);
+  box-shadow: 0 0 10cqw rgb(255 106 43 / 0.35);
+}
+
+.posterTitle {
+  position: absolute;
+  left: 6cqw;
+  bottom: 14cqw;
+  font-size: 26cqw;
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 0.8;
+}
+
+.posterSub {
+  position: absolute;
+  left: 6cqw;
+  bottom: 5cqw;
+  font-size: 2.4cqw;
+  line-height: 1.4;
+  color: #b9b0de;
+}

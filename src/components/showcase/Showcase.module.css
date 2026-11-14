@@ -1,0 +1,188 @@
+/* A dark anodized plate with a picture of the work and a chrome object on its corner. */
+
+.showcase {
+  --mx: 0.5;
+  --my: 0.5;
+  --hue: 255 106 43;
+  position: relative;
+}
+
+.showcase[data-hue='cold'] {
+  --hue: 70 110 255;
+}
+
+.showcase[data-hue='violet'] {
+  --hue: 140 90 255;
+}
+
+.showcase[data-hue='green'] {
+  --hue: 40 190 145;
+}
+
+/* ── the plate ───────────────────────────────────────────────── */
+
+.plate {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  border-radius: var(--r-l);
+  isolation: isolate;
+  perspective: 1400px;
+  background:
+    /* the light that follows the cursor */
+    radial-gradient(
+      55% 60% at calc(var(--mx) * 100%) calc(var(--my) * 100%),
+      rgb(255 255 255 / 0.07),
+      rgb(255 255 255 / 0) 70%
+    ),
+    /* brushed metal: fine vertical lines */
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.014) 0 1px, rgb(0 0 0 / 0) 1px 3px),
+    linear-gradient(170deg, #1d1d22 0%, #121215 48%, #0b0b0d 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.09),
+    inset 0 0 0 1px rgb(255 255 255 / 0.05),
+    0 50px 90px -50px rgb(0 0 0 / 0.9);
+}
+
+/* the coloured light inside the card, rising from behind the picture */
+.glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(55% 48% at 50% 58%, rgb(var(--hue) / 0.5), rgb(var(--hue) / 0) 72%),
+    radial-gradient(100% 70% at 50% 125%, rgb(var(--hue) / 0.45), rgb(var(--hue) / 0) 70%);
+  opacity: 0.85;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+.showcase[data-hover] .glow {
+  opacity: 1;
+}
+
+/* a slow diagonal glint across the plate, moving with the cursor */
+.sheen {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    rgb(255 255 255 / 0) 40%,
+    rgb(255 255 255 / 0.05) 50%,
+    rgb(255 255 255 / 0) 60%
+  );
+  transform: translateX(calc((var(--mx) - 0.5) * 30%));
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+/* the picture leans toward the cursor */
+.tilt {
+  width: 84%;
+  transform: rotateX(calc((var(--my) - 0.5) * -7deg)) rotateY(calc((var(--mx) - 0.5) * 9deg))
+    translateZ(0);
+  transform-style: preserve-3d;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.showcase[data-kind='brand'] .tilt {
+  width: 70%;
+}
+
+.showcase[data-kind='app'] .tilt,
+.showcase[data-kind='poster'] .tilt {
+  width: 56%;
+}
+
+.showcase[data-kind='photo'] .tilt {
+  position: absolute;
+  inset: 0;
+  width: auto;
+}
+
+/* ── the object on the corner ────────────────────────────────── */
+
+.object {
+  position: absolute;
+  width: clamp(10rem, 42%, 22rem);
+  aspect-ratio: 1;
+  pointer-events: none;
+}
+
+.showcase[data-corner='tr'] .object {
+  top: -16%;
+  right: -7%;
+}
+
+.showcase[data-corner='tl'] .object {
+  top: -16%;
+  left: -7%;
+}
+
+.showcase[data-corner='br'] .object {
+  bottom: -16%;
+  right: -7%;
+}
+
+.showcase[data-corner='bl'] .object {
+  bottom: -16%;
+  left: -7%;
+}
+
+@media (min-width: 768px) {
+  .showcase[data-wide] .plate {
+    aspect-ratio: 16 / 9;
+  }
+
+  .showcase[data-wide] .tilt {
+    width: 56%;
+  }
+
+  .showcase[data-wide][data-kind='app'] .tilt,
+  .showcase[data-wide][data-kind='poster'] .tilt {
+    width: 34%;
+  }
+
+  .showcase[data-wide] .object {
+    width: clamp(12rem, 28%, 24rem);
+  }
+}
+
+@media (max-width: 599px) {
+  .plate {
+    aspect-ratio: 1;
+  }
+
+  .tilt {
+    width: 88%;
+  }
+
+  .showcase[data-kind='app'] .tilt,
+  .showcase[data-kind='poster'] .tilt {
+    width: 64%;
+  }
+
+  .object {
+    width: 46%;
+  }
+
+  .showcase[data-corner] .object {
+    top: -14%;
+    right: -3%;
+    left: auto;
+    bottom: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt,
+  .sheen {
+    transform: none;
+    transition: none;
+  }
+
+  .glow {
+    transition: none;
+  }
+}

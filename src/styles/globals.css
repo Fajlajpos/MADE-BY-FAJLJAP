@@ -8,37 +8,41 @@ html {
 }
 
 body {
-  /* the page ground (components/fx/Ground) is laid out against the whole body */
-  position: relative;
-  /* transparent: the ground (z-index -1) shows through; <html> holds the toner */
-  background: transparent;
+  background: var(--bg);
   color: var(--fg);
   font-family: var(--font-body);
   font-size: var(--fs-body);
   line-height: var(--lh-body);
   overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
 }
 
 h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 500;
   line-height: var(--lh-tight);
-  letter-spacing: var(--tracking-display);
+  letter-spacing: var(--tracking-h);
   text-wrap: balance;
-  hyphens: manual;
 }
 
 p {
   text-wrap: pretty;
 }
 
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
 a,
 button,
 [role='button'],
 label[for],
-summary {
+summary,
+select {
   cursor: pointer;
 }
 
@@ -48,8 +52,8 @@ summary {
 }
 
 ::selection {
-  background: var(--spot);
-  color: var(--spot-ink);
+  background: var(--fg);
+  color: var(--bg);
 }
 
 .visually-hidden {
@@ -64,69 +68,56 @@ summary {
   border: 0;
 }
 
-/* A sheet of paper laid on the toner: flips text, lines, focus and character inks. */
-.paper {
-  background: var(--c-paper);
-  color: var(--paper-fg);
-  --bg: var(--c-paper);
-  --fg: var(--paper-fg);
-  --fg-muted: var(--paper-fg-muted);
-  --fg-subtle: var(--paper-fg-muted);
-  --line: var(--paper-line);
-  --line-strong: var(--paper-fg);
-  --focus: var(--c-toner);
-  --ascii-ink: #a9a8a1;
-  --ascii-ink-strong: var(--c-toner);
-}
-
-/* Mono metadata: [01] SYSTEM, ROK 2026 … */
+/* small label: section names, metadata */
+.label,
+.note,
 .meta {
-  font-family: var(--font-mono);
-  font-size: var(--fs-meta);
+  font-size: var(--fs-label);
   font-weight: 500;
-  letter-spacing: var(--tracking-meta);
-  text-transform: uppercase;
-  line-height: 1.5;
+  letter-spacing: var(--tracking-label);
+  line-height: 1.4;
+  color: var(--fg-subtle);
 }
 
-/* Blinking block cursor. */
-.caret {
-  display: inline-block;
-  width: 0.6em;
-  height: 1.05em;
-  margin-left: 0.1em;
-  vertical-align: -0.15em;
-  background: var(--spot);
-  animation: caret-blink 1.06s steps(1) infinite;
+/* Reveals on scroll (src/components/fx/Reveal.tsx adds data-in). Without JS: visible. */
+.js [data-reveal]:not([data-in]) {
+  opacity: 0;
+  translate: 0 24px;
 }
 
-@keyframes caret-blink {
-  50% {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .caret {
-    animation: none;
-  }
+[data-reveal] {
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    translate var(--dur-slow) var(--ease-out);
+  transition-delay: calc(var(--reveal-i, 0) * 90ms);
 }
 
 .skip-link {
   position: fixed;
   top: var(--space-3);
   left: var(--space-3);
-  z-index: var(--z-cursor);
+  z-index: var(--z-top);
   padding: var(--space-3) var(--space-4);
-  background: var(--c-paper);
-  color: var(--c-toner);
-  font-family: var(--font-mono);
-  font-size: var(--fs-small);
+  border-radius: var(--r-control);
+  background: var(--fg);
+  color: var(--bg);
   transform: translateY(-200%);
   transition: transform var(--dur-base) var(--ease-out);
 }
 
 .skip-link:focus-visible {
   transform: translateY(0);
-  outline-color: var(--spot);
+}
+
+/* Film grain over the whole page: one static noise tile, plain opacity (no blend mode), so it
+   costs one composited layer and never repaints. Under the 3D and the header. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 -.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
 }

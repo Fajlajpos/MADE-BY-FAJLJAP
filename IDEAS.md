@@ -19,3 +19,11 @@ Nápady, které v zadání nebyly nebo by se hodily. U každého je co, proč a 
 | 13 | **CPU renderer znaků** jako fallback bez GPU | Software WebGL kit odmítá (zatěžoval by CPU), web se ale má hýbat všude. | **hotovo** (fáze 1c) |
 | 14 | **Přechody mezi stránkami ze znaků** (kit `pageDissolve`) | Až budou další stránky (fáze 2), stránka se při navigaci rozpadne do znaků a složí nová. | nápad, fáze 3 |
 | 15 | **Video ve znacích** (kit `asciiVideo`) pro hero slot | Až dodáš video, poběží ve znacích, ztlumené, se zastavením. | nápad, po dodání videa |
+| 16 | **Malá postava jako průvodce** (navazuje na #4) ve 3D: low-poly figurka chodí po webu podle scrollu, sedá si na nadpisy | Osobní obdoba maskota, ale z moodboardu (fotka 4), ne blob. | nápad, další 3D krok |
+| 17 | **3D hover u karet projektů**: náhled je v klidu ve znacích, při najetí se rozsvítí do barvy | Princip „tma → barva“. | nahrazeno: karty mají chromový objekt a náklon (fáze 1e) |
+| 18 | **Průlet kolem paneláku** jako přechod mezi sekcemi nebo stránkami | Panelák je už ve scéně za oknem (shader), dá se z něj udělat samostatná scéna. | nápad |
+| 19 | **Scéna podle denní doby návštěvníka**: přes den šero a světlo z okna, v noci lampa (hodiny už web má) | Každý návštěvník uvidí trochu jiný stůl. | nápad |
+| 20 | **Výměna modelů za skeny** (Polycam / Scaniverse): skutečný plecháček, lampa, klávesnice | Ještě osobnější a slot `models.ts` je na to připravený. | čeká na skeny |
+| 21 | **Chromový objekt reaguje na formulář**: vlaštovka se při psaní zprávy natáčí, balík se u volby „E-shop“ zatřese | Formulář je pak součást 3D světa, ne jen pole. | nápad |
+| 22 | **Lift-off i obráceně**: při scrollu zpátky nahoru se chromové objekty vrátí na stůl a přelijí zpět na karton a sklo | Už funguje díky scrubu, šlo by zvýraznit zvukem nebo jiskrou. | hotovo (scrub), zvuk nápad |
+| 23 | **Vlastní HDR fotka pokoje** místo kódového studia v `chrome/env.ts` | Chrom by odrážel skutečný stůl a okno. | čeká na fotku 360° |

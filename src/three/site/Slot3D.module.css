@@ -1,0 +1,44 @@
+.slot {
+  position: relative;
+  isolation: isolate;
+  /* set by Slot3D from the cursor: −1 lamp on the left … 1 on the right */
+  --lamp-x: -0.6;
+}
+
+/* a faint pool of light on the floor under the object: it stands somewhere, it does not float in a void */
+.shadow {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: 6%;
+  height: 10%;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(244 244 242 / 0.07), rgb(244 244 242 / 0));
+}
+
+.slot[data-object='ring'] .shadow,
+.slot[data-object='wordmark'] .shadow {
+  left: 8%;
+  right: 8%;
+}
+
+.view,
+.still {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.still {
+  object-fit: contain;
+}
+
+/* a still that has not been rendered yet leaves only the shadow */
+.still:not([src]),
+.still[data-missing] {
+  display: none;
+}
+

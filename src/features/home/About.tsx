@@ -1,127 +1,56 @@
-import { AsciiScene } from '@/components/ascii/AsciiScene'
-import { InView } from '@/components/ascii/InView'
-import { Scramble } from '@/components/ascii/Scramble'
+import type { CSSProperties } from 'react'
+import { Media } from '@/components/media/Media'
 import { home } from '@/content/home'
 import { typo } from '@/lib/typo/czech'
+import { Slot3D } from '@/three/site/Slot3D'
 import shared from './home.module.css'
 import styles from './About.module.css'
 
 /**
- * Who I am, as a terminal manual page: `$ man fajlajp` in a window on the ground, name, usage,
- * the description in a human voice, the facts as options, one bug, links to the rest of the page,
- * and a portrait in characters as figure 1. Its entries print in one by one as it scrolls in.
+ * O mně — a large portrait on the left with the chrome mug standing over its corner, the copy on
+ * the right: heading, two paragraphs, then the facts as a ruled two-column list.
  */
 export function About() {
   const { about } = home
-  const { man } = about
-  const h = man.headings
   return (
-    <section
-      data-ground="lobes"
-      id="o-mne"
-      className={shared.section}
-      aria-labelledby="o-mne-title"
-    >
-      <h2 id="o-mne-title" className={shared.label}>
-        <span>{about.index}</span>
-        <b>{about.label}</b>
-      </h2>
+    <section id="o-mne" className={`${shared.section} ${styles.section}`} aria-labelledby="o-mne-title">
+      <p className={shared.label} data-reveal="">
+        <b>{about.index}</b> {about.label}
+      </p>
 
-      <InView className={styles.window}>
-        <p className={`meta ${styles.bar}`}>
-          <span className={styles.lights} aria-hidden="true">
-            o o o
-          </span>
-          <span className={styles.prompt}>
-            <span aria-hidden="true">~ $ </span>
-            {man.command}
-          </span>
-          <span className={styles.page}>{man.page}</span>
-        </p>
+      <div className={styles.layout}>
+        <figure className={styles.figure} data-reveal="">
+          <div className={styles.frame}>
+            <Media slot={about.portraitSlot} className={styles.portrait} sizes="(min-width: 1024px) 40vw, 92vw" />
+            {/* the mug stands just over the portrait's corner */}
+            <Slot3D object="mug" className={styles.mug} scale={1.1} label="Chromový plecháček, můj hrnek ze stolu" />
+          </div>
+          <figcaption className={styles.caption}>{typo(about.caption)}</figcaption>
+        </figure>
 
-        <div className={styles.body}>
-          <div className={styles.man}>
-            <p className={`meta ${styles.running}`} aria-hidden="true">
-              <span>{man.page}</span>
-              <span>{man.manual}</span>
-              <span>{man.page}</span>
-            </p>
+        <div className={styles.copy}>
+          <h2 id="o-mne-title" className={`${shared.h2} ${styles.title}`} data-reveal="">
+            {typo(about.heading)}
+          </h2>
 
-            <dl className={styles.entries}>
-              <div className={styles.entry}>
-                <dt>{h.name}</dt>
-                <dd className={styles.name}>{man.name}</dd>
-              </div>
-
-              <div className={styles.entry}>
-                <dt>{h.usage}</dt>
-                <dd className={styles.usage}>
-                  <code>
-                    {man.usage.map((part, i) => (
-                      <span key={part} data-first={i === 0 || undefined}>
-                        {part}{' '}
-                      </span>
-                    ))}
-                  </code>
-                </dd>
-              </div>
-
-              <div className={styles.entry}>
-                <dt>{h.description}</dt>
-                <dd className={styles.description}>{typo(man.description)}</dd>
-              </div>
-
-              <div className={styles.entry}>
-                <dt>{h.options}</dt>
-                <dd>
-                  <dl className={styles.options}>
-                    {man.options.map((o) => (
-                      <div key={o.flag}>
-                        <dt>
-                          <code>{o.flag}</code>
-                        </dt>
-                        <dd>{typo(o.text)}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </dd>
-              </div>
-
-              <div className={styles.entry}>
-                <dt>{h.bugs}</dt>
-                <dd>{typo(man.bugs)}</dd>
-              </div>
-
-              <div className={styles.entry}>
-                <dt>{h.seeAlso}</dt>
-                <dd className={styles.see}>
-                  {man.seeAlso.map((link, i) => (
-                    <span key={link.href}>
-                      <a href={link.href}>
-                        <Scramble text={link.label} />
-                      </a>
-                      {i < man.seeAlso.length - 1 ? ', ' : null}
-                    </span>
-                  ))}
-                </dd>
-              </div>
-            </dl>
-
-            <p className={`meta ${styles.running}`} aria-hidden="true">
-              <span>{man.footer}</span>
-              <span className={styles.end}>
-                {man.end}
-                <span className="caret" />
-              </span>
-            </p>
+          <div className={styles.body}>
+            {about.body.map((p, i) => (
+              <p key={p.slice(0, 24)} className={i === 0 ? styles.first : styles.text} data-reveal="" style={{ '--reveal-i': i + 1 } as CSSProperties}>
+                {typo(p)}
+              </p>
+            ))}
           </div>
 
-          <figure className={styles.figure}>
-            <AsciiScene slot="home.about" seed={3} cellSize={7} className={styles.portrait} />
-            <figcaption className="meta">{man.figure}</figcaption>
-          </figure>
+          <dl className={styles.facts} data-reveal="" style={{ '--reveal-i': 2 } as CSSProperties}>
+            {about.facts.map((f) => (
+              <div key={f.label} className={styles.fact}>
+                <dt>{f.label}</dt>
+                <dd>{typo(f.value)}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
-      </InView>
+      </div>
     </section>
   )
 }

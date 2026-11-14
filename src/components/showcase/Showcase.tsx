@@ -1,0 +1,91 @@
+'use client'
+
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { UiMock, type MockKind } from '@/components/ui/UiMock'
+import type { ObjectKind } from '@/three/site/ChromeObject'
+import { Slot3D } from '@/three/site/Slot3D'
+import styles from './Showcase.module.css'
+
+export type Hue = 'warm' | 'cold' | 'violet' | 'green'
+export type Corner = 'tr' | 'tl' | 'br' | 'bl'
+
+type Props = {
+  /** The drawn picture of the work. */
+  mock: MockKind
+  /** The chrome object that stands on the corner of the card. */
+  object: ObjectKind
+  /** The colour of the light inside the card. */
+  hue?: Hue
+  /** Which corner the object sits on, half out of the card. */
+  corner?: Corner
+  /** A real photo (or anything else) instead of the drawn mock. */
+  children?: ReactNode
+  /** A wide plate (16:9 from tablet up) for the one project across the page. */
+  wide?: boolean
+  className?: string
+}
+
+/**
+ * A dark metal plate with a picture of the work on it and a chrome object sitting on its
+ * corner, half outside, like a paperweight. A soft light follows the cursor across the plate,
+ * the picture leans toward it, and the object lifts while the cursor is on the card.
+ */
+export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, wide, className }: Props) {
+  const root = useRef<HTMLDivElement>(null)
+  const [hover, setHover] = useState(false)
+
+  useEffect(() => {
+    const el = root.current
+    if (!el) return
+    let raf = 0
+    let x = 0.5
+    let y = 0.5
+    const apply = () => {
+      raf = 0
+      el.style.setProperty('--mx', x.toFixed(3))
+      el.style.setProperty('--my', y.toFixed(3))
+    }
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === 'touch') return
+      const r = el.getBoundingClientRect()
+      x = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width))
+      y = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height))
+      if (!raf) raf = requestAnimationFrame(apply)
+    }
+    const onEnter = (e: PointerEvent) => e.pointerType !== 'touch' && setHover(true)
+    const onLeave = () => {
+      x = 0.5
+      y = 0.5
+      if (!raf) raf = requestAnimationFrame(apply)
+      setHover(false)
+    }
+    el.addEventListener('pointermove', onMove, { passive: true })
+    el.addEventListener('pointerenter', onEnter)
+    el.addEventListener('pointerleave', onLeave)
+    return () => {
+      cancelAnimationFrame(raf)
+      el.removeEventListener('pointermove', onMove)
+      el.removeEventListener('pointerenter', onEnter)
+      el.removeEventListener('pointerleave', onLeave)
+    }
+  }, [])
+
+  return (
+    <div
+      ref={root}
+      className={[styles.showcase, className].filter(Boolean).join(' ')}
+      data-hue={hue}
+      data-corner={corner}
+      data-kind={children ? 'photo' : mock}
+      data-hover={hover || undefined}
+      data-wide={wide || undefined}
+    >
+      <div className={styles.plate}>
+        <span className={styles.glow} aria-hidden="true" />
+        <div className={styles.tilt}>{children ?? <UiMock kind={mock} className={styles.mock} />}</div>
+        <span className={styles.sheen} aria-hidden="true" />
+      </div>
+      <Slot3D object={object} className={styles.object} active={hover} scale={1.35} tone={hue === 'warm' ? 'warm' : 'cold'} />
+    </div>
+  )
+}

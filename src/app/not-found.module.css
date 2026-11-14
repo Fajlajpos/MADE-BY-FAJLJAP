@@ -1,108 +1,108 @@
+/* 404: a huge number, a short line, the way back, the chrome browser window. */
+
 .main {
+  min-height: calc(100svh - var(--header-h));
+  overflow-x: clip;
+}
+
+.inner {
+  display: grid;
+  gap: var(--space-7) var(--gutter);
   max-width: var(--max-width);
   margin-inline: auto;
-  padding: var(--space-5) var(--margin) 0;
-}
-
-.strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-5);
-  color: var(--fg-subtle);
-  text-transform: none;
-}
-
-.strip span:first-child {
-  color: var(--ascii-error);
-}
-
-.art {
-  position: relative;
-  height: clamp(14rem, 42vw, 32rem);
-  margin-block: var(--space-5) var(--space-7);
-  background: var(--bg);
+  padding: var(--space-8) var(--margin) var(--space-9);
 }
 
 .copy {
   display: grid;
-  gap: var(--space-6) var(--gutter);
+  justify-items: start;
+  align-content: start;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.code {
+  width: 100%;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  color: var(--fg-subtle);
 }
 
 .title {
-  font-size: var(--fs-h2);
-  font-stretch: var(--wdth-wide);
-  font-weight: 800;
-  line-height: var(--lh-tight);
-  letter-spacing: -0.04em;
-  max-width: 14ch;
+  display: grid;
+  gap: var(--space-4);
 }
 
-.side {
-  display: grid;
-  gap: var(--space-5);
-  align-content: start;
+.number {
+  font-size: clamp(7rem, 2rem + 24vw, 22rem);
+  font-weight: 500;
+  font-stretch: 88%;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+  margin-left: -0.04em;
+}
+
+.heading {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  font-stretch: 92%;
+  line-height: 1.05;
+  letter-spacing: var(--tracking-h);
 }
 
 .lead {
-  max-width: 34rem;
+  max-width: 30rem;
   color: var(--fg-muted);
-  font-size: var(--fs-lead);
 }
 
 .home {
-  display: inline-flex;
-  align-items: center;
-  gap: 1ch;
-  justify-self: start;
-  min-height: 44px;
-  padding-inline: var(--space-4);
-  font-family: var(--font-mono);
-  font-weight: 700;
-  text-decoration: none;
-  background: var(--fg);
-  color: var(--bg);
-  transition: background-color var(--dur-fast) var(--ease-out);
+  margin-top: var(--space-3);
 }
 
-.home:hover {
-  background: var(--fg-muted);
-}
-
-.homeArrow {
-  transition: transform var(--dur-base) var(--ease-out);
-}
-
-.home:hover .homeArrow {
-  transform: translateX(-0.25em);
+.object {
+  width: min(80vw, 26rem);
+  aspect-ratio: 1;
+  justify-self: center;
+  pointer-events: none;
 }
 
 .nav {
-  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--line);
 }
 
 .navTitle {
-  color: var(--fg-subtle);
   margin-bottom: var(--space-2);
-  text-transform: none;
+  font-size: var(--fs-label);
+  font-weight: 500;
+  color: var(--fg-subtle);
 }
 
 .list {
-  list-style: none;
+  display: grid;
+  margin: 0;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 var(--space-4);
+  list-style: none;
+}
+
+.list li {
+  border-bottom: 1px solid var(--line);
 }
 
 .link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6ch;
-  min-height: 44px;
-  font-family: var(--font-mono);
-  font-size: var(--fs-small);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  min-height: 52px;
+  padding-block: var(--space-3);
   color: var(--fg-muted);
+  font-size: var(--fs-body);
+  font-weight: 500;
   text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
 .link:hover {
@@ -110,17 +110,42 @@
 }
 
 .index {
+  min-width: 2ch;
+  font-size: var(--fs-label);
   color: var(--fg-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 768px) {
+  .list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--gutter);
+  }
 }
 
 @media (min-width: 1024px) {
-  .copy {
+  .inner {
     grid-template-columns: repeat(12, minmax(0, 1fr));
+    padding-top: var(--space-9);
   }
-  .title {
-    grid-column: 1 / span 6;
+
+  .copy {
+    grid-column: 1 / 8;
   }
-  .side {
-    grid-column: 8 / -1;
+
+  .object {
+    grid-column: 8 / 13;
+    align-self: center;
+    width: 100%;
+    max-width: 30rem;
+  }
+
+  .nav {
+    grid-column: 1 / 13;
+    margin-top: var(--space-6);
+  }
+
+  .list {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }

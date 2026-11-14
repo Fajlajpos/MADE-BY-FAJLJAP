@@ -1,7 +1,6 @@
-import { AsciiWordmark } from '@/components/ascii/AsciiWordmark'
-import { Scramble } from '@/components/ascii/Scramble'
 import { site } from '@/content/site'
 import { typo } from '@/lib/typo/czech'
+import { Slot3D } from '@/three/site/Slot3D'
 import { NavList } from './NavList'
 import { Status } from './Status'
 import styles from './Footer.module.css'
@@ -9,99 +8,73 @@ import styles from './Footer.module.css'
 const YEAR = 2026
 
 /**
- * The colophon: index, elsewhere, operator (§ 435 OZ), and the
- * name in characters cut by the bottom edge of the page.
+ * The foot of every page: the name in chrome across the full width, then quiet columns — a line
+ * and the address, the sections, elsewhere, the operator's details (§ 435 OZ) — and the base row.
  */
 export function Footer() {
   const { business } = site
   return (
     <footer className={styles.footer}>
+      <Slot3D object="wordmark" className={styles.wordmark} label={site.brand} />
+
       <div className={styles.inner}>
-        <div className={styles.brand}>
-          <p className={styles.name}>
-            {site.brand}
-            <span aria-hidden="true">.</span>
-          </p>
-          <p className={styles.tagline}>
-            {typo('Grafik a webdesignér. Weby, identity a plakáty s rukopisem.')}
-          </p>
-          <Status />
+        <div className={styles.lead}>
+          <p className={styles.statement}>{typo('Weby, e-shopy a grafika od jednoho člověka. Od první skici po spuštění.')}</p>
           <a className={styles.mail} href={`mailto:${site.contact.email}`}>
-            <Scramble text={site.contact.email} />
+            {site.contact.email}
           </a>
+          <Status />
         </div>
 
-        <section aria-labelledby="pata-rejstrik">
-          <h2 id="pata-rejstrik" className={`meta ${styles.colTitle}`}>
-            Rejstřík
+        <nav className={`${styles.col} ${styles.colNav}`} aria-labelledby="pata-stranka">
+          <h2 id="pata-stranka" className={styles.colTitle}>
+            Na stránce
           </h2>
-          <nav aria-labelledby="pata-rejstrik">
-            <NavList
-              className={styles.list}
-              linkClassName={styles.link}
-              indexClassName={`meta ${styles.index}`}
-            />
-          </nav>
-        </section>
+          <NavList className={styles.list} linkClassName={styles.link} indexClassName={styles.index} indexes />
+        </nav>
 
-        <section aria-labelledby="pata-jinde">
-          <h2 id="pata-jinde" className={`meta ${styles.colTitle}`}>
+        <section className={`${styles.col} ${styles.colElse}`} aria-labelledby="pata-jinde">
+          <h2 id="pata-jinde" className={styles.colTitle}>
             Jinde
           </h2>
           <ul className={styles.list} role="list">
             {site.socials.map((s) => (
               <li key={s.label}>
                 <a className={styles.link} href={s.href}>
-                  <Scramble text={s.label} />
-                  <span className={styles.index} aria-hidden="true">
-                    [&#8599;]
-                  </span>
+                  <span>{s.label}</span>
+                  <svg className={styles.out} viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7 17L17 7M9 7h8v8" />
+                  </svg>
                 </a>
               </li>
             ))}
           </ul>
         </section>
 
-        <section aria-labelledby="pata-provozovatel">
-          <h2 id="pata-provozovatel" className={`meta ${styles.colTitle}`}>
+        <section className={`${styles.col} ${styles.colOperator}`} aria-labelledby="pata-provozovatel">
+          <h2 id="pata-provozovatel" className={styles.colTitle}>
             Provozovatel
           </h2>
-          <dl className={styles.facts}>
-            <div>
-              <dt className="meta">Jméno</dt>
-              <dd>{business.name}</dd>
-            </div>
-            <div>
-              <dt className="meta">Místo podnikání</dt>
-              <dd>{business.address}</dd>
-            </div>
-            <div>
-              <dt className="meta">IČO</dt>
-              <dd>{business.ico}</dd>
-            </div>
-            <div>
-              <dt className="meta">Zápis</dt>
-              <dd>{typo(business.registry)}</dd>
-            </div>
-          </dl>
+          <address className={styles.operator}>
+            <span>{business.name}</span>
+            <span>{business.address}</span>
+            <span>IČO {business.ico}</span>
+            <span className={styles.registry}>{typo(business.registry)}</span>
+          </address>
         </section>
       </div>
 
-      <div className={`meta ${styles.base}`}>
+      <div className={styles.base}>
         <p>
-          (c) {YEAR} {site.brand}
+          © {YEAR} {site.brand}
         </p>
-        <p>Martian Mono + Archivo · znaky &apos; .:-=+*#%@&apos;</p>
-        <p>Ctrl K = příkazy</p>
+        <a className={styles.top} href="#obsah">
+          Zpátky nahoru
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 19V6M6 11l6-6 6 6" />
+          </svg>
+        </a>
       </div>
-
-      <AsciiWordmark
-        text={site.brand}
-        className={styles.mark}
-        cellSize={9}
-        artHeight={300}
-        decorative
-      />
     </footer>
   )
 }

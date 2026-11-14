@@ -1,8 +1,38 @@
 # FAJLAJP — PLAN
 
-> Stav: **Fáze 1c, verze 4 (ZNAKY, černobílá) 18. 10. 2026.** Předchozí pokusy jsou v `.backup/` (znaky-v1, nocni-smena-v2, osobni archiv v3 nebyl dokončen). Čeká se na tvoje potvrzení vzhledu, pak fáze 2.
+> Stav: **Fáze 1e, směr CHROM A DVĚ SVĚTLA, 14. 11. 2026.** ASCII (ZNAKY) je pryč, záloha v `.backup/znaky-2026-11-14/`. Předtím fáze 1d (3D stůl nad ZNAKY, 13. 11.) a 1c v4 (ZNAKY, 18. 10.). Předchozí pokusy jsou v `.backup/` (znaky-v1, nocni-smena-v2, osobni archiv v3 nebyl dokončen). Čeká se na tvoje potvrzení vzhledu, pak fáze 2.
 >
 > **Změna směru (18. 10. 2026):** celý web je předělaný do ASCII. Platný vizuální systém je **ZNAKY** (viz `BRAND.md` a sekce níže). RASTR je zálohovaný v `.backup/rastr-2026-10-18/` (mimo git). Kde se níže mluví o RASTRu, shaderech a `RasterImage`, platí teď ZNAKY a `AsciiScene`.
+
+## Fáze 1e — chrom a dvě světla, celá úvodní stránka (14. 11. 2026)
+
+**Zadání:** ASCII styl úplně pryč, víc 3D (inspirace mechanikou Lepshee, ne vzhledem), věci na stole mají souviset s weby a e-shopy a trochu se mnou, dodělat zbytek stránky. Rozhodnuto: stůl zůstává a věci na něm jsou služby, které na konci „odletí“ do Služeb. Materiál chrom + barevné světlo. Terminálový styl pryč, mono jen na drobné popisky. Barvy oranžová + ultramarín.
+
+**Co je hotové:**
+- Nový vizuální systém (`tokens.css`, `globals.css`, Bricolage Grotesque + Archivo + Martian Mono) a `BRAND.md`. ASCII komponenty, `src/lib/ascii`, `asciify-engine`, účtenka a man stránka jsou smazané (záloha v `.backup/znaky-2026-11-14/`).
+- Úvod: na stole služby se štítky jako odkazy na `#sluzba-*` (monitor s rozdělaným e-shopem, balík #0042, telefon se sledováním objednávky, skicák se vzorníkem), osobní věci bez štítku. Na konci `Flyers` (`src/three/desk/flyers.tsx`): zvednutí, morph materiálu do chromu (`createMorphMaterial`/`setMorph`) a odlet. Nová dráha kamery, pryč `AsciiEffect`.
+- Chrom: `src/three/chrome/` (studio z kódu přes PMREM, sada materiálů) a objekty `src/three/objects/shapes.tsx` (browser, parcel, phone, pen, mug, panelak, plane).
+- Sdílený canvas pro zbytek webu: `ThreeRoot` → `SiteCanvas` (fixní, drei `View.Port`) a `Slot3D` (lehký, bez three) → `Slot3DView` (líně). Stills v `public/objects/`.
+- Sekce: Služby (sticky prstenec `ServiceRing` na desktopu, karty s objektem na mobilu), Práce (karty s náklonem `Tilt`, chromový objekt do doby fotky), O mně (portrét + plecháček a panelák), Mimo obrazovku (pás fotek), Kontakt (formulář ve 3 krocích nad `inquiry.ts` a `sendInquiry.ts`, vlaštovka po odeslání odletí).
+- Hlavička, mobilní menu (clip-path), Ctrl K paleta (čistý dialog), patička, 404, `Reveal` (odhalení při scrollu), `Media` (fotka nebo náhrada ve dvou světlech).
+- Ověřeno: typecheck, lint, build, snímky 375 / 768 / 1440 (`scripts/page-shots.mjs`), bez GPU, reduced-motion, Tab, Ctrl K, menu + Esc, odeslání formuláře (poptávka v logu serveru).
+
+## Fáze 1d — 3D „Noční stůl“ (13. 11. 2026)
+
+**Zadání:** web jako lepshee.com (vyprávění scrollem, 3D, interaktivita), ale vůbec ne podobný a založený na mně. ZNAKY zůstávají, přibývá skutečné 3D v barvě. Modely zatím v kódu, fotky a modely dodám časem.
+
+**Co je hotové:**
+- Hero = připíchnutá sekce (desktop 320svh, mobil 230svh). Kamera jede podle scrollu po dráze se 4 body (`src/three/desk/camera.ts`) a texty se střídají ve 3 beatech podle `--p`.
+- Scéna `src/three/desk/` je celá z kódu: stůl s kresbou dřeva, monitor s živým editorem (kód z `home.hero.code`, skutečný čas), česká klávesnice, myš, plecháček s párou, kloubová lampa (SpotLight se stínem), telefon s poptávkou #0042, skicák s náčrtem tohoto webu, polaroid (slot `desk.photo`), kabely, zeď s oknem a panelák naproti (shader s okny).
+- Postprocessing: bloom, AgX tone mapping, zrno, vinětace a vlastní `AsciiEffect` (přechod do znaků).
+- Interakce: náklon za kurzorem, hover zvedne věc a ukáže štítek, klik nebo Enter zhasne lampu. Štítky jsou DOM tlačítka promítaná na 3D kotvy (`HotspotProjector`).
+- Výkon: úrovně `none` / `low` / `high` (`src/three/quality.ts`, přepsatelné přes `?tier=`). three.js je v líně načítaném chunku, `frameloop` mimo obrazovku stojí, `PerformanceMonitor` snižuje DPR.
+- Lenis pro celý web (`SmoothScroll`), `scrollToTarget()` pro kotvy i paletu.
+- Sloty: `src/content/models.ts` (`.glb`, `ModelSlot` s fallbackem), `useSlotTexture` (fotka nebo generativní placeholder jako textura).
+- Fallbacky: poster (`scripts/scene-poster.mjs`), reduced-motion (statický snímek, beaty pod sebou), bez JS.
+- Ověřování snímků: `node scripts/scene-shots.mjs [šířky] [progresy] [--reduced] [--cpu]`.
+
+**Další krok (fáze 3, výběr):** průvodce postavou, 3D hover u projektů, průlet kolem paneláku (IDEAS #16–20).
 
 ## Fáze 1c v4 — aktuální podoba úvodu
 
@@ -286,6 +316,8 @@ Ve fázích 0 a 1 dělám **Architekta** já: definuju kontrakty, tokeny, schema
 | 17. 10. 2026 | Frontend shell | Header (wordmark, nav, status), MobileMenu (rastrový wipe, focus trap, Esc, inert), Footer (údaje § 435, sítě, dočasný přepínač barvy tisku), 404, favicony | Fáze 2: stránky |
 | 17. 10. 2026 | Frontend úvod + copy | Úvod v 7 sekcích (hero, kdo jsem, vybrané práce, co dělám, z dílny, teď, kontakt), texty v `src/content/home.ts` | Fáze 2: DB seed z `src/content/*` |
 | 18. 10. 2026 | Architekt + frontend | Fáze 1c: kompletní redesign do ASCII (směr ZNAKY). `asciify-engine` 4.22 + vlastní CPU fallback (`src/lib/ascii/`), komponenty `src/components/ascii/*`, nová hlavička (hodiny, spinner, Ctrl K paleta), mobilní menu, všech 7 sekcí úvodu, patička, 404. RASTR zálohovaný v `.backup/`, shadery a `raw-loader` odstraněné | Výběr barvy tisku, fáze 2 |
+| 14. 11. 2026 | Architekt + frontend | Fáze 1e: konec ASCII, směr CHROM A DVĚ SVĚTLA. Stůl se službami a lift-off do chromu, sdílený 3D canvas s drei View, chromové objekty, sekce Služby/Práce/O mně/Mimo obrazovku/Kontakt, nové layout komponenty, stills a postery | Potvrzení vzhledu a textů, fotky, fáze 2 |
+| 13. 11. 2026 | Architekt + frontend | Fáze 1d: 3D úvod „Noční stůl“ (three 0.187, R3F 9, drei, postprocessing, GSAP, Lenis). Scéna z kódu, scroll kamera, `AsciiEffect`, štítky, lampa, sloty `models.ts` + `desk.photo`, postery, úrovně výkonu | Potvrzení textů, fotka a modely |
 
 ### Známé drobnosti z fáze 1 / 1b
 - `▸` není v subsetu IBM Plex Mono → kreslí ho záložní font; zvážit SVG/CSS značku.
