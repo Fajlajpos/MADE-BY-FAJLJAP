@@ -51,7 +51,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(75% 70% at 100% 100%, rgb(255 106 43 / 0.2), rgb(255 106 43 / 0) 70%);
+  background: radial-gradient(75% 70% at 100% 100%, rgb(var(--accent-rgb) / 0.2), rgb(var(--accent-rgb) / 0) 70%);
 }
 
 .item:hover {

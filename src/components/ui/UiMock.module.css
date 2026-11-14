@@ -18,7 +18,7 @@
   color: #16161a;
   box-shadow:
     0 0 0 1px rgb(255 255 255 / 0.08),
-    0 6cqw 12cqw -4cqw rgb(0 0 0 / 0.7);
+    0 3cqw 5cqw -2cqw rgb(0 0 0 / 0.6);
 }
 
 .bar {
@@ -180,156 +180,163 @@
   font-weight: 600;
 }
 
-/* ── a design file: two artboards, desktop and phone ─ */
+/* ── a redesign: the old site and the new one, split by a handle ── */
 
-.canvas {
+.split {
   position: relative;
   display: grid;
-  grid-template-columns: 15cqw 1fr;
-  overflow: hidden;
-  border-radius: 3cqw;
-  background: #1e1e22;
-  color: #c9c9ce;
-  font-size: 1.7cqw;
-  box-shadow:
-    0 0 0 1px rgb(255 255 255 / 0.08),
-    0 6cqw 12cqw -4cqw rgb(0 0 0 / 0.7);
-}
-
-.layers {
-  display: grid;
-  align-content: start;
-  gap: 1.6cqw;
-  padding: 3cqw 2cqw;
-  border-right: 1px solid rgb(255 255 255 / 0.08);
-  background: #19191c;
-}
-
-.layers b {
-  margin-bottom: 1cqw;
-  color: #f4f4f2;
-  font-weight: 600;
-}
-
-.layers span {
-  display: flex;
-  align-items: center;
-  gap: 1cqw;
-  color: #8a8a90;
-}
-
-.layers span::before {
-  content: '';
-  width: 1.4cqw;
-  height: 1.4cqw;
-  border: 0.25cqw solid currentColor;
-  border-radius: 0.3cqw;
-}
-
-.layers span[data-on] {
-  color: #f4f4f2;
-}
-
-.board {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  gap: 4cqw;
-  padding: 5cqw 4cqw 6cqw;
-  background:
-    radial-gradient(circle, rgb(255 255 255 / 0.07) 0.18cqw, transparent 0.2cqw) 0 0 / 2.4cqw 2.4cqw,
-    #26262b;
-}
-
-.artboard {
-  flex: none;
-  display: grid;
-  gap: 1.4cqw;
-}
-
-.artboard > small {
-  font-size: 1.5cqw;
-  color: #8a8a90;
-}
-
-.frameDesk,
-.framePhone {
-  display: grid;
-  align-content: start;
-  gap: 1.6cqw;
-  padding: 2.4cqw;
-  border-radius: 1cqw;
-  background: #f3f1ec;
-}
-
-.frameDesk {
-  width: 46cqw;
+  grid-template-columns: 1fr 1fr;
   aspect-ratio: 16 / 10;
 }
 
-.framePhone {
-  width: 16cqw;
-  aspect-ratio: 9 / 18;
-  border-radius: 2cqw;
+.old,
+.new {
+  position: relative;
+  overflow: hidden;
 }
 
-.frameDesk i,
-.framePhone i {
-  display: block;
-  height: 1.4cqw;
-  border-radius: 0.5cqw;
-  background: #dcd8cf;
+.old {
+  padding: 2.4cqw;
+  background: #e9e9e4;
+  color: #222;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1.5cqw;
+  line-height: 1.3;
+  filter: saturate(0.6);
 }
 
-.frameDesk .big,
-.framePhone .big {
-  height: 4.4cqw;
-  width: 70%;
-  background: #16161a;
+.oldLogo {
+  font-size: 3.2cqw;
+  font-weight: 700;
+  font-style: italic;
+  color: #7a2e2e;
 }
 
-.frameDesk .img,
-.framePhone .img {
-  height: 11cqw;
-  background: linear-gradient(160deg, #9aa2ab, #4b5157);
+.oldMenu {
+  margin-top: 1cqw;
+  padding: 0.8cqw;
+  background: #c9d2e6;
+  color: #1d3fa8;
+  font-size: 1.3cqw;
 }
 
-.frameDesk .btn,
-.framePhone .btn {
-  width: 34%;
-  height: 3cqw;
+.oldBody {
+  display: flex;
+  gap: 1.4cqw;
+  margin-top: 1.6cqw;
+}
+
+.oldImg {
+  flex: none;
+  width: 12cqw;
+  height: 9cqw;
+  border: 0.3cqw ridge #999;
+  background: linear-gradient(135deg, #b8a27a, #6e5a3a);
+}
+
+.new {
+  display: grid;
+  align-content: start;
+  gap: 1.6cqw;
+  padding: 2.4cqw 3cqw;
+  background: #f4efe6;
+  color: #1c1814;
+}
+
+.newNav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.6cqw;
+}
+
+.newNav b {
+  font-size: 2.2cqw;
+  letter-spacing: -0.03em;
+}
+
+.newNav span {
+  padding: 0.6cqw 1.4cqw;
+  border-radius: 3cqw;
+  background: #1c1814;
+  color: #f4efe6;
+}
+
+.newTitle {
+  font-size: 4.2cqw;
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+}
+
+.newImg {
+  position: absolute;
+  right: -2cqw;
+  bottom: -2cqw;
+  width: 20cqw;
+  height: 20cqw;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #e3b77a 0%, #b57a3c 45%, #6d4320 100%);
+  box-shadow: 0 2cqw 4cqw -1cqw rgb(60 30 10 / 0.5);
+}
+
+.newBtn {
+  justify-self: start;
+  padding: 1cqw 2cqw;
   border-radius: 3cqw;
   background: #ff6a2b;
+  color: #fff;
+  font-size: 1.5cqw;
+  font-weight: 600;
 }
 
-/* the selected element: a blue box with handles, and the cursor on it */
-.select {
-  position: relative;
-  outline: 0.3cqw solid #4c7dff;
-  outline-offset: 0.8cqw;
-}
-
-.select::after {
-  content: '';
+.tagOld,
+.tagNew {
   position: absolute;
-  right: -1.8cqw;
-  bottom: -1.8cqw;
-  width: 1.6cqw;
-  height: 1.6cqw;
+  bottom: 1.6cqw;
+  padding: 0.4cqw 1.2cqw;
+  border-radius: 2cqw;
+  font-family: var(--font-body);
+  font-size: 1.4cqw;
+  font-weight: 600;
+}
+
+.tagOld {
+  left: 1.6cqw;
+  background: rgb(0 0 0 / 0.55);
+  color: #fff;
+}
+
+.tagNew {
+  left: 3cqw;
+  background: #1c1814;
+  color: #f4efe6;
+}
+
+/* the handle you would drag between before and after */
+.handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 0.4cqw;
+  translate: -50% 0;
   background: #fff;
-  border: 0.3cqw solid #4c7dff;
+  box-shadow: 0 0 2cqw rgb(0 0 0 / 0.35);
 }
 
-.cursor {
+.handle i {
   position: absolute;
-  left: 41cqw;
-  top: 33cqw;
-  width: 3.4cqw;
-  height: 3.4cqw;
-  fill: #f4f4f2;
-  stroke: #16161a;
-  stroke-width: 1.5;
-  filter: drop-shadow(0 0.6cqw 0.8cqw rgb(0 0 0 / 0.5));
+  top: 50%;
+  left: 50%;
+  width: 5cqw;
+  height: 5cqw;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background:
+    linear-gradient(90deg, transparent 30%, #16161a 30% 36%, transparent 36% 64%, #16161a 64% 70%, transparent 70%) center / 50% 30% no-repeat,
+    #fff;
+  box-shadow: 0 0.6cqw 1.6cqw rgb(0 0 0 / 0.35);
 }
 
 /* ── a phone app ──────────────────────────────────── */
@@ -345,7 +352,7 @@
   box-shadow:
     0 0 0 1.2cqw #26262b,
     0 0 0 1.5cqw #3a3a40,
-    0 8cqw 14cqw -4cqw rgb(0 0 0 / 0.8);
+    0 3cqw 6cqw -2cqw rgb(0 0 0 / 0.7);
 }
 
 .notch {
@@ -449,3 +456,15 @@
   font-weight: 600;
 }
 
+
+/* ── a real screenshot ───────────────────────────── */
+
+.shot {
+  position: relative;
+  aspect-ratio: 16 / 10;
+}
+
+.shotImg {
+  object-fit: cover;
+  object-position: top center;
+}

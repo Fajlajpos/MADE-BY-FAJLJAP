@@ -10,7 +10,7 @@
 export type ServiceObject = 'browser' | 'parcel' | 'pen' | 'phone'
 
 export type Service = {
-  id: 'weby' | 'e-shopy' | 'navrh' | 'aplikace'
+  id: 'weby' | 'e-shopy' | 'redesign' | 'aplikace'
   object: ServiceObject
   index: string
   title: string
@@ -47,7 +47,7 @@ export const home = {
     index: '02',
     label: 'Co dělám',
     heading: 'S čím ti pomůžu',
-    lead: 'Dělám jen weby a věci kolem nich. Zato je dělám celé: návrh, stavbu i to, co přijde po spuštění.',
+    lead: 'Dělám jen weby a věci kolem nich. Zato je dělám celé: návrh, stavbu i to, co přijde po spuštění. A starý web ti klidně předělám.',
     items: [
       {
         id: 'weby',
@@ -65,14 +65,13 @@ export const home = {
         body: 'Postavím ti obchod, kde zákazník zaplatí kartou a sám si vybere dopravu. Faktura se vystaví sama, takže ty hlavně balíš objednávky.',
         points: ['Pokladna na pár kliknutí', 'Platba kartou, doprava, faktury', 'Produkty přidáváš sám'],
       },
-      // OVĚŘIT: nabízí samotný návrh webu (bez stavby)?
       {
-        id: 'navrh',
+        id: 'redesign',
         object: 'pen',
         index: '03',
-        title: 'Návrh webu',
-        body: 'Když už máš programátora, nakreslím ti jen návrh. Dostaneš obrazovky pro počítač i telefon, rozkreslené tak, aby se podle nich dalo rovnou stavět. A starý web ti klidně překreslím, aby zase vypadal k světu.',
-        points: ['Obrazovky pro počítač i telefon', 'Podklady připravené pro programátora', 'Překreslení starého webu'],
+        title: 'Redesign webu',
+        body: 'Máš web, který funguje, ale vypadá jako z roku 2012 a na telefonu se rozpadá. Překreslím ho a postavím znovu tak, aby byl rychlý a čitelný. Texty a adresy stránek nechám, ať o nic nepřijdeš ve vyhledávání.',
+        points: ['Nový vzhled, stejný obsah', 'Konečně pořádně na telefonu', 'Adresy a SEO zůstanou'],
       },
       {
         id: 'aplikace',
@@ -152,7 +151,7 @@ export const home = {
       // OVĚŘIT: cena
       { title: 'E-shop', from: 'od 60 000 Kč', body: 'Obchod s platbou kartou, dopravou a přehledem objednávek.' },
       // OVĚŘIT: cena
-      { title: 'Návrh webu', from: 'od 12 000 Kč', body: 'Jen návrh obrazovek pro počítač i telefon, připravený pro tvého programátora.' },
+      { title: 'Redesign webu', from: 'od 20 000 Kč', body: 'Nový vzhled a nová stavba pro web, který už máš. Obsah a adresy zůstanou.' },
       // OVĚŘIT: cena
       { title: 'Úpravy a péče', from: 'od 800 Kč/h', body: 'Oprava nebo vylepšení webu, který už máš. Platíš jen za čas, který tomu dám.' },
     ],
@@ -191,7 +190,7 @@ export const home = {
       },
       servicesLabel: 'Co potřebuješ',
       // Also the server-side whitelist (inquiry.ts): keep the count.
-      services: ['Web', 'E-shop', 'Návrh webu', 'Úprava webu', 'Aplikace', 'Něco jiného'],
+      services: ['Web', 'E-shop', 'Redesign webu', 'Úprava webu', 'Aplikace', 'Něco jiného'],
       budgetLabel: 'Rozpočet',
       // OVĚŘIT: rozpočtové rozsahy (CHECKLIST.md › „Rozpočtové rozsahy pro formulář")
       budgets: ['do 30 tis. Kč', '30 až 80 tis. Kč', '80 až 150 tis. Kč', 'přes 150 tis. Kč', 'Zatím nevím'],

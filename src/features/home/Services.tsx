@@ -12,7 +12,7 @@ import styles from './Services.module.css'
 const LOOK: Record<Service['id'], { mock: MockKind; hue: Hue; corner: Corner }> = {
   weby: { mock: 'web', hue: 'cold', corner: 'tr' },
   'e-shopy': { mock: 'shop', hue: 'warm', corner: 'tl' },
-  navrh: { mock: 'design', hue: 'green', corner: 'tr' },
+  redesign: { mock: 'redesign', hue: 'green', corner: 'tr' },
   aplikace: { mock: 'app', hue: 'violet', corner: 'tl' },
 }
 

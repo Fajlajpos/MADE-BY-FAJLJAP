@@ -30,22 +30,22 @@ export function useChromeKit(): ChromeKit {
     const physical = (params: ConstructorParameters<typeof MeshPhysicalMaterial>[0]) =>
       new MeshPhysicalMaterial({ envMap: env, ...params })
     const enamel = { metalness: 0.1, roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.06, envMapIntensity: 1 }
+    const chrome = physical({
+      color: '#f1efea',
+      metalness: 1,
+      roughness: 0.14,
+      envMapIntensity: 1.45,
+      clearcoat: 0.5,
+      clearcoatRoughness: 0.08,
+      iridescence: 0.55,
+      iridescenceIOR: 1.7,
+      iridescenceThicknessMinimum: 180,
+      iridescenceThicknessMaximum: 520,
+    })
     return {
       env,
-      // a thin oily film on the chrome: the highlights run from violet to teal as it turns, like the
-      // heat tint on a polished pipe; it keeps the metal from reading as flat grey on black
-      chrome: physical({
-        color: '#f1efea',
-        metalness: 1,
-        roughness: 0.14,
-        envMapIntensity: 1.45,
-        clearcoat: 0.5,
-        clearcoatRoughness: 0.08,
-        iridescence: 0.55,
-        iridescenceIOR: 1.7,
-        iridescenceThicknessMinimum: 180,
-        iridescenceThicknessMaximum: 520,
-      }),
+      // a thin oily film on the chrome: the highlights run from violet to teal as it turns
+      chrome,
       orange: physical({ color: palette.orange, ...enamel }),
       blue: physical({ color: palette.blue, ...enamel }),
       dark: physical({ color: '#16130f', metalness: 0.4, roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.05, envMapIntensity: 1 }),

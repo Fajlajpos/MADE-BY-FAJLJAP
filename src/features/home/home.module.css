@@ -6,7 +6,6 @@
   max-width: var(--max-width);
   margin-inline: auto;
   padding: var(--section-pad) var(--margin) 0;
-  overflow-x: clip;
 }
 
 /* every section stands under its own soft studio light, falling from above its heading, so the
@@ -14,14 +13,18 @@
 .section::before {
   content: '';
   position: absolute;
-  /* starts above the section, so the light has no hard top edge */
-  inset: -18rem 0 auto;
+  /* starts above the section and runs the full width of the screen (not just the centred
+     column), so the light never shows a hard edge, even on a very wide monitor */
+  top: -18rem;
+  left: 50%;
+  width: 100vw;
+  translate: -50% 0;
   height: min(88rem, calc(100% + 18rem));
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(42% 30rem at 22% 18rem, rgb(244 244 242 / 0.05), rgb(244 244 242 / 0) 75%),
-    radial-gradient(30% 22rem at 85% 24rem, rgb(255 106 43 / 0.03), rgb(255 106 43 / 0) 75%);
+    radial-gradient(min(42%, 40rem) 30rem at max(22%, calc(50% - 30rem)) 18rem, rgb(244 244 242 / 0.05), rgb(244 244 242 / 0) 75%),
+    radial-gradient(min(30%, 30rem) 22rem at min(85%, calc(50% + 34rem)) 24rem, rgb(var(--accent-2-rgb) / 0.035), rgb(var(--accent-2-rgb) / 0) 75%);
 }
 
 /* a section opens with a small chip: its number in an orange dot, then its name */
@@ -48,8 +51,8 @@
   height: 2.1em;
   padding-inline: 0.5em;
   border-radius: 999px;
-  background: rgb(255 106 43 / 0.14);
-  color: var(--accent);
+  background: rgb(var(--accent-2-rgb) / 0.14);
+  color: var(--accent-2);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }

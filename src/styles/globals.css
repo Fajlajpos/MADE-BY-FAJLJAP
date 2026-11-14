@@ -8,7 +8,8 @@ html {
 }
 
 body {
-  background: var(--bg);
+  /* the page colour lives on <html>, so the glows below can sit between it and the content */
+  background: none;
   color: var(--fg);
   font-family: var(--font-body);
   font-size: var(--fs-body);
@@ -156,4 +157,38 @@ body::after {
   .js [data-reveal]:not([data-in]) .w > span {
     translate: none;
   }
+}
+
+/* Soft coloured light far behind everything: a warm glow, a cold one and a violet one, very
+   faint and blurred, drifting slowly. Fixed and transform-only, so it never repaints on scroll. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -20vmax;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(28vmax 24vmax at 18% 22%, rgb(255 106 43 / 0.075), rgb(255 106 43 / 0) 70%),
+    radial-gradient(32vmax 26vmax at 84% 38%, rgb(70 110 255 / 0.07), rgb(70 110 255 / 0) 70%),
+    radial-gradient(30vmax 24vmax at 40% 86%, rgb(140 90 255 / 0.06), rgb(140 90 255 / 0) 70%);
+  animation: glowDrift 48s ease-in-out infinite alternate;
+}
+
+@keyframes glowDrift {
+  to {
+    transform: translate3d(4vmax, -3vmax, 0) rotate(8deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+  }
+}
+
+/* Whatever sticks out sideways (an object on a card's corner, a section's full-width light) is
+   cut at the edge of the page, so the page never scrolls sideways. `clip`, not `hidden`: it
+   makes no scroll container, so sticky parts keep working. */
+#obsah {
+  overflow-x: clip;
 }

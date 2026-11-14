@@ -5,9 +5,8 @@
   overflow: clip;
   isolation: isolate;
   /* a soft studio floor under the chrome: lighter in the middle, black at the edges */
-  background:
-    linear-gradient(180deg, rgb(8 8 10 / 0) 70%, var(--bg) 100%),
-    radial-gradient(60% 55% at 62% 46%, #1b1b20 0%, #0d0d10 55%, var(--bg) 100%);
+  /* a soft studio light that fades out into the page, never an opaque block */
+  background: radial-gradient(60% 55% at 62% 46%, rgb(40 40 48 / 0.55) 0%, rgb(40 40 48 / 0) 100%);
 }
 
 .scene {
@@ -72,7 +71,7 @@
 
 .dot[data-open='true'] {
   background: var(--accent);
-  box-shadow: 0 0 0 4px rgb(255 106 43 / 0.15);
+  box-shadow: 0 0 0 4px rgb(var(--accent-rgb) / 0.15);
 }
 
 .bottom {

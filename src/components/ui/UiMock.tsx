@@ -1,10 +1,11 @@
+import Image from 'next/image'
 import styles from './UiMock.module.css'
 
-export type MockKind = 'web' | 'shop' | 'design' | 'app'
+export type MockKind = 'web' | 'shop' | 'redesign' | 'app'
 
 /**
- * A small, living picture of the kind of work — a website, a coffee e-shop, a design file, an
- * app — drawn in HTML/CSS so it stays sharp at any size (it scales with its
+ * A small, living picture of the kind of work — a website, a coffee e-shop, a redesign (before
+ * and after), an app — drawn in HTML/CSS so it stays sharp at any size (it scales with its
  * box via container units). Decorative: what it shows is said in the text next to it.
  */
 export function UiMock({ kind, className }: { kind: MockKind; className?: string }) {
@@ -12,7 +13,7 @@ export function UiMock({ kind, className }: { kind: MockKind; className?: string
     <div className={[styles.mock, className].filter(Boolean).join(' ')} data-kind={kind} aria-hidden="true">
       {kind === 'web' && <Web />}
       {kind === 'shop' && <Shop />}
-      {kind === 'design' && <Design />}
+      {kind === 'redesign' && <Redesign />}
       {kind === 'app' && <App />}
     </div>
   )
@@ -92,39 +93,46 @@ function Shop() {
   )
 }
 
-function Design() {
+function Redesign() {
   return (
-    <div className={styles.canvas}>
-      <div className={styles.layers}>
-        <b>Vrstvy</b>
-        <span>Menu</span>
-        <span data-on="">Hlavička</span>
-        <span>Fotka</span>
-        <span>Tlačítko</span>
-        <span>Patička</span>
-      </div>
-      <div className={styles.board}>
-        <div className={styles.artboard}>
-          <small>Počítač · 1440</small>
-          <div className={styles.frameDesk}>
-            <i style={{ width: '30%' }} />
-            <i className={`${styles.big} ${styles.select}`} />
-            <i className={styles.img} />
-            <i className={styles.btn} />
+    <div className={styles.window}>
+      <Bar url="pekarnakvasek.cz" />
+      <div className={styles.split}>
+        {/* before: the old site, crowded and tiny */}
+        <div className={styles.old}>
+          <p className={styles.oldLogo}>Pekárna Kvásek</p>
+          <p className={styles.oldMenu}>
+            <u>Úvod</u> | <u>O nás</u> | <u>Produkty</u> | <u>Ceník</u> | <u>Fotogalerie</u> | <u>Kontakt</u>
+          </p>
+          <div className={styles.oldBody}>
+            <span className={styles.oldImg} />
+            <p>
+              Vítejte na našich stránkách! Jsme rodinná pekárna s dlouholetou tradicí. Pečeme chléb, rohlíky, koláče a
+              dorty na objednávku. Otevírací doba Po–Pá 6–17, So 7–11. Novinka!!! Kváskový chléb.
+            </p>
           </div>
+          <span className={styles.tagOld}>Před</span>
         </div>
-        <div className={styles.artboard}>
-          <small>Telefon · 390</small>
-          <div className={styles.framePhone}>
-            <i style={{ width: '50%' }} />
-            <i className={styles.big} />
-            <i className={styles.img} />
-            <i className={styles.btn} />
-          </div>
+        {/* after: the same bakery, redrawn */}
+        <div className={styles.new}>
+          <p className={styles.newNav}>
+            <b>Kvásek</b>
+            <span>Objednat</span>
+          </p>
+          <p className={styles.newTitle}>
+            Chleba,
+            <br />
+            co voní
+            <br />
+            až na ulici.
+          </p>
+          <span className={styles.newImg} />
+          <span className={styles.newBtn}>Objednat dort</span>
+          <span className={styles.tagNew}>Po</span>
         </div>
-        <svg className={styles.cursor} viewBox="0 0 24 24">
-          <path d="M4 2l16 10-7 1.5L9.5 21z" />
-        </svg>
+        <span className={styles.handle}>
+          <i />
+        </span>
       </div>
     </div>
   )
@@ -150,6 +158,20 @@ function App() {
         <li>Hotovo k vyzvednutí</li>
       </ul>
       <div className={styles.appBtn}>Objednat opravu</div>
+    </div>
+  )
+}
+
+/** A real screenshot of a live site, in the same browser window as the drawn mocks. */
+export function ShotWindow({ src, alt, url, sizes }: { src: string; alt: string; url: string; sizes?: string }) {
+  return (
+    <div className={styles.mock}>
+      <div className={styles.window}>
+        <Bar url={url.replace(/^https?:\/\//, '')} />
+        <div className={styles.shot}>
+          <Image src={src} alt={alt} fill sizes={sizes ?? '(min-width: 1024px) 60vw, 90vw'} className={styles.shotImg} />
+        </div>
+      </div>
     </div>
   )
 }

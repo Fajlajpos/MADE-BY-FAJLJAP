@@ -86,7 +86,8 @@
     row-gap: var(--space-9);
   }
 
-  .cell:first-child {
+  .cell:first-child,
+  .cell[data-wide] {
     grid-column: 1 / -1;
   }
 
@@ -103,21 +104,38 @@
   }
 
   /* the wide project's caption: title and meta on the left, summary on the right */
-  .cell:first-child .caption {
+  .cell[data-wide] .caption {
     grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: var(--gutter);
     align-items: start;
   }
 
-  .cell:first-child .titleRow,
-  .cell:first-child .meta {
+  .cell[data-wide] .titleRow,
+  .cell[data-wide] .meta {
     grid-column: 1 / 6;
   }
 
-  .cell:first-child .summary {
+  .cell[data-wide] .summary {
     grid-column: 7 / -1;
     grid-row: 1 / span 2;
     margin-top: 0.4rem;
   }
 }
 
+
+/* the link to a live project */
+.visit {
+  justify-self: start;
+  margin-top: var(--space-3);
+}
+
+.visitIcon {
+  rotate: -45deg;
+}
+
+@media (min-width: 1024px) {
+  .cell[data-wide] .visit {
+    grid-column: 7 / -1;
+    margin-top: 0;
+  }
+}

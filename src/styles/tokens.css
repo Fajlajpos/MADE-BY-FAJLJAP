@@ -18,6 +18,7 @@
   --c-grey-2: #8a8a90; /* 5.9:1 */
   --c-grey-3: #5a5a60; /* lines, never text */
   --c-accent: #ff6a2b; /* 7.2:1 */
+  --accent-rgb: 255 106 43;
 
   --bg: var(--c-black);
   --bg-raised: var(--c-ink-1);
@@ -31,15 +32,17 @@
   --surface: linear-gradient(170deg, #1b1b20 0%, #121215 55%, #0d0d10 100%);
   --surface-hover: linear-gradient(170deg, #222228 0%, #16161a 55%, #0f0f12 100%);
   --surface-edge: inset 0 1px 0 rgb(255 255 255 / 0.085), inset 0 0 0 1px rgb(255 255 255 / 0.045);
-  --surface-drop: 0 40px 80px -44px rgb(0 0 0 / 0.9);
+  --surface-drop: 0 22px 36px -26px rgb(0 0 0 / 0.85);
   --accent: var(--c-accent);
+  /* (older code asks for a second accent: it is the same orange) */
+  --accent-2: var(--c-accent);
+  --accent-2-rgb: var(--accent-rgb);
   --accent-ink: var(--c-black);
   --focus: var(--c-accent);
 
   /* kept for older code paths */
   --accent-text: var(--c-accent);
-  --accent-2: var(--c-grey-1);
-  --accent-2-text: var(--c-grey-1);
+  --accent-2-text: var(--c-accent);
   --c-paper: var(--c-black);
   --c-ink: var(--c-white);
   --c-orange: var(--c-accent);

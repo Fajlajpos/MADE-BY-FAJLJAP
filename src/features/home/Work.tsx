@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react'
 import { Media } from '@/components/media/Media'
+import { Arrow } from '@/components/ui/Arrow'
 import { Showcase, type Corner, type Hue } from '@/components/showcase/Showcase'
 import { home } from '@/content/home'
 import { getSlot } from '@/content/media'
@@ -10,8 +11,8 @@ import shared from './home.module.css'
 import styles from './Work.module.css'
 
 const SIZES = ['(min-width: 768px) 92vw, 100vw', '(min-width: 768px) 46vw, 100vw']
-const HUES: Hue[] = ['cold', 'warm', 'violet']
-const CORNERS: Corner[] = ['tr', 'tl', 'tr']
+const HUES: Hue[] = ['cold', 'warm', 'violet', 'warm']
+const CORNERS: Corner[] = ['tr', 'tl', 'tr', 'tl']
 
 /**
  * 04 Práce — three projects on metal plates, the first across the full width, the other two
@@ -20,7 +21,7 @@ const CORNERS: Corner[] = ['tr', 'tl', 'tr']
  */
 export function Work() {
   const { work } = home
-  const featured = projects.filter((p) => p.featured).slice(0, 3)
+  const featured = projects.filter((p) => p.featured)
   return (
     <section id="prace" className={shared.section} aria-labelledby="prace-title">
       <header className={styles.head}>
@@ -39,11 +40,16 @@ export function Work() {
 
       <ol className={styles.grid} role="list">
         {featured.map((project, i) => {
-          const hasPhoto = Boolean(getSlot(project.slot).src)
+          const media = getSlot(project.slot)
+          const hasPhoto = Boolean(media.src)
+          // the first and the last project run across the full width
+          const wide = i === 0 || (i === featured.length - 1 && featured.length % 2 === 0)
+          const shot = project.url && media.src ? { src: media.src, alt: media.alt, url: project.url } : undefined
           return (
             <li
               key={project.slug}
               className={styles.cell}
+              data-wide={wide || undefined}
               data-reveal=""
               style={{ '--reveal-i': i % 2 } as CSSProperties}
             >
@@ -53,9 +59,11 @@ export function Work() {
                   object={project.object}
                   hue={HUES[i % HUES.length]}
                   corner={CORNERS[i % CORNERS.length]}
-                  wide={i === 0}
+                  wide={wide}
+                  shot={shot}
+                  chip={shot ? 'Skutečný e-shop · běží' : undefined}
                 >
-                  {hasPhoto ? <Media slot={project.slot} className={styles.media} sizes={SIZES[i === 0 ? 0 : 1]} /> : undefined}
+                  {hasPhoto && !shot ? <Media slot={project.slot} className={styles.media} sizes={SIZES[wide ? 0 : 1]} /> : undefined}
                 </Showcase>
                 <div className={styles.caption}>
                   <div className={styles.titleRow}>
@@ -68,6 +76,13 @@ export function Work() {
                     {project.categories.map((c) => categoryLabels[c]).join(', ')}
                   </p>
                   <p className={styles.summary}>{typo(project.summary)}</p>
+                  {project.url && (
+                    <a className={`${shared.link} ${styles.visit}`} href={project.url} target="_blank" rel="noopener noreferrer">
+                      Otevřít {project.url.replace(/^https?:\/\//, '')}
+                      <Arrow className={`${shared.arrow} ${styles.visitIcon}`} />
+                      <span className="visually-hidden"> (otevře se v novém okně)</span>
+                    </a>
+                  )}
                 </div>
               </article>
             </li>

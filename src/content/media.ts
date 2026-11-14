@@ -5,8 +5,8 @@ import type { MediaSlot } from './types'
  * How to add a photo now (before the admin exists):
  *   1. put the file into /public/photos/ (JPG/PNG/WebP, ideally ≥ 1600 px on the long side)
  *   2. set `src: '/photos/<file>'` and write a real `alt` below
- * Photos are printed as a riso duotone (orange + black, blue halftone). Until a slot has one, it
- * shows a printed stand-in (`placeholder`: warm = mostly orange, cold = mostly blue dots, dusk = both).
+ * Photos keep their own colours. Until a slot has one, it shows a lit studio backdrop
+ * (`placeholder`: warm, cold or dusk light).
  */
 export const mediaSlots = {
   // the cinematic reel after the hero (landscape 16:9): set `video` (+ `src` as its poster)
@@ -17,6 +17,11 @@ export const mediaSlots = {
   'project.seda-zona': { alt: 'Ateliér Šedá Zóna, web', placeholder: 'cold' },
   'project.kavarna-sum': { alt: 'Kavárna Šum, e-shop', placeholder: 'warm' },
   'project.servis-brzda': { alt: 'Servis Brzda, objednávky v telefonu', placeholder: 'dusk' },
+  'project.lindashop': {
+    src: '/projects/lindashop.jpg',
+    alt: 'Úvodní stránka e-shopu Linda Fashion: nadpis Nadčasová elegance pro každý den a fotka ženy v lněných šatech u moře',
+    placeholder: 'warm',
+  },
 } satisfies Record<string, MediaSlot>
 
 export type SlotKey = keyof typeof mediaSlots

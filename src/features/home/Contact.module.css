@@ -16,7 +16,7 @@
 
 /* the one orange thing in the section */
 .dot {
-  color: var(--accent);
+  color: var(--accent-2);
 }
 
 .layout {
@@ -313,7 +313,7 @@
 .error {
   font-size: var(--fs-small);
   font-weight: 500;
-  color: var(--accent);
+  color: var(--accent-2);
 }
 
 .error a {

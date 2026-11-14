@@ -24,7 +24,7 @@ const TOKENS = {
   /** The second light of the night desk; the same blue ink (the token was --c-ultra before). */
   ultra: ['--c-blue', '#3d9be9'],
   ink: ['--c-ink', '#ece6da'],
-  paper: ['--c-paper', '#0e0d0c'],
+  paper: ['--c-paper', '#08080a'],
   cursorLamp: ['--c-lamp', '#ffb067'],
 } as const
 

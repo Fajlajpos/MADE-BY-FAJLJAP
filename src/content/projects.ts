@@ -44,11 +44,28 @@ export const projects: ProjectSummary[] = [
     mock: 'app',
     featured: true,
   },
+  // A real project: the screenshot is the live site (public/projects/lindashop.jpg).
+  // OVĚŘIT: rok, rozsah práce a text
+  {
+    slug: 'lindashop',
+    index: '04',
+    title: 'Linda Fashion',
+    summary: 'Butik s dámskou módou v italském stylu ze Sokolova. Udělal jsem mu e-shop, kde si zákaznice projde kolekce podle druhu oblečení a objedná na pár kliknutí. Kamenná prodejna má na webu vlastní místo s otevírací dobou a cestou na mapě, protože spousta lidí si šaty chce nejdřív vyzkoušet.',
+    year: 2026,
+    categories: ['e-shop', 'navrh'],
+    role: 'Návrh a stavba e-shopu',
+    slot: 'project.lindashop',
+    object: 'parcel',
+    mock: 'shop',
+    url: 'https://lindashop.cz',
+    featured: true,
+  },
 ]
 
 export const categoryLabels = {
   web: 'Web',
   'e-shop': 'E-shop',
   navrh: 'Návrh',
+  redesign: 'Redesign',
   aplikace: 'Aplikace',
 } as const

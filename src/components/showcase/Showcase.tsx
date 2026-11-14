@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { UiMock, type MockKind } from '@/components/ui/UiMock'
+import { ShotWindow, UiMock, type MockKind } from '@/components/ui/UiMock'
 import type { ObjectKind } from '@/three/site/ChromeObject'
 import { Slot3D } from '@/three/site/Slot3D'
 import styles from './Showcase.module.css'
@@ -10,7 +10,7 @@ import styles from './Showcase.module.css'
 const CHIPS: Record<MockKind, string> = {
   web: 'Načteno za 0,8 s',
   shop: 'Nová objednávka · 578 Kč',
-  design: 'Návrh v2 · 6 obrazovek',
+  redesign: 'Načítání 6,2 s → 0,9 s',
   app: 'Kolo je hotové',
 }
 
@@ -28,6 +28,10 @@ type Props = {
   corner?: Corner
   /** A real photo (or anything else) instead of the drawn mock. */
   children?: ReactNode
+  /** A real screenshot of the live site, shown in a browser window instead of the drawn mock. */
+  shot?: { src: string; alt: string; url: string }
+  /** The text of the floating chip (defaults to one that fits the mock). */
+  chip?: string
   /** A wide plate (16:9 from tablet up) for the one project across the page. */
   wide?: boolean
   className?: string
@@ -38,7 +42,7 @@ type Props = {
  * corner, half outside, like a paperweight. A soft light follows the cursor across the plate,
  * the picture leans toward it, and the object lifts while the cursor is on the card.
  */
-export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, wide, className }: Props) {
+export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, shot, chip, wide, className }: Props) {
   const root = useRef<HTMLDivElement>(null)
   const [hover, setHover] = useState(false)
 
@@ -84,7 +88,7 @@ export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, 
       className={[styles.showcase, className].filter(Boolean).join(' ')}
       data-hue={hue}
       data-corner={corner}
-      data-kind={children ? 'photo' : mock}
+      data-kind={children ? 'photo' : shot ? 'shot' : mock}
       data-hover={hover || undefined}
       data-wide={wide || undefined}
     >
@@ -94,11 +98,16 @@ export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, 
       <div className={styles.plate}>
         <span className={styles.glow} aria-hidden="true" />
         <div className={styles.tilt}>
-          {children ?? <UiMock kind={mock} className={styles.mock} />}
+          {children ??
+            (shot ? (
+              <ShotWindow src={shot.src} alt={shot.alt} url={shot.url} sizes={wide ? '(min-width: 768px) 60vw, 90vw' : '(min-width: 768px) 40vw, 90vw'} />
+            ) : (
+              <UiMock kind={mock} className={styles.mock} />
+            ))}
           {!children && (
             <span className={styles.chip} aria-hidden="true">
               <i />
-              {CHIPS[mock]}
+              {chip ?? CHIPS[mock]}
             </span>
           )}
         </div>

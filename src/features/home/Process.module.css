@@ -47,11 +47,11 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(70% 55% at 100% 0%, rgb(255 106 43 / 0.09), rgb(255 106 43 / 0) 70%);
+  background: radial-gradient(70% 55% at 100% 0%, rgb(var(--accent-rgb) / 0.09), rgb(var(--accent-rgb) / 0) 70%);
 }
 
 .step:first-child::before {
-  background: radial-gradient(80% 65% at 100% 0%, rgb(255 106 43 / 0.2), rgb(255 106 43 / 0) 70%);
+  background: radial-gradient(80% 65% at 100% 0%, rgb(var(--accent-rgb) / 0.2), rgb(var(--accent-rgb) / 0) 70%);
 }
 
 .top {

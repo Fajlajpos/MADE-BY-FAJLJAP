@@ -19,7 +19,7 @@ export type MediaSlot = {
   focal?: [number, number]
 }
 
-export type ProjectCategory = 'web' | 'e-shop' | 'navrh' | 'aplikace'
+export type ProjectCategory = 'web' | 'e-shop' | 'navrh' | 'redesign' | 'aplikace'
 
 export type ProjectSummary = {
   slug: string
@@ -35,8 +35,10 @@ export type ProjectSummary = {
   slot: string
   /** The chrome symbol shown on the card until the project has a photo. */
   object: 'browser' | 'parcel' | 'pen' | 'phone' | 'mug' | 'play' | 'tag' | 'plane'
+  /** The live site, for real projects: the card links to it and shows its screenshot in a browser window. */
+  url?: string
   /** The drawn picture of the work shown on the card until the photo comes. */
-  mock: 'web' | 'shop' | 'design' | 'app'
+  mock: 'web' | 'shop' | 'redesign' | 'app'
   featured: boolean
 }
 
