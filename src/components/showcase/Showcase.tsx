@@ -6,6 +6,14 @@ import type { ObjectKind } from '@/three/site/ChromeObject'
 import { Slot3D } from '@/three/site/Slot3D'
 import styles from './Showcase.module.css'
 
+/** A small piece of UI that floats in front of the picture, closer to you. */
+const CHIPS: Record<MockKind, string> = {
+  web: 'Načteno za 0,8 s',
+  shop: 'Nová objednávka · 578 Kč',
+  design: 'Návrh v2 · 6 obrazovek',
+  app: 'Kolo je hotové',
+}
+
 export type Hue = 'warm' | 'cold' | 'violet' | 'green'
 export type Corner = 'tr' | 'tl' | 'br' | 'bl'
 
@@ -80,9 +88,20 @@ export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, 
       data-hover={hover || undefined}
       data-wide={wide || undefined}
     >
+      {/* two more plates under this one, like prints in a stack */}
+      <span className={styles.sheet} aria-hidden="true" />
+      <span className={styles.sheet} aria-hidden="true" />
       <div className={styles.plate}>
         <span className={styles.glow} aria-hidden="true" />
-        <div className={styles.tilt}>{children ?? <UiMock kind={mock} className={styles.mock} />}</div>
+        <div className={styles.tilt}>
+          {children ?? <UiMock kind={mock} className={styles.mock} />}
+          {!children && (
+            <span className={styles.chip} aria-hidden="true">
+              <i />
+              {CHIPS[mock]}
+            </span>
+          )}
+        </div>
         <span className={styles.sheen} aria-hidden="true" />
       </div>
       <Slot3D object={object} className={styles.object} active={hover} scale={1.35} tone={hue === 'warm' ? 'warm' : 'cold'} />

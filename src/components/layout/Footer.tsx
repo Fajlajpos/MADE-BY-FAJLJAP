@@ -19,7 +19,7 @@ export function Footer() {
 
       <div className={styles.inner}>
         <div className={styles.lead}>
-          <p className={styles.statement}>{typo('Weby, e-shopy a grafika od jednoho člověka. Od první skici po spuštění.')}</p>
+          <p className={styles.statement}>{typo('Weby a e-shopy od jednoho člověka. Od první skici po spuštění.')}</p>
           <a className={styles.mail} href={`mailto:${site.contact.email}`}>
             {site.contact.email}
           </a>

@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react'
 import { Arrow } from '@/components/ui/Arrow'
 import { home } from '@/content/home'
+import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import { Slot3D } from '@/three/site/Slot3D'
 import shared from './home.module.css'
@@ -33,7 +34,7 @@ export function Pricing() {
       <div className={styles.top}>
         <div className={styles.intro}>
           <h2 id="cenik-title" className={`${shared.h2} ${styles.title}`} data-reveal="">
-            {typo(pricing.heading)}
+            <Words text={pricing.heading} />
           </h2>
           <p className={shared.lead} data-reveal="" style={{ '--reveal-i': 1 } as CSSProperties}>
             {typo(pricing.lead)}

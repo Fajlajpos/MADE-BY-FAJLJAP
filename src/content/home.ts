@@ -2,7 +2,7 @@
  * Homepage copy, phase 1g (night print). Raw strings — components run prose through typo() at
  * render time. Voice: FAJLAJP writing it himself — first person, tykání, short sentences, plain
  * spoken Czech, concrete over adjectives, no slogans. Headings stay short (2–6 words): they are
- * set huge in Gloock. `// OVĚŘIT:` marks facts to confirm.
+ * set huge. `// OVĚŘIT:` marks facts to confirm.
  * Phase 2: becomes SiteText rows editable in the admin.
  */
 
@@ -10,7 +10,7 @@
 export type ServiceObject = 'browser' | 'parcel' | 'pen' | 'phone'
 
 export type Service = {
-  id: 'weby' | 'e-shopy' | 'grafika' | 'aplikace'
+  id: 'weby' | 'e-shopy' | 'navrh' | 'aplikace'
   object: ServiceObject
   index: string
   title: string
@@ -21,11 +21,11 @@ export type Service = {
 
 export const home = {
   hero: {
-    tag: 'Grafik a webdesignér z Česka',
+    tag: 'Webdesignér z Česka',
     // Short lines: the hero sets them huge, the last one in the accent ink.
-    title: ['Ahoj,', 'dělám weby', 'a loga.'],
+    title: ['Ahoj,', 'dělám weby', 'a e-shopy.'],
     intro:
-      'Jsem FAJLAJP a dělám to sám, takže nepíšeš žádnému obchodníkovi, ale rovnou mně. Web nebo e-shop ti navrhnu i postavím. Když k tomu chceš logo nebo leták, udělám ho taky. Ozvu se do dvou dnů.',
+      'Jsem FAJLAJP a dělám to sám, takže nepíšeš žádnému obchodníkovi, ale rovnou mně. Web nebo e-shop ti navrhnu i postavím, od první skici po spuštění. Ozvu se do dvou dnů.',
     ctaPrimary: 'Napiš mi',
     ctaSecondary: 'Co dělám',
   },
@@ -47,7 +47,7 @@ export const home = {
     index: '02',
     label: 'Co dělám',
     heading: 'S čím ti pomůžu',
-    lead: 'Většina lidí přijde kvůli jedné věci a nakonec potřebuje dvě. K webu logo, k e-shopu obaly. Klidně to vezmu celé, ať to pak k sobě sedí.',
+    lead: 'Dělám jen weby a věci kolem nich. Zato je dělám celé: návrh, stavbu i to, co přijde po spuštění.',
     items: [
       {
         id: 'weby',
@@ -65,13 +65,14 @@ export const home = {
         body: 'Postavím ti obchod, kde zákazník zaplatí kartou a sám si vybere dopravu. Faktura se vystaví sama, takže ty hlavně balíš objednávky.',
         points: ['Pokladna na pár kliknutí', 'Platba kartou, doprava, faktury', 'Produkty přidáváš sám'],
       },
+      // OVĚŘIT: nabízí samotný návrh webu (bez stavby)?
       {
-        id: 'grafika',
+        id: 'navrh',
         object: 'pen',
         index: '03',
-        title: 'Logo a grafika',
-        body: 'Logo nejdřív kreslím tužkou, teprve pak ho dělám v počítači. Vyberu k němu barvy a písmo a podle toho pak dělám vizitky, plakáty, obaly nebo příspěvky na sítě. Všechno pak vypadá, že je od jedné firmy, a ono taky je.',
-        points: ['Logo a jednoduchý manuál', 'Plakáty, letáky, vizitky', 'Obaly a příspěvky na sítě'],
+        title: 'Návrh webu',
+        body: 'Když už máš programátora, nakreslím ti jen návrh. Dostaneš obrazovky pro počítač i telefon, rozkreslené tak, aby se podle nich dalo rovnou stavět. A starý web ti klidně překreslím, aby zase vypadal k světu.',
+        points: ['Obrazovky pro počítač i telefon', 'Podklady připravené pro programátora', 'Překreslení starého webu'],
       },
       {
         id: 'aplikace',
@@ -87,6 +88,15 @@ export const home = {
   },
 
   /** How working with me goes — for companies that want to know what happens and when. */
+  /** The chrome corridor between the services and the process: three lines while you fly through. */
+  depth: {
+    label: 'Jak to vzniká',
+    lines: [
+      'Každá zakázka začne jednou zprávou.',
+      'Pak sedím u stolu, kreslím a škrtám, dokud to nesedí.',
+      'A potom to postavím. Sám, takže víš, komu psát, když něco nejde.',
+    ],
+  },
   process: {
     index: '03',
     label: 'Jak to probíhá',
@@ -114,7 +124,7 @@ export const home = {
     label: 'O mně',
     heading: 'Kdo u stolu sedí',
     body: [
-      'Jsem FAJLAJP, grafik a webdesignér. Skoro všechno začínám tužkou ve skicáku, protože tam je škrtání zadarmo. Nikoho dalšího na to nemám, takže všechno, co ode mě dostaneš, jsem dělal já. Včetně chyb, které pak taky opravuju já.',
+      'Jsem FAJLAJP, webdesignér. Skoro všechno začínám tužkou ve skicáku, protože tam je škrtání zadarmo. Nikoho dalšího na to nemám, takže všechno, co ode mě dostaneš, jsem dělal já. Včetně chyb, které pak taky opravuju já.',
       'Nejlíp se mi pracuje v noci, kdy nikdo nevolá a na stole svítí jen lampa. Na zprávy ale odpovídám i přes den. Teď k tomu dělám svoji první aplikaci a pořád se na ní něco učím.',
     ],
     facts: [
@@ -142,9 +152,9 @@ export const home = {
       // OVĚŘIT: cena
       { title: 'E-shop', from: 'od 60 000 Kč', body: 'Obchod s platbou kartou, dopravou a přehledem objednávek.' },
       // OVĚŘIT: cena
-      { title: 'Logo a identita', from: 'od 15 000 Kč', body: 'Logo s barvami a písmem. K tomu pár stránek o tom, jak s tím zacházet.' },
+      { title: 'Návrh webu', from: 'od 12 000 Kč', body: 'Jen návrh obrazovek pro počítač i telefon, připravený pro tvého programátora.' },
       // OVĚŘIT: cena
-      { title: 'Grafika', from: 'od 3 000 Kč', body: 'Plakát, leták, obal nebo příspěvky na sítě. Cena podle toho, kolik toho je.' },
+      { title: 'Úpravy a péče', from: 'od 800 Kč/h', body: 'Oprava nebo vylepšení webu, který už máš. Platíš jen za čas, který tomu dám.' },
     ],
     faqLabel: 'Na co se lidi ptají',
     faq: [
@@ -152,7 +162,7 @@ export const home = {
       { q: 'Jak dlouho to trvá?', a: 'Web obvykle 4 až 6 týdnů, e-shop 6 až 10. Nejvíc to zdrží texty a fotky, takže je dobré je mít připravené dřív.' },
       { q: 'Budu si pak web umět upravovat sám?', a: 'Ano. Texty, fotky i produkty si měníš sám a na konci ti to ukážu.' },
       { q: 'Zařídíš i doménu a hosting?', a: 'Ano. Buď to založíme na tebe, nebo to zařídím já.' },
-      { q: 'Vezmeš i malou zakázku?', a: 'Jasně. Jeden plakát nebo oprava starého webu je úplně v pohodě.' },
+      { q: 'Vezmeš i malou zakázku?', a: 'Jasně. Jedna stránka k akci nebo oprava starého webu je úplně v pohodě.' },
       // OVĚŘIT: platební podmínky
       { q: 'Jak se platí?', a: 'Polovinu zaplatíš na začátku, zbytek při spuštění. Dostaneš ode mě fakturu, klidně na firmu.' },
       // OVĚŘIT: práce na dálku po celém Česku
@@ -160,24 +170,8 @@ export const home = {
     ],
   },
 
-  gallery: {
-    index: '07',
-    label: 'Mimo obrazovku',
-    lead: 'Co na hotovém webu neuvidíš. Většinou je to můj stůl ve dvě ráno a skici, které skončily v koši.',
-    hint: 'táhni do strany',
-    // Captions are drafts until the real photos arrive.
-    frames: [
-      { slot: 'home.studio.1', caption: 'Stůl, 02:14', ratio: '4 / 5' },
-      { slot: 'home.studio.2', caption: 'Skici, které nevyšly', ratio: '1 / 1' },
-      { slot: 'home.studio.3', caption: 'Odraz monitoru', ratio: '4 / 5' },
-      { slot: 'home.studio.4', caption: 'Cestou domů', ratio: '3 / 2' },
-      { slot: 'home.studio.5', caption: 'Pauza venku, 03:10', ratio: '4 / 5' },
-      { slot: 'home.studio.6', caption: 'Plecháček, třetí kafe', ratio: '1 / 1' },
-    ],
-  },
-
   contact: {
-    index: '08',
+    index: '07',
     label: 'Kontakt',
     heading: 'Napiš mi',
     body: 'Stačí pár vět o tom, co děláš a co potřebuješ. Když víš termín nebo rozpočet, napiš ho taky. Odpovím do dvou dnů, většinou dřív a často v noci.',
@@ -197,7 +191,7 @@ export const home = {
       },
       servicesLabel: 'Co potřebuješ',
       // Also the server-side whitelist (inquiry.ts): keep the count.
-      services: ['Web', 'E-shop', 'Grafika', 'Logo', 'Návrh rozhraní', 'Aplikace', 'Něco jiného'],
+      services: ['Web', 'E-shop', 'Návrh webu', 'Úprava webu', 'Aplikace', 'Něco jiného'],
       budgetLabel: 'Rozpočet',
       // OVĚŘIT: rozpočtové rozsahy (CHECKLIST.md › „Rozpočtové rozsahy pro formulář")
       budgets: ['do 30 tis. Kč', '30 až 80 tis. Kč', '80 až 150 tis. Kč', 'přes 150 tis. Kč', 'Zatím nevím'],

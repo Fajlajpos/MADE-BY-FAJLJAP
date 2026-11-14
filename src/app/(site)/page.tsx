@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { About } from '@/features/home/About'
 import { Contact } from '@/features/home/Contact'
-import { Gallery } from '@/features/home/Gallery'
+import { Depth } from '@/features/home/Depth'
 import { Hero } from '@/features/home/Hero'
 import { Pricing } from '@/features/home/Pricing'
 import { Process } from '@/features/home/Process'
@@ -11,7 +11,7 @@ import { Work } from '@/features/home/Work'
 import { site } from '@/content/site'
 
 export const metadata: Metadata = {
-  title: { absolute: `${site.brand} — grafik a webdesignér. Weby, e-shopy, grafika` },
+  title: { absolute: `${site.brand} — webdesignér. Weby, e-shopy, aplikace` },
   description: site.tagline,
 }
 
@@ -21,11 +21,11 @@ export default function Home() {
       <Hero />
       <Reel />
       <Services />
+      <Depth />
       <Process />
       <Work />
       <About />
       <Pricing />
-      <Gallery />
       <Contact />
     </>
   )

@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react'
 import { Media } from '@/components/media/Media'
 import { home } from '@/content/home'
+import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import { Slot3D } from '@/three/site/Slot3D'
 import shared from './home.module.css'
@@ -30,7 +31,7 @@ export function About() {
 
         <div className={styles.copy}>
           <h2 id="o-mne-title" className={`${shared.h2} ${styles.title}`} data-reveal="">
-            {typo(about.heading)}
+            <Words text={about.heading} />
           </h2>
 
           <div className={styles.body}>

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { home } from '@/content/home'
 import { getSlot } from '@/content/media'
 import { prefersReducedMotion } from '@/lib/dom'
+import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import { Slot3D } from '@/three/site/Slot3D'
 import shared from './home.module.css'
@@ -105,7 +106,7 @@ export function Reel() {
           data-reveal=""
           style={{ '--reveal-i': 1 } as CSSProperties}
         >
-          {typo(reel.heading)}
+          <Words text={reel.heading} />
         </h2>
         <p
           className={`${shared.lead} ${styles.caption}`}

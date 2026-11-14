@@ -6,6 +6,7 @@
   isolation: isolate;
   /* a soft studio floor under the chrome: lighter in the middle, black at the edges */
   background:
+    linear-gradient(180deg, rgb(8 8 10 / 0) 70%, var(--bg) 100%),
     radial-gradient(60% 55% at 62% 46%, #1b1b20 0%, #0d0d10 55%, var(--bg) 100%);
 }
 
@@ -90,8 +91,87 @@
   text-wrap: nowrap;
 }
 
+.mask {
+  display: block;
+  padding-block: 0.08em;
+  margin-block: -0.08em;
+  overflow: clip;
+}
+
 .line {
   display: block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* on load the three lines rise out of their masks, one after another */
+  .line {
+    animation: lineIn 1.2s var(--ease-out) both;
+    animation-delay: calc(0.25s + var(--li, 0) * 0.12s);
+  }
+
+  .aside {
+    animation: fadeUp 1s var(--ease-out) 0.75s both;
+  }
+
+  /* as the hero scrolls away, the lines slide apart and the copy sinks back */
+  @supports (animation-timeline: view()) {
+    .hero {
+      view-timeline-name: --hero;
+    }
+
+    .mask {
+      animation: lineOut linear both;
+      animation-timeline: --hero;
+      animation-range: exit 0% exit 75%;
+    }
+
+    .mask:nth-child(2) {
+      animation-name: lineOutRight;
+    }
+
+    .aside,
+    .top {
+      animation:
+        fadeUp 1s var(--ease-out) 0.75s both,
+        sink linear both;
+      animation-timeline: auto, --hero;
+      animation-range: normal, exit 0% exit 50%;
+    }
+  }
+}
+
+@keyframes lineIn {
+  from {
+    translate: 0 110%;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    translate: 0 20px;
+  }
+}
+
+@keyframes lineOut {
+  to {
+    transform: translateX(-14vw);
+    opacity: 0.15;
+  }
+}
+
+@keyframes lineOutRight {
+  to {
+    transform: translateX(10vw);
+    opacity: 0.15;
+  }
+}
+
+@keyframes sink {
+  to {
+    transform: translateY(-60px);
+    opacity: 0;
+  }
 }
 
 .aside {

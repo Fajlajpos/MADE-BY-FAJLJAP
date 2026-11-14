@@ -180,79 +180,156 @@
   font-weight: 600;
 }
 
-/* ── a brand board ────────────────────────────────── */
+/* ── a design file: two artboards, desktop and phone ─ */
 
-.board {
+.canvas {
+  position: relative;
   display: grid;
-  gap: 3cqw;
-  padding: 5cqw;
+  grid-template-columns: 15cqw 1fr;
+  overflow: hidden;
   border-radius: 3cqw;
-  background: #efe6d6;
-  color: #1b1a18;
+  background: #1e1e22;
+  color: #c9c9ce;
+  font-size: 1.7cqw;
   box-shadow:
     0 0 0 1px rgb(255 255 255 / 0.08),
     0 6cqw 12cqw -4cqw rgb(0 0 0 / 0.7);
 }
 
-.logo {
+.layers {
+  display: grid;
+  align-content: start;
+  gap: 1.6cqw;
+  padding: 3cqw 2cqw;
+  border-right: 1px solid rgb(255 255 255 / 0.08);
+  background: #19191c;
+}
+
+.layers b {
+  margin-bottom: 1cqw;
+  color: #f4f4f2;
+  font-weight: 600;
+}
+
+.layers span {
   display: flex;
   align-items: center;
-  gap: 3cqw;
+  gap: 1cqw;
+  color: #8a8a90;
 }
 
-.logoMark {
-  display: grid;
-  place-items: center;
-  width: 16cqw;
-  height: 16cqw;
-  border-radius: 50%;
-  background: #c4592b;
-  color: #efe6d6;
-  font-size: 9cqw;
-  font-weight: 700;
+.layers span::before {
+  content: '';
+  width: 1.4cqw;
+  height: 1.4cqw;
+  border: 0.25cqw solid currentColor;
+  border-radius: 0.3cqw;
 }
 
-.logoWord {
-  font-size: 13cqw;
-  font-weight: 700;
-  letter-spacing: -0.06em;
+.layers span[data-on] {
+  color: #f4f4f2;
 }
 
-.swatches {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2cqw;
-}
-
-.swatches span {
+.board {
+  position: relative;
   display: flex;
-  align-items: flex-end;
-  aspect-ratio: 1;
-  padding: 1.4cqw;
-  border-radius: 1.4cqw;
-  color: #fff;
-  font-size: 1.7cqw;
-  box-shadow: inset 0 0 0 0.3cqw rgb(27 26 24 / 0.18);
-}
-
-.specimen {
-  display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 4cqw;
-  padding-top: 3cqw;
-  border-top: 0.3cqw solid #1b1a18;
+  padding: 5cqw 4cqw 6cqw;
+  background:
+    radial-gradient(circle, rgb(255 255 255 / 0.07) 0.18cqw, transparent 0.2cqw) 0 0 / 2.4cqw 2.4cqw,
+    #26262b;
 }
 
-.aa {
-  font-size: 14cqw;
-  font-weight: 500;
-  letter-spacing: -0.04em;
+.artboard {
+  flex: none;
+  display: grid;
+  gap: 1.4cqw;
 }
 
-.abc {
-  font-size: 2.4cqw;
-  line-height: 1.5;
-  color: #55524c;
+.artboard > small {
+  font-size: 1.5cqw;
+  color: #8a8a90;
+}
+
+.frameDesk,
+.framePhone {
+  display: grid;
+  align-content: start;
+  gap: 1.6cqw;
+  padding: 2.4cqw;
+  border-radius: 1cqw;
+  background: #f3f1ec;
+}
+
+.frameDesk {
+  width: 46cqw;
+  aspect-ratio: 16 / 10;
+}
+
+.framePhone {
+  width: 16cqw;
+  aspect-ratio: 9 / 18;
+  border-radius: 2cqw;
+}
+
+.frameDesk i,
+.framePhone i {
+  display: block;
+  height: 1.4cqw;
+  border-radius: 0.5cqw;
+  background: #dcd8cf;
+}
+
+.frameDesk .big,
+.framePhone .big {
+  height: 4.4cqw;
+  width: 70%;
+  background: #16161a;
+}
+
+.frameDesk .img,
+.framePhone .img {
+  height: 11cqw;
+  background: linear-gradient(160deg, #9aa2ab, #4b5157);
+}
+
+.frameDesk .btn,
+.framePhone .btn {
+  width: 34%;
+  height: 3cqw;
+  border-radius: 3cqw;
+  background: #ff6a2b;
+}
+
+/* the selected element: a blue box with handles, and the cursor on it */
+.select {
+  position: relative;
+  outline: 0.3cqw solid #4c7dff;
+  outline-offset: 0.8cqw;
+}
+
+.select::after {
+  content: '';
+  position: absolute;
+  right: -1.8cqw;
+  bottom: -1.8cqw;
+  width: 1.6cqw;
+  height: 1.6cqw;
+  background: #fff;
+  border: 0.3cqw solid #4c7dff;
+}
+
+.cursor {
+  position: absolute;
+  left: 41cqw;
+  top: 33cqw;
+  width: 3.4cqw;
+  height: 3.4cqw;
+  fill: #f4f4f2;
+  stroke: #16161a;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0.6cqw 0.8cqw rgb(0 0 0 / 0.5));
 }
 
 /* ── a phone app ──────────────────────────────────── */
@@ -372,50 +449,3 @@
   font-weight: 600;
 }
 
-/* ── a festival poster ────────────────────────────── */
-
-.poster {
-  position: relative;
-  aspect-ratio: 3 / 4;
-  width: 72%;
-  margin-inline: auto;
-  overflow: hidden;
-  padding: 6cqw;
-  border-radius: 1.4cqw;
-  background: radial-gradient(70% 50% at 50% 38%, #3d2a8c 0%, #160f33 60%, #0a0716 100%);
-  color: #f1ecff;
-  box-shadow:
-    0 0 0 1px rgb(255 255 255 / 0.08),
-    0 8cqw 14cqw -4cqw rgb(0 0 0 / 0.8);
-}
-
-.posterEye {
-  position: absolute;
-  left: 50%;
-  top: 34%;
-  width: 46cqw;
-  height: 24cqw;
-  translate: -50% -50%;
-  border-radius: 50%;
-  background: radial-gradient(circle, #0a0716 0 18%, #ff6a2b 19% 26%, #f1ecff 27% 100%);
-  box-shadow: 0 0 10cqw rgb(255 106 43 / 0.35);
-}
-
-.posterTitle {
-  position: absolute;
-  left: 6cqw;
-  bottom: 14cqw;
-  font-size: 26cqw;
-  font-weight: 700;
-  letter-spacing: -0.06em;
-  line-height: 0.8;
-}
-
-.posterSub {
-  position: absolute;
-  left: 6cqw;
-  bottom: 5cqw;
-  font-size: 2.4cqw;
-  line-height: 1.4;
-  color: #b9b0de;
-}

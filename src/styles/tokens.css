@@ -27,6 +27,11 @@
   --fg-subtle: var(--c-grey-2);
   --line: rgb(244 244 242 / 0.1);
   --line-strong: rgb(244 244 242 / 0.24);
+  /* the one material for panels: dark anodized metal lit from above, with a bright top edge */
+  --surface: linear-gradient(170deg, #1b1b20 0%, #121215 55%, #0d0d10 100%);
+  --surface-hover: linear-gradient(170deg, #222228 0%, #16161a 55%, #0f0f12 100%);
+  --surface-edge: inset 0 1px 0 rgb(255 255 255 / 0.085), inset 0 0 0 1px rgb(255 255 255 / 0.045);
+  --surface-drop: 0 40px 80px -44px rgb(0 0 0 / 0.9);
   --accent: var(--c-accent);
   --accent-ink: var(--c-black);
   --focus: var(--c-accent);

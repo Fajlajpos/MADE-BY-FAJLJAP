@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { Arrow } from '@/components/ui/Arrow'
 import { home } from '@/content/home'
 import { site } from '@/content/site'
@@ -28,9 +29,11 @@ export function Hero() {
 
         <div className={styles.bottom}>
           <h1 id="hero-title" className={styles.title}>
-            {hero.title.map((line) => (
-              <span key={line} className={styles.line}>
-                {typo(line)}
+            {hero.title.map((line, i) => (
+              <span key={line} className={styles.mask}>
+                <span className={styles.line} style={{ '--li': i } as CSSProperties}>
+                  {typo(line)}
+                </span>
               </span>
             ))}
           </h1>

@@ -1,4 +1,4 @@
-/* Ceník: heading beside the chrome tag, ruled price rows, FAQ as native <details>. */
+/* Ceník: heading beside the chrome tag, prices on metal cards, FAQ as native <details>. */
 
 .top {
   display: grid;
@@ -24,21 +24,43 @@
   pointer-events: none;
 }
 
-/* ── price list ─────────────────────────────────── */
+/* ── price list: four metal cards ──────────────── */
 .items {
-  border-top: 1px solid var(--line-strong);
+  display: grid;
+  gap: var(--space-4);
 }
 
 .item {
+  position: relative;
   display: grid;
-  gap: var(--space-3);
-  padding-block: var(--space-6);
-  border-bottom: 1px solid var(--line);
+  align-content: space-between;
+  gap: var(--space-8);
+  min-height: 17rem;
+  padding: var(--space-6);
+  border-radius: var(--r-l);
+  background: var(--surface);
+  box-shadow: var(--surface-edge), var(--surface-drop);
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+/* the most asked-for job gets the warm light */
+.item:first-child::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(75% 70% at 100% 100%, rgb(255 106 43 / 0.2), rgb(255 106 43 / 0) 70%);
+}
+
+.item:hover {
+  transform: translateY(-4px);
 }
 
 .what {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-3);
   min-width: 0;
 }
 
@@ -51,7 +73,7 @@
 }
 
 .itemBody {
-  max-width: 34rem;
+  max-width: 30rem;
   color: var(--fg-muted);
 }
 
@@ -70,7 +92,11 @@
 }
 
 .amount {
-  font-size: clamp(2rem, 1.3rem + 2.8vw, 3.75rem);
+  font-size: clamp(2.4rem, 1.5rem + 3vw, 4.4rem);
+  background: linear-gradient(180deg, #ffffff 0%, #d6d7dc 50%, #8d9099 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
   font-weight: 500;
   font-stretch: 90%;
   line-height: 1;
@@ -105,11 +131,20 @@
 }
 
 .qas {
-  border-top: 1px solid var(--line-strong);
+  display: grid;
+  gap: var(--space-2);
 }
 
 .qa {
-  border-bottom: 1px solid var(--line);
+  padding-inline: var(--space-5);
+  border-radius: var(--r-m);
+  background: var(--surface);
+  box-shadow: var(--surface-edge);
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.qa[open] {
+  box-shadow: var(--surface-edge), var(--surface-drop);
 }
 
 .q {
@@ -117,8 +152,9 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-5);
-  min-height: 64px;
+  min-height: 72px;
   padding-block: var(--space-4);
+  cursor: pointer;
   font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem);
   font-weight: 500;
   letter-spacing: -0.01em;
@@ -135,8 +171,7 @@
 }
 
 .q:hover .icon {
-  border-color: var(--line-strong);
-  background: var(--bg-high);
+  background: rgb(255 255 255 / 0.1);
 }
 
 .icon {
@@ -144,15 +179,14 @@
   width: 44px;
   height: 44px;
   padding: 13px;
-  border: 1px solid var(--line);
   border-radius: 50%;
+  background: rgb(255 255 255 / 0.05);
   fill: none;
   stroke: currentColor;
   stroke-width: 1.6;
   stroke-linecap: round;
   transition:
     background-color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out),
     transform var(--dur-base) var(--ease-out);
 }
 
@@ -188,14 +222,8 @@
 }
 
 @media (min-width: 768px) {
-  .item {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: start;
-    gap: var(--space-6);
-  }
-
-  .price {
-    justify-content: flex-end;
+  .items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -218,17 +246,8 @@
   }
 
   .item {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--gutter);
-    padding-block: var(--space-7);
-  }
-
-  .what {
-    grid-column: 1 / 8;
-  }
-
-  .price {
-    grid-column: 8 / 13;
+    min-height: 20rem;
+    padding: var(--space-7);
   }
 
   .faq {
@@ -251,5 +270,11 @@
 @media (prefers-reduced-motion: reduce) {
   .qa[open] .a {
     animation: none;
+  }
+
+  .item,
+  .item:hover {
+    transition: none;
+    transform: none;
   }
 }

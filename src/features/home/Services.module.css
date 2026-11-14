@@ -71,11 +71,11 @@
 .tag {
   margin: 0;
   padding: 0.3rem 0.75rem;
-  border: 1px solid var(--line-strong);
   border-radius: 999px;
+  background: rgb(255 106 43 / 0.14);
+  color: var(--accent);
   font-size: var(--fs-label);
   font-weight: 500;
-  color: var(--fg-muted);
 }
 
 .body {
@@ -85,9 +85,11 @@
   color: var(--fg-muted);
 }
 
-/* what you get: a plain list split by hairlines */
+/* what you get: small metal pills */
 .points {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
   max-width: 34rem;
   margin: var(--space-2) 0 0;
   padding: 0;
@@ -97,24 +99,23 @@
 }
 
 .points li {
-  display: flex;
-  gap: 0.8rem;
-  padding-block: 0.85rem;
-  border-top: 1px solid var(--line);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.6rem 1rem 0.6rem 0.85rem;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: var(--surface-edge);
 }
 
 .points li::before {
   content: '';
   flex: none;
-  width: 5px;
-  height: 5px;
-  margin-top: 0.55em;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--accent);
-}
-
-.points li:last-child {
-  border-bottom: 1px solid var(--line);
+  box-shadow: 0 0 0 3px rgb(255 106 43 / 0.18);
 }
 
 .cta {
@@ -173,5 +174,26 @@
 
   .cta {
     text-align: center;
+  }
+}
+
+/* the text drifts up a little slower than the card beside it: two layers, two depths */
+@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
+  @supports (animation-timeline: view()) {
+    .text {
+      animation: drift linear both;
+      animation-timeline: view();
+      animation-range: cover;
+    }
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translateY(90px);
+  }
+
+  to {
+    transform: translateY(-90px);
   }
 }

@@ -4,7 +4,7 @@ import { fontVariables } from './fonts'
 import '@/styles/globals.css'
 
 export const metadata: Metadata = {
-  title: { default: `${site.brand} — weby, e-shopy, grafika`, template: `%s — ${site.brand}` },
+  title: { default: `${site.brand} — weby, e-shopy, aplikace`, template: `%s — ${site.brand}` },
   description: site.tagline,
 }
 

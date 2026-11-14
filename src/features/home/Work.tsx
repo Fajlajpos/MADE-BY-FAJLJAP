@@ -4,6 +4,7 @@ import { Showcase, type Corner, type Hue } from '@/components/showcase/Showcase'
 import { home } from '@/content/home'
 import { getSlot } from '@/content/media'
 import { categoryLabels, projects } from '@/content/projects'
+import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import shared from './home.module.css'
 import styles from './Work.module.css'
@@ -32,7 +33,7 @@ export function Work() {
           data-reveal=""
           style={{ '--reveal-i': 1 } as CSSProperties}
         >
-          {typo(work.heading)}
+          <Words text={work.heading} />
         </h2>
       </header>
 

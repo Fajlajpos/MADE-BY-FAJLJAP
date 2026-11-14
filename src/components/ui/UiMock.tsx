@@ -1,10 +1,10 @@
 import styles from './UiMock.module.css'
 
-export type MockKind = 'web' | 'shop' | 'brand' | 'app' | 'poster'
+export type MockKind = 'web' | 'shop' | 'design' | 'app'
 
 /**
- * A small, living picture of the kind of work — a website, a coffee e-shop, a brand board, an
- * app, a festival poster — drawn in HTML/CSS so it stays sharp at any size (it scales with its
+ * A small, living picture of the kind of work — a website, a coffee e-shop, a design file, an
+ * app — drawn in HTML/CSS so it stays sharp at any size (it scales with its
  * box via container units). Decorative: what it shows is said in the text next to it.
  */
 export function UiMock({ kind, className }: { kind: MockKind; className?: string }) {
@@ -12,9 +12,8 @@ export function UiMock({ kind, className }: { kind: MockKind; className?: string
     <div className={[styles.mock, className].filter(Boolean).join(' ')} data-kind={kind} aria-hidden="true">
       {kind === 'web' && <Web />}
       {kind === 'shop' && <Shop />}
-      {kind === 'brand' && <Brand />}
+      {kind === 'design' && <Design />}
       {kind === 'app' && <App />}
-      {kind === 'poster' && <Poster />}
     </div>
   )
 }
@@ -93,26 +92,39 @@ function Shop() {
   )
 }
 
-function Brand() {
+function Design() {
   return (
-    <div className={styles.board}>
-      <div className={styles.logo}>
-        <span className={styles.logoMark}>Š</span>
-        <span className={styles.logoWord}>ŠUM</span>
+    <div className={styles.canvas}>
+      <div className={styles.layers}>
+        <b>Vrstvy</b>
+        <span>Menu</span>
+        <span data-on="">Hlavička</span>
+        <span>Fotka</span>
+        <span>Tlačítko</span>
+        <span>Patička</span>
       </div>
-      <div className={styles.swatches}>
-        <span style={{ background: '#c4592b' }}>#C4592B</span>
-        <span style={{ background: '#1b1a18' }}>#1B1A18</span>
-        <span style={{ background: '#efe6d6', color: '#1b1a18' }}>#EFE6D6</span>
-        <span style={{ background: '#2f6f62' }}>#2F6F62</span>
-      </div>
-      <div className={styles.specimen}>
-        <span className={styles.aa}>Aa</span>
-        <span className={styles.abc}>
-          ABCDEFGHIJ
-          <br />
-          ěščřžýáíé 0123
-        </span>
+      <div className={styles.board}>
+        <div className={styles.artboard}>
+          <small>Počítač · 1440</small>
+          <div className={styles.frameDesk}>
+            <i style={{ width: '30%' }} />
+            <i className={`${styles.big} ${styles.select}`} />
+            <i className={styles.img} />
+            <i className={styles.btn} />
+          </div>
+        </div>
+        <div className={styles.artboard}>
+          <small>Telefon · 390</small>
+          <div className={styles.framePhone}>
+            <i style={{ width: '50%' }} />
+            <i className={styles.big} />
+            <i className={styles.img} />
+            <i className={styles.btn} />
+          </div>
+        </div>
+        <svg className={styles.cursor} viewBox="0 0 24 24">
+          <path d="M4 2l16 10-7 1.5L9.5 21z" />
+        </svg>
       </div>
     </div>
   )
@@ -123,7 +135,7 @@ function App() {
     <div className={styles.phone}>
       <div className={styles.notch} />
       <div className={styles.appTop}>
-        <b>Objednávka</b>
+        <b>Oprava kola</b>
         <span>#0042</span>
       </div>
       <div className={styles.map}>
@@ -134,24 +146,10 @@ function App() {
       </div>
       <ul className={styles.steps}>
         <li data-done="">Přijato</li>
-        <li data-done="">Zabaleno</li>
-        <li>Na cestě</li>
+        <li data-done="">V opravě</li>
+        <li>Hotovo k vyzvednutí</li>
       </ul>
-      <div className={styles.appBtn}>Sledovat balík</div>
-    </div>
-  )
-}
-
-function Poster() {
-  return (
-    <div className={styles.poster}>
-      <span className={styles.posterEye} />
-      <p className={styles.posterTitle}>TMA</p>
-      <p className={styles.posterSub}>
-        festival audiovizuálního umění
-        <br />
-        3 noci · 12.–14. 3.
-      </p>
+      <div className={styles.appBtn}>Objednat opravu</div>
     </div>
   )
 }

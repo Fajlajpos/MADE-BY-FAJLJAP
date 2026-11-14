@@ -1,13 +1,14 @@
 import type { CSSProperties } from 'react'
 import { home } from '@/content/home'
+import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import shared from './home.module.css'
 import styles from './Process.module.css'
 
 /**
- * 03 Jak to probíhá — for companies that want to know what happens and when. Four steps on one
- * horizontal axis (four columns on a wide screen, stacked on a phone): the number, a line that
- * draws itself in as the step appears, the title, how long it takes, and a short description.
+ * 03 Jak to probíhá — for companies that want to know what happens and when. Four steps as metal
+ * cards (four columns stepping down on a wide screen, two by two on a tablet, stacked on a
+ * phone): the number and how long it takes, the title, and a short description.
  */
 export function Process() {
   const { process } = home
@@ -23,7 +24,7 @@ export function Process() {
           data-reveal=""
           style={{ '--reveal-i': 1 } as CSSProperties}
         >
-          {typo(process.heading)}
+          <Words text={process.heading} />
         </h2>
         <p
           className={`${shared.lead} ${styles.lead}`}
@@ -42,12 +43,13 @@ export function Process() {
             data-reveal=""
             style={{ '--reveal-i': i } as CSSProperties}
           >
-            <span className={styles.num} aria-hidden="true">
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <span className={styles.rule} aria-hidden="true" />
+            <div className={styles.top}>
+              <span className={styles.num} aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <p className={styles.time}>{step.time}</p>
+            </div>
             <h3 className={styles.title}>{step.title}</h3>
-            <p className={styles.time}>{step.time}</p>
             <p className={styles.body}>{typo(step.body)}</p>
           </li>
         ))}

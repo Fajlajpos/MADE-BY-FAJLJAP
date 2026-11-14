@@ -1,0 +1,107 @@
+/* The chrome corridor: a tall section whose inside sticks to the screen while you scroll. */
+
+.depth {
+  position: relative;
+  height: 340svh;
+  margin-top: var(--section-pad);
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(50% 50% at 50% 50%, #141418 0%, #0b0b0d 60%, var(--bg) 100%);
+}
+
+/* the edges fall into black, so the corridor reads as deep, not as a box */
+.sticky::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, var(--bg) 0%, rgb(8 8 10 / 0) 18%, rgb(8 8 10 / 0) 82%, var(--bg) 100%);
+}
+
+.scene,
+.canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.canvas {
+  opacity: 0;
+  transition: opacity 1.2s var(--ease-out);
+}
+
+.scene[data-ready] .canvas {
+  opacity: 1;
+}
+
+.lines {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding-inline: var(--margin);
+  pointer-events: none;
+}
+
+.line {
+  grid-area: 1 / 1;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  max-width: 18ch;
+  font-size: clamp(2rem, 1rem + 3.4vw, 4.4rem);
+  font-weight: 500;
+  font-stretch: 92%;
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  text-align: center;
+  text-wrap: balance;
+  opacity: 0;
+  text-shadow: 0 2px 30px rgb(8 8 10 / 0.9);
+  will-change: opacity, transform;
+}
+
+.num {
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* reduced motion: no flight, the three lines stand one under the other */
+.depth[data-still],
+:global(html:not(.js)) .depth {
+  height: auto;
+}
+
+.depth[data-still] .sticky,
+:global(html:not(.js)) .sticky {
+  position: relative;
+  height: auto;
+  min-height: 100svh;
+}
+
+.depth[data-still] .lines,
+:global(html:not(.js)) .lines {
+  position: relative;
+  min-height: 100svh;
+  align-content: center;
+  gap: var(--space-8);
+  padding-block: var(--space-9);
+}
+
+.depth[data-still] .line,
+:global(html:not(.js)) .line {
+  grid-area: auto;
+  opacity: 1;
+}

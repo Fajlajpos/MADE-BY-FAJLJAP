@@ -19,6 +19,56 @@
   --hue: 40 190 145;
 }
 
+/* ── the stack under the plate ───────────────────────────────── */
+
+.sheet {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-l);
+  background: linear-gradient(170deg, #18181c, #0d0d10);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    inset 0 0 0 1px rgb(255 255 255 / 0.04),
+    0 30px 60px -30px rgb(0 0 0 / 0.9);
+  transform-origin: 50% 100%;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.sheet:nth-of-type(1) {
+  transform: translate(2.2%, 3.6%) rotate(2.4deg) scale(0.97);
+  opacity: 0.55;
+}
+
+.sheet:nth-of-type(2) {
+  transform: translate(1%, 1.8%) rotate(1deg) scale(0.985);
+  opacity: 0.85;
+}
+
+.showcase[data-corner='tl'] .sheet:nth-of-type(1) {
+  transform: translate(-2.2%, 3.6%) rotate(-2.4deg) scale(0.97);
+}
+
+.showcase[data-corner='tl'] .sheet:nth-of-type(2) {
+  transform: translate(-1%, 1.8%) rotate(-1deg) scale(0.985);
+}
+
+/* on hover the stack fans out a little more */
+.showcase[data-hover] .sheet:nth-of-type(1) {
+  transform: translate(3.4%, 5%) rotate(3.6deg) scale(0.96);
+}
+
+.showcase[data-hover] .sheet:nth-of-type(2) {
+  transform: translate(1.6%, 2.6%) rotate(1.6deg) scale(0.98);
+}
+
+.showcase[data-hover][data-corner='tl'] .sheet:nth-of-type(1) {
+  transform: translate(-3.4%, 5%) rotate(-3.6deg) scale(0.96);
+}
+
+.showcase[data-hover][data-corner='tl'] .sheet:nth-of-type(2) {
+  transform: translate(-1.6%, 2.6%) rotate(-1.6deg) scale(0.98);
+}
+
 /* ── the plate ───────────────────────────────────────────────── */
 
 .plate {
@@ -86,12 +136,11 @@
   transition: transform 0.5s var(--ease-out);
 }
 
-.showcase[data-kind='brand'] .tilt {
-  width: 70%;
+.showcase[data-kind='design'] .tilt {
+  width: 88%;
 }
 
-.showcase[data-kind='app'] .tilt,
-.showcase[data-kind='poster'] .tilt {
+.showcase[data-kind='app'] .tilt {
   width: 56%;
 }
 
@@ -99,6 +148,50 @@
   position: absolute;
   inset: 0;
   width: auto;
+}
+
+/* a piece of UI hovering in front of the picture: it sits closer, so it moves more on tilt */
+.tilt {
+  position: relative;
+}
+
+.chip {
+  position: absolute;
+  left: -6%;
+  bottom: 8%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.7em 1.1em 0.7em 0.8em;
+  border-radius: 999px;
+  background: rgb(22 22 26 / 0.92);
+  color: var(--fg);
+  font-size: clamp(0.72rem, 0.6rem + 0.35vw, 0.9rem);
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.12),
+    inset 0 0 0 1px rgb(255 255 255 / 0.08),
+    0 18px 40px -12px rgb(0 0 0 / 0.85);
+  transform: translateZ(70px);
+}
+
+.chip i {
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+  background: rgb(var(--hue));
+  box-shadow: 0 0 0 0.3em rgb(var(--hue) / 0.25);
+}
+
+.showcase[data-corner='tl'] .chip {
+  left: auto;
+  right: -6%;
+}
+
+.showcase[data-kind='design'] .chip {
+  left: 2%;
+  bottom: 3%;
 }
 
 /* ── the object on the corner ────────────────────────────────── */
@@ -139,8 +232,7 @@
     width: 56%;
   }
 
-  .showcase[data-wide][data-kind='app'] .tilt,
-  .showcase[data-wide][data-kind='poster'] .tilt {
+  .showcase[data-wide][data-kind='app'] .tilt {
     width: 34%;
   }
 
@@ -158,8 +250,7 @@
     width: 88%;
   }
 
-  .showcase[data-kind='app'] .tilt,
-  .showcase[data-kind='poster'] .tilt {
+    .showcase[data-kind='app'] .tilt {
     width: 64%;
   }
 
@@ -175,7 +266,35 @@
   }
 }
 
+/* as the card comes up from the bottom of the screen it rises off the table: tipped back,
+   lower and smaller, it stands up straight by the time it is a third of the way in */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .showcase {
+      animation: standUp linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+  }
+}
+
+@keyframes standUp {
+  from {
+    transform: perspective(1600px) translateY(90px) rotateX(24deg) scale(0.92);
+    opacity: 0.2;
+  }
+
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .sheet {
+    transition: none;
+  }
+
   .tilt,
   .sheen {
     transform: none;

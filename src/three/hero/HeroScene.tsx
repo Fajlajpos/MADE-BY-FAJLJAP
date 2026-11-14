@@ -26,7 +26,7 @@ import {
  * where you point. No shadows, no postprocessing: it has to stay smooth.
  */
 
-type Kind =
+export type Kind =
   | 'browser'
   | 'parcel'
   | 'phone'
@@ -237,9 +237,9 @@ export function HeroScene({
   )
 }
 
-type Sets = { chrome: MaterialSet; dark: MaterialSet; kit: ChromeKit }
+export type Sets = { chrome: MaterialSet; dark: MaterialSet; kit: ChromeKit }
 
-function makeSets(kit: ChromeKit): Sets {
+export function makeSets(kit: ChromeKit): Sets {
   return {
     kit,
     chrome: { body: kit.chrome, accent: kit.orange, accent2: kit.dark, inset: kit.dark, label: kit.enamel },
@@ -247,7 +247,7 @@ function makeSets(kit: ChromeKit): Sets {
   }
 }
 
-function Shape({ kind, sets }: { kind: Kind; sets: Sets }): ReactNode {
+export function Shape({ kind, sets }: { kind: Kind; sets: Sets }): ReactNode {
   const { chrome, kit } = sets
   switch (kind) {
     case 'browser':

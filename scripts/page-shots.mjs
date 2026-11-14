@@ -17,11 +17,10 @@ const stops = [
   ['hero-90', { hero: 0.9 }],
   ['sluzby', { id: 'co-delam', offset: 0 }],
   ['sluzba-1', { id: 'sluzba-weby', offset: -200 }],
-  ['sluzba-3', { id: 'sluzba-grafika', offset: -200 }],
+  ['sluzba-3', { id: 'sluzba-navrh', offset: -200 }],
   ['prace', { id: 'prace', offset: 0 }],
   ['prace-2', { id: 'prace', offset: 700 }],
   ['o-mne', { id: 'o-mne', offset: 0 }],
-  ['mimo', { id: 'mimo-title', offset: -150 }],
   ['kontakt', { id: 'kontakt', offset: 0 }],
   ['pata', { bottom: true }],
 ]

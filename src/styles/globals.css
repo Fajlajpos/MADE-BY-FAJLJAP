@@ -121,3 +121,39 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 -.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 180px 180px;
 }
+
+/* ── Words: headings whose words rise out of a mask, one after another ── */
+.w {
+  display: inline-block;
+  /* room for descenders and Czech accents inside the mask */
+  padding-block: 0.14em;
+  margin-block: -0.14em;
+  overflow: clip;
+  vertical-align: top;
+}
+
+.w > span {
+  display: inline-block;
+  transition: translate 1s var(--ease-out);
+  transition-delay: calc(var(--reveal-i, 0) * 90ms + var(--wi, 0) * 65ms);
+}
+
+/* the heading itself does not fade: its words do the work */
+.js [data-reveal]:has(> .w):not([data-in]) {
+  opacity: 1;
+  translate: none;
+}
+
+.js [data-reveal]:not([data-in]) .w > span {
+  translate: 0 115%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w > span {
+    transition: none;
+  }
+
+  .js [data-reveal]:not([data-in]) .w > span {
+    translate: none;
+  }
+}

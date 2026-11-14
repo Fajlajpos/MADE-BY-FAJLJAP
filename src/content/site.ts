@@ -4,7 +4,7 @@ import type { SiteContent } from './types'
 export const site: SiteContent = {
   brand: 'FAJLAJP',
   tagline:
-    'FAJLAJP je grafik a webdesignér z Česka. Navrhuje a staví weby a e-shopy pro firmy i jednotlivce a dělá loga a tiskovou grafiku. Na poptávky odpovídá do dvou dnů.',
+    'FAJLAJP je webdesignér z Česka. Navrhuje a staví weby, e-shopy a webové aplikace pro firmy i jednotlivce. Na poptávky odpovídá do dvou dnů.',
   // Sections of the homepage until the sub-pages exist (phase 2: /prace, /o-mne, /sluzby …).
   nav: [
     { href: '/#video', label: 'Video', index: '01' },
@@ -12,7 +12,7 @@ export const site: SiteContent = {
     { href: '/#prace', label: 'Práce', index: '04' },
     { href: '/#o-mne', label: 'O mně', index: '05' },
     { href: '/#cenik', label: 'Ceny', index: '06' },
-    { href: '/#kontakt', label: 'Kontakt', index: '08' },
+    { href: '/#kontakt', label: 'Kontakt', index: '07' },
   ],
   // OVĚŘIT: od kdy bere nové zakázky
   availability: { open: true, label: 'Beru nové zakázky od listopadu' },
