@@ -86,6 +86,17 @@
   pointer-events: none;
 }
 
+/* the card's light spilling onto the page around it: it scrolls with the card, so the card
+   and the background are lit by the same light */
+.showcase::after {
+  content: '';
+  position: absolute;
+  inset: -22% -18%;
+  z-index: -2;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgb(var(--hue) / 0.2), rgb(var(--hue) / 0.06) 55%, rgb(var(--hue) / 0) 100%);
+}
+
 /* the coloured light inside the card, rising from behind the picture */
 .glow {
   position: absolute;

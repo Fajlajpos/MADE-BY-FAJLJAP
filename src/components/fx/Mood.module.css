@@ -5,6 +5,21 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
+  /* only the base tone now: the real light is attached to the cards and sections and scrolls
+     with them, so content and background read as one surface */
+  opacity: 0.45;
+}
+
+/* a light noise woven into the light itself (behind the content, not over it): the glows get a
+   texture, lose their smooth "floating fog" look and sit with the cards as one surface */
+.mood::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 -.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
 }
 
 .mood span {

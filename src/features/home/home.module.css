@@ -24,7 +24,27 @@
   pointer-events: none;
   background:
     radial-gradient(min(42%, 40rem) 30rem at max(22%, calc(50% - 30rem)) 18rem, rgb(244 244 242 / 0.05), rgb(244 244 242 / 0) 75%),
-    radial-gradient(min(30%, 30rem) 22rem at min(85%, calc(50% + 34rem)) 24rem, rgb(var(--accent-2-rgb) / 0.035), rgb(var(--accent-2-rgb) / 0) 75%);
+    radial-gradient(min(45%, 44rem) 34rem at min(80%, calc(50% + 30rem)) 22rem, rgb(var(--sec-rgb) / 0.16), rgb(var(--sec-rgb) / 0) 75%),
+    radial-gradient(min(40%, 40rem) 30rem at max(15%, calc(50% - 38rem)) 85%, rgb(var(--sec-rgb) / 0.09), rgb(var(--sec-rgb) / 0) 75%);
+}
+
+/* the colour of each section's light (the same moods as the page's base tone) */
+.section {
+  --sec-rgb: 255 106 43;
+}
+
+.section:global(#co-delam),
+.section:global(#jak-to-probiha) {
+  --sec-rgb: 70 110 255;
+}
+
+.section:global(#prace),
+.section:global(#cenik) {
+  --sec-rgb: 140 90 255;
+}
+
+.section:global(#o-mne) {
+  --sec-rgb: 255 80 40;
 }
 
 /* a section opens with a small chip: its number in an orange dot, then its name */
