@@ -136,6 +136,12 @@ export const home = {
     portraitSlot: 'home.about',
     // OVĚŘIT: popisek k fotce
     caption: 'Já, zima 2026. Ne vždycky sedím u stolu.',
+    /** The portrait as a real print: the camera's date (from the photo, 31. 1. 2026) and its back. */
+    print: {
+      stamp: "'26 1 31",
+      // OVĚŘIT: text na zadní straně fotky
+      back: ['Zadní strana', 'Zima 2026.', 'Weby dělám u stolu,', 'ale nápady chodí venku.'],
+    },
   },
 
   /** What it roughly costs, and the questions companies ask first. Prices to confirm (CHECKLIST). */

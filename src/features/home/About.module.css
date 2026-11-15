@@ -12,6 +12,12 @@
   margin: 0;
 }
 
+/* the print makes its own entrance (it drops onto the page): the figure does not fade */
+:global(.js) .figure:global([data-reveal]:not([data-in])) {
+  opacity: 1;
+  translate: none;
+}
+
 .frame {
   position: relative;
   /* leave room on the right for the mug on narrow screens */
@@ -28,7 +34,8 @@
 .mug {
   position: absolute;
   right: calc(-1 * clamp(3rem, 14vw, 6.5rem));
-  bottom: calc(-1 * clamp(1.5rem, 6vw, 3rem));
+  /* on a phone it stands below the print's white strip, so the note stays readable */
+  bottom: calc(-1 * clamp(4rem, 22vw, 6rem));
   width: clamp(8rem, 36vw, 15rem);
   aspect-ratio: 1;
   z-index: 1;

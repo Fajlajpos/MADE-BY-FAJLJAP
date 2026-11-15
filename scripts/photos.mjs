@@ -4,6 +4,9 @@
 // camera, date) stripped. The file name becomes a plain slug ("Moje Fotka 01.jpeg" →
 // moje-fotka-01.webp). Prints the size before and after. Run it again after adding photos;
 // it skips photos whose WebP is newer than the source.
+// Next to each photo it also writes <name>-glow.webp: a tiny (48 px), heavily blurred copy, for
+// the light a photo casts around itself on the page (stretched by CSS, so it costs ~1 kB and no
+// runtime blur filter).
 import { readdirSync, statSync, mkdirSync, existsSync } from 'node:fs'
 import { join, extname, basename } from 'node:path'
 import sharp from 'sharp'
@@ -49,4 +52,5 @@ for (const file of files) {
     .webp({ quality: QUALITY, effort: 6, smartSubsample: true })
     .toFile(out)
   console.log(`${kb(statSync(file).size).padStart(8)} → ${kb(info.size).padStart(7)}  ${info.width}×${info.height}  ${out}`)
+  await sharp(file).rotate().resize({ width: 48, height: 48, fit: 'inside' }).blur(3).webp({ quality: 60 }).toFile(out.replace(/\.webp$/, '-glow.webp'))
 }

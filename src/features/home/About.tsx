@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import { Media } from '@/components/media/Media'
+import { PhotoPrint } from '@/components/print/PhotoPrint'
 import { home } from '@/content/home'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
@@ -8,7 +8,8 @@ import shared from './home.module.css'
 import styles from './About.module.css'
 
 /**
- * O mně — a large portrait on the left with the chrome mug standing over its corner, the copy on
+ * O mně — my photo on the left as a real print (taped, dated, turn it over), the chrome mug
+ * standing over its corner; the copy on
  * the right: heading, two paragraphs, then the facts as a ruled two-column list.
  */
 export function About() {
@@ -22,11 +23,18 @@ export function About() {
       <div className={styles.layout}>
         <figure className={styles.figure} data-reveal="">
           <div className={styles.frame}>
-            <Media slot={about.portraitSlot} className={styles.portrait} sizes="(min-width: 1024px) 40vw, 92vw" />
-            {/* the mug stands just over the portrait's corner */}
-            <Slot3D object="mug" className={styles.mug} scale={1.1} label="Chromový plecháček, můj hrnek ze stolu" />
+            <PhotoPrint
+              slot={about.portraitSlot}
+              stamp={about.print.stamp}
+              note={typo(about.caption)}
+              back={about.print.back}
+              sizes="(min-width: 1024px) 40vw, 92vw"
+            >
+              {/* the mug stands just over the print's corner */}
+              <Slot3D object="mug" className={styles.mug} scale={1.1} label="Chromový plecháček, můj hrnek ze stolu" />
+            </PhotoPrint>
           </div>
-          <figcaption className={styles.caption}>{typo(about.caption)}</figcaption>
+          <figcaption className="visually-hidden">{typo(about.caption)}</figcaption>
         </figure>
 
         <div className={styles.copy}>
