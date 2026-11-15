@@ -29,7 +29,7 @@ type Props = {
   /** A real photo (or anything else) instead of the drawn mock. */
   children?: ReactNode
   /** A real screenshot of the live site, shown in a browser window instead of the drawn mock. */
-  shot?: { src: string; alt: string; url: string }
+  shot?: { src: string; alt: string; url: string; video?: { src: string; poster: string } }
   /** The text of the floating chip (defaults to one that fits the mock). */
   chip?: string
   /** A wide plate (16:9 from tablet up) for the one project across the page. */
@@ -101,7 +101,7 @@ export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, 
         <div className={styles.tilt}>
           {children ??
             (shot ? (
-              <ShotWindow src={shot.src} alt={shot.alt} url={shot.url} sizes={wide ? '(min-width: 768px) 60vw, 90vw' : '(min-width: 768px) 40vw, 90vw'} />
+              <ShotWindow src={shot.src} alt={shot.alt} url={shot.url} video={shot.video} sizes={wide ? '(min-width: 768px) 60vw, 90vw' : '(min-width: 768px) 40vw, 90vw'} />
             ) : (
               <UiMock kind={mock} className={styles.mock} />
             ))}

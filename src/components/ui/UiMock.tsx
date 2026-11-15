@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { ShotVideo } from './ShotVideo'
 import styles from './UiMock.module.css'
 
 export type MockKind = 'web' | 'shop' | 'redesign' | 'app'
@@ -163,13 +164,30 @@ function App() {
 }
 
 /** A real screenshot of a live site, in the same browser window as the drawn mocks. */
-export function ShotWindow({ src, alt, url, sizes }: { src: string; alt: string; url: string; sizes?: string }) {
+export function ShotWindow({
+  src,
+  alt,
+  url,
+  sizes,
+  video,
+}: {
+  src: string
+  alt: string
+  url: string
+  sizes?: string
+  /** A screen recording to loop instead of the still (the still is its poster). */
+  video?: { src: string; poster: string }
+}) {
   return (
     <div className={styles.mock}>
       <div className={styles.window}>
         <Bar url={url.replace(/^https?:\/\//, '')} />
         <div className={styles.shot}>
-          <Image src={src} alt={alt} fill sizes={sizes ?? '(min-width: 1024px) 60vw, 90vw'} className={styles.shotImg} />
+          {video ? (
+            <ShotVideo src={video.src} poster={video.poster} label={alt} className={styles.shotImg} />
+          ) : (
+            <Image src={src} alt={alt} fill sizes={sizes ?? '(min-width: 1024px) 60vw, 90vw'} className={styles.shotImg} />
+          )}
         </div>
       </div>
     </div>

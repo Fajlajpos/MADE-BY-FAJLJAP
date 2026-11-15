@@ -37,6 +37,8 @@ export type ProjectSummary = {
   object: 'browser' | 'parcel' | 'pen' | 'phone' | 'mug' | 'play' | 'tag' | 'plane'
   /** The live site, for real projects: the card links to it and shows its screenshot in a browser window. */
   url?: string
+  /** A looping screen recording of the live site (mp4 in /public/video) and its first frame. */
+  video?: { src: string; poster: string }
   /** The drawn picture of the work shown on the card until the photo comes. */
   mock: 'web' | 'shop' | 'redesign' | 'app'
   featured: boolean

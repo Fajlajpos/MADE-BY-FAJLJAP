@@ -6,7 +6,7 @@ import { NavList } from '@/components/layout/NavList'
 import { Arrow } from '@/components/ui/Arrow'
 import shared from '@/features/home/home.module.css'
 import { typo } from '@/lib/typo/czech'
-import { Slot3D } from '@/three/site/Slot3D'
+import { PhotoPrint } from '@/components/print/PhotoPrint'
 import { ThreeRoot } from '@/three/site/ThreeRoot'
 import styles from './not-found.module.css'
 
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   robots: { index: false },
 }
 
-/** 404: a huge number, a short line, the way back, and the chrome browser window that found nothing. */
+/** 404: a huge number, a joke, the way back, and my photo from the snow — I got stuck too. */
 export default function NotFound() {
   return (
     <ThreeRoot>
@@ -31,10 +31,10 @@ export default function NotFound() {
               <span className={styles.number} aria-hidden="true">
                 404
               </span>
-              <span className={styles.heading}>{typo('Tahle stránka tu není.')}</span>
+              <span className={styles.heading}>{typo('Tahle stránka zapadla sněhem.')}</span>
             </h1>
             <p className={styles.lead}>
-              {typo('Buď jsem ji přesunul, nebo nikdy neexistovala. Zbytek webu je v pořádku.')}
+              {typo('Buď jsem ji přesunul, nebo nikdy neexistovala. Já jsem se taky jednou zasekl, viz fotka. Zbytek webu ale jede.')}
             </p>
             <Link href="/" className={`${shared.button} ${styles.home}`}>
               Zpátky na úvod
@@ -42,7 +42,15 @@ export default function NotFound() {
             </Link>
           </div>
 
-          <Slot3D object="browser" className={styles.object} />
+          <div className={styles.object}>
+            <PhotoPrint
+              slot="home.about"
+              stamp="'26 1 31"
+              note={typo('Taky jsem se zasekl.')}
+              back={['Zadní strana', 'Nakonec jsme vyjeli.', 'Ty se vrať na úvod.']}
+              sizes="(min-width: 1024px) 30vw, 80vw"
+            />
+          </div>
 
           <nav className={styles.nav} aria-labelledby="nf-kam">
             <p id="nf-kam" className={styles.navTitle}>
