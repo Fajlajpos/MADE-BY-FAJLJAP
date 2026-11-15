@@ -1,0 +1,65 @@
+/* Four lights behind the page, cross-faded by the section in view (html[data-mood]). */
+
+.mood {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.mood span {
+  position: absolute;
+  inset: -10%;
+  opacity: 0;
+  transition: opacity 1.6s var(--ease-out);
+  will-change: opacity;
+}
+
+/* warm: an orange sun low on the left, peach on the right */
+.warm {
+  background:
+    radial-gradient(45% 50% at 22% 78%, rgb(255 106 43 / 0.2), rgb(255 106 43 / 0) 70%),
+    radial-gradient(35% 40% at 82% 30%, rgb(255 180 120 / 0.1), rgb(255 180 120 / 0) 70%);
+}
+
+/* cold: deep blue from the top right, a teal haze low */
+.cold {
+  background:
+    radial-gradient(45% 50% at 80% 22%, rgb(70 110 255 / 0.2), rgb(70 110 255 / 0) 70%),
+    radial-gradient(40% 40% at 18% 82%, rgb(60 170 200 / 0.09), rgb(60 170 200 / 0) 70%);
+}
+
+/* violet: purple across the middle, a touch of magenta */
+.violet {
+  background:
+    radial-gradient(50% 50% at 30% 40%, rgb(140 90 255 / 0.19), rgb(140 90 255 / 0) 70%),
+    radial-gradient(35% 40% at 85% 75%, rgb(220 80 200 / 0.09), rgb(220 80 200 / 0) 70%);
+}
+
+/* ember: a low red-orange glow, like the last light of the evening */
+.ember {
+  background:
+    radial-gradient(55% 45% at 50% 100%, rgb(255 80 40 / 0.18), rgb(255 80 40 / 0) 70%),
+    radial-gradient(35% 35% at 15% 25%, rgb(255 150 90 / 0.08), rgb(255 150 90 / 0) 70%);
+}
+
+/* green: the redesign card's mint, from the top left and low right */
+.green {
+  background:
+    radial-gradient(45% 50% at 20% 25%, rgb(40 190 145 / 0.17), rgb(40 190 145 / 0) 70%),
+    radial-gradient(35% 40% at 85% 80%, rgb(120 220 190 / 0.08), rgb(120 220 190 / 0) 70%);
+}
+
+:global(html[data-mood='green']) .green,
+:global(html[data-mood='warm']) .warm,
+:global(html[data-mood='cold']) .cold,
+:global(html[data-mood='violet']) .violet,
+:global(html[data-mood='ember']) .ember {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mood span {
+    transition: none;
+  }
+}

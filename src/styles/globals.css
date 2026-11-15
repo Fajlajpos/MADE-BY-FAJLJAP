@@ -110,18 +110,6 @@ select {
   transform: translateY(0);
 }
 
-/* Film grain over the whole page: one static noise tile, plain opacity (no blend mode), so it
-   costs one composited layer and never repaints. Under the 3D and the header. */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  pointer-events: none;
-  opacity: 0.07;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 -.25'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 180px 180px;
-}
 
 /* ── Words: headings whose words rise out of a mask, one after another ── */
 .w {
@@ -169,13 +157,13 @@ body::before {
   pointer-events: none;
   background:
     /* warm orange, high on the left */
-    radial-gradient(34vmax 28vmax at 30% 26%, rgb(255 106 43 / 0.16), rgb(255 106 43 / 0) 70%),
+    radial-gradient(34vmax 28vmax at 30% 26%, rgb(255 106 43 / 0.08), rgb(255 106 43 / 0) 70%),
     /* cold blue, on the right */
-    radial-gradient(38vmax 30vmax at 74% 38%, rgb(70 110 255 / 0.14), rgb(70 110 255 / 0) 70%),
+    radial-gradient(38vmax 30vmax at 74% 38%, rgb(70 110 255 / 0.07), rgb(70 110 255 / 0) 70%),
     /* violet, low and to the left */
-    radial-gradient(34vmax 26vmax at 38% 72%, rgb(140 90 255 / 0.12), rgb(140 90 255 / 0) 70%),
+    radial-gradient(34vmax 26vmax at 38% 72%, rgb(140 90 255 / 0.06), rgb(140 90 255 / 0) 70%),
     /* a deep ember glow in the lower right */
-    radial-gradient(28vmax 22vmax at 72% 80%, rgb(255 70 40 / 0.09), rgb(255 70 40 / 0) 70%),
+    radial-gradient(28vmax 22vmax at 72% 80%, rgb(255 70 40 / 0.05), rgb(255 70 40 / 0) 70%),
     /* a faint cool haze across the middle, so the lights read as one room */
     radial-gradient(60vmax 40vmax at 50% 50%, rgb(120 140 200 / 0.035), rgb(120 140 200 / 0) 75%);
   /* the lights drift on their own, and slowly travel up and turn as you scroll the page */
