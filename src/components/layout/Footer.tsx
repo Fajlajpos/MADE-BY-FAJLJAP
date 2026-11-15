@@ -1,6 +1,5 @@
 import { site } from '@/content/site'
 import { typo } from '@/lib/typo/czech'
-import { Slot3D } from '@/three/site/Slot3D'
 import { NavList } from './NavList'
 import { Status } from './Status'
 import styles from './Footer.module.css'
@@ -8,14 +7,13 @@ import styles from './Footer.module.css'
 const YEAR = 2026
 
 /**
- * The foot of every page: the name in chrome across the full width, then quiet columns — a line
+ * The foot of every page: quiet columns — a line
  * and the address, the sections, elsewhere, the operator's details (§ 435 OZ) — and the base row.
  */
 export function Footer() {
   const { business } = site
   return (
     <footer className={styles.footer}>
-      <Slot3D object="wordmark" className={styles.wordmark} label={site.brand} />
 
       <div className={styles.inner}>
         <div className={styles.lead}>

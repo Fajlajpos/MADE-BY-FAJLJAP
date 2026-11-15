@@ -19,7 +19,7 @@ export default function SiteCanvas({ tier }: { tier: Exclude<Tier, 'none'> }) {
   return (
     <Canvas
       aria-hidden="true"
-      dpr={tier === 'high' ? [1, 1.75] : 1}
+      dpr={tier === 'high' ? [1, 1.5] : 1}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance', toneMapping: ACESFilmicToneMapping }}
       style={{ position: 'fixed', inset: 0, zIndex: 50, pointerEvents: 'none' }}
       eventPrefix="client"

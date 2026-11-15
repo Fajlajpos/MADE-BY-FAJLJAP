@@ -164,7 +164,7 @@ body::after {
 body::before {
   content: '';
   position: fixed;
-  inset: -30vmax;
+  inset: -18vmax;
   z-index: -1;
   pointer-events: none;
   background:
@@ -228,15 +228,10 @@ html::after {
 }
 
 /* ── Glow cards ─────────────────────────────────────────────────
-   Every card has a light running round its edge: a short bright arc (orange into peach into
-   violet) that circles the rim, plus a soft halo around the card. On hover or focus the arc
-   and the halo brighten. Each card runs on its own clock, so they never pulse together. */
-@property --glow-angle {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0deg;
-}
-
+   Every card has a lit rim — a bright arc of orange into peach into violet along one side of
+   its edge — and a soft halo around it. The rim breathes slowly (each card on its own clock),
+   and brightens on hover or focus. It is drawn once and then only its opacity changes, on its
+   own compositor layer, so a scrolling page never has to repaint the cards for it. */
 .glow-card {
   position: relative;
   isolation: isolate;
@@ -253,13 +248,14 @@ html::after {
   border-radius: inherit;
   pointer-events: none;
   background: conic-gradient(
-    from var(--glow-angle),
+    from 200deg,
     rgb(255 106 43 / 0) 0deg,
-    rgb(255 106 43 / 0) 200deg,
-    rgb(255 106 43 / 0.95) 255deg,
-    rgb(255 205 170 / 1) 275deg,
-    rgb(150 110 255 / 0.85) 300deg,
-    rgb(150 110 255 / 0) 345deg
+    rgb(255 106 43 / 0) 40deg,
+    rgb(255 106 43 / 0.95) 100deg,
+    rgb(255 205 170 / 1) 125deg,
+    rgb(150 110 255 / 0.85) 160deg,
+    rgb(150 110 255 / 0) 215deg,
+    rgb(255 106 43 / 0) 360deg
   );
   /* only the 1.5 px rim shows */
   -webkit-mask:
@@ -269,24 +265,25 @@ html::after {
   mask:
     linear-gradient(#000 0 0) content-box exclude,
     linear-gradient(#000 0 0);
-  opacity: 0.7;
-  animation: glowSpin 9s linear infinite;
+  opacity: 0.55;
+  will-change: opacity;
+  animation: glowBreathe 6s ease-in-out infinite alternate paused;
   transition: opacity var(--dur-slow) var(--ease-out);
 }
 
-/* each card starts the arc somewhere else on its rim, and some run a little faster */
+/* each card breathes on its own clock */
 .glow-card:nth-child(2n)::after {
-  animation-delay: -3s;
-  animation-duration: 11s;
+  animation-delay: -2s;
+  animation-duration: 7s;
 }
 
 .glow-card:nth-child(3n)::after {
-  animation-delay: -6.5s;
+  animation-delay: -4.5s;
 }
 
-.glow-card:nth-child(4n + 1)::after {
-  animation-delay: -1.5s;
-  animation-duration: 8s;
+/* only cards on screen breathe (Reveal.tsx sets data-on) */
+.glow-card[data-on]::after {
+  animation-play-state: running;
 }
 
 /* doubled class: wins over the cards' own (module) box-shadow */
@@ -299,18 +296,22 @@ html::after {
 .glow-card:hover::after,
 .glow-card:focus-within::after,
 [data-hover] > .glow-card::after {
+  animation: none;
   opacity: 1;
 }
 
-@keyframes glowSpin {
+@keyframes glowBreathe {
+  from {
+    opacity: 0.35;
+  }
+
   to {
-    --glow-angle: 360deg;
+    opacity: 0.9;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .glow-card::after {
     animation: none;
-    --glow-angle: 220deg;
   }
 }

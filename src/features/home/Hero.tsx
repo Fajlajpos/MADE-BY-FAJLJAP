@@ -10,7 +10,8 @@ import styles from './Hero.module.css'
 /**
  * The opening: one screen, a cluster of polished chrome behind the copy — the things I make,
  * which you can push around with the cursor and knock with a click. The title is set large and
- * plain at the bottom left; the intro and the two ways on sit at the bottom right.
+ * plain at the bottom left; the intro and the two ways on sit at the bottom right. As the hero
+ * scrolls away, the title's lines slide apart (CSS only, nothing pinned).
  */
 export function Hero() {
   const { hero } = home
@@ -51,7 +52,6 @@ export function Hero() {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   )

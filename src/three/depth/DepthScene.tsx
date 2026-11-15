@@ -13,7 +13,7 @@ import { makeSets, Shape, type Kind } from '../hero/HeroScene'
  */
 
 const LENGTH = 70
-const COUNT = 40
+const COUNT = 30
 const KINDS: Kind[] = ['browser', 'sphere', 'pen', 'torus', 'parcel', 'pill', 'phone', 'ring', 'mug', 'drop', 'plane', 'cube', 'play', 'sphere', 'tag', 'torus']
 
 type Item = { kind: Kind; x: number; y: number; z: number; s: number; rx: number; ry: number; spin: number }

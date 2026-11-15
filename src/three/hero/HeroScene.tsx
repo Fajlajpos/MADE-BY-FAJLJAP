@@ -93,7 +93,10 @@ export function HeroScene({
   const pointer = useRef({ world: new Vector3(99, 99, 0), active: false, last: new Vector2() })
   const raycaster = useMemo(() => new Raycaster(), [])
   const plane = useMemo(() => new Plane(new Vector3(0, 0, 1), 0), [])
-  const tmp = useMemo(() => ({ a: new Vector3(), b: new Vector3(), q: new Quaternion(), e: new Euler() }), [])
+  const tmp = useMemo(
+    () => ({ a: new Vector3(), b: new Vector3(), away: new Vector3(), sep: new Vector3(), q: new Quaternion(), e: new Euler() }),
+    [],
+  )
   const { camera, size } = useThree()
   const narrow = size.width < 700
   const scale = narrow ? 0.5 : size.width < 1100 ? 0.62 : 0.74
@@ -138,6 +141,7 @@ export function HeroScene({
       cluster.current.scale.setScalar(scale)
     }
 
+    const origin = cluster.current?.position
     for (let i = 0; i < bodies.length; i++) {
       const b = bodies[i]!
       const home = tmp.b.set(...b.def.home).multiplyScalar(spread)
@@ -151,17 +155,17 @@ export function HeroScene({
       b.vel.addScaledVector(home.sub(b.pos), 3.2 * dt)
 
       // the cursor pushes (in the cluster's own space)
-      const origin = cluster.current?.position
       const local = tmp.a.copy(pointer.current.world)
       if (origin) local.sub(origin)
       local.divideScalar(scale)
-      const away = b.pos.clone().sub(local)
+      const away = tmp.away.copy(b.pos).sub(local)
       away.z *= 0.4
       const d = away.length()
       const reach = 1.9 + b.def.radius
       if (pointer.current.active && d < reach) {
         const f = (1 - d / reach) ** 2 * 26
-        b.vel.addScaledVector(away.normalize(), f * dt)
+        away.normalize()
+        b.vel.addScaledVector(away, f * dt)
         b.angVel.x += away.y * f * dt * 0.6
         b.angVel.y += away.x * f * dt * 0.6
       }
@@ -169,15 +173,15 @@ export function HeroScene({
       // bodies keep out of each other
       for (let j = i + 1; j < bodies.length; j++) {
         const o = bodies[j]!
-        const sep = b.pos.clone().sub(o.pos)
+        const sep = tmp.sep.copy(b.pos).sub(o.pos)
         const dist = sep.length() || 0.0001
         const min = (b.def.radius + o.def.radius) * 0.95
         if (dist < min) {
-          const push = sep.multiplyScalar(((min - dist) / dist) * 0.5)
-          b.pos.add(push)
-          o.pos.sub(push)
-          b.vel.addScaledVector(push, 4)
-          o.vel.addScaledVector(push, -4)
+          sep.multiplyScalar(((min - dist) / dist) * 0.5)
+          b.pos.add(sep)
+          o.pos.sub(sep)
+          b.vel.addScaledVector(sep, 4)
+          o.vel.addScaledVector(sep, -4)
         }
       }
 

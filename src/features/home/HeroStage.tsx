@@ -20,7 +20,7 @@ export function HeroStage() {
   const [running, setRunning] = useState(true)
   const [ready, setReady] = useState(false)
   const [still] = useState(prefersReducedMotion)
-  const [shift, setShift] = useState(1.6)
+  const [shift, setShift] = useState(1.55)
 
   useEffect(() => {
     let cancelled = false

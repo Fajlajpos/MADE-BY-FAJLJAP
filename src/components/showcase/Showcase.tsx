@@ -97,6 +97,7 @@ export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, 
       <span className={styles.sheet} aria-hidden="true" />
       <div className={`${styles.plate} glow-card`}>
         <span className={styles.glow} aria-hidden="true" />
+        <span className={styles.spot} aria-hidden="true" />
         <div className={styles.tilt}>
           {children ??
             (shot ? (

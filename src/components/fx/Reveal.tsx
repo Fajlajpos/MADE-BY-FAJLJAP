@@ -27,11 +27,32 @@ export function Reveal() {
         io.observe(el)
       }
     }
+    // the glowing rims of cards run only while the card is on screen (globals.css › Glow cards)
+    const glowSeen = new WeakSet<Element>()
+    const glow = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) entry.target.toggleAttribute('data-on', entry.isIntersecting)
+      },
+      { rootMargin: '80px 0px' },
+    )
+    const collectGlow = () => {
+      for (const el of document.querySelectorAll('.glow-card')) {
+        if (glowSeen.has(el)) continue
+        glowSeen.add(el)
+        glow.observe(el)
+      }
+    }
+
     collect()
-    const mo = new MutationObserver(collect)
+    collectGlow()
+    const mo = new MutationObserver(() => {
+      collect()
+      collectGlow()
+    })
     mo.observe(document.body, { childList: true, subtree: true })
     return () => {
       io.disconnect()
+      glow.disconnect()
       mo.disconnect()
     }
   }, [])

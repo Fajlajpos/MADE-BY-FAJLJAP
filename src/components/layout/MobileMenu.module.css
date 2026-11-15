@@ -20,7 +20,9 @@
   position: fixed;
   inset: 0;
   z-index: var(--z-overlay);
-  display: grid;
+  /* closed, the menu is taken out of rendering altogether: a hidden full-screen clip-path
+     layer would otherwise be re-composited with the whole page on every scrolled frame */
+  display: none;
   grid-template-rows: auto 1fr auto;
   padding: 0 var(--margin) var(--space-7);
   background: var(--bg);
@@ -28,15 +30,27 @@
   visibility: hidden;
   transition:
     clip-path 520ms var(--ease-in-out),
-    visibility 0s linear 520ms;
+    visibility 0s linear 520ms,
+    display 0s linear 520ms;
+  transition-behavior: allow-discrete;
 }
 
 .sheet[data-open='true'] {
+  display: grid;
   clip-path: circle(150% at calc(100% - var(--margin) - 22px) calc(var(--header-h) / 2));
   visibility: visible;
   transition:
     clip-path 620ms var(--ease-out),
-    visibility 0s;
+    visibility 0s,
+    display 0s;
+  transition-behavior: allow-discrete;
+}
+
+/* the reveal starts from the closed circle when the menu comes back into rendering */
+@starting-style {
+  .sheet[data-open='true'] {
+    clip-path: circle(0% at calc(100% - var(--margin) - 22px) calc(var(--header-h) / 2));
+  }
 }
 
 .top {

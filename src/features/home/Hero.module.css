@@ -4,7 +4,6 @@
   margin-top: calc(-1 * var(--header-h));
   overflow: clip;
   isolation: isolate;
-  /* a soft studio floor under the chrome: lighter in the middle, black at the edges */
   /* a soft studio light that fades out into the page, never an opaque block */
   background: radial-gradient(60% 55% at 62% 46%, rgb(40 40 48 / 0.55) 0%, rgb(40 40 48 / 0) 100%);
 }
@@ -101,6 +100,37 @@
   display: block;
 }
 
+.aside {
+  display: grid;
+  gap: var(--space-5);
+  max-width: 26rem;
+}
+
+.intro {
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+}
+
+@media (min-width: 1024px) {
+  .bottom {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+@media (max-width: 599px) {
+  .title {
+    text-wrap: balance;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   /* on load the three lines rise out of their masks, one after another */
   .line {
@@ -112,7 +142,7 @@
     animation: fadeUp 1s var(--ease-out) 0.75s both;
   }
 
-  /* as the hero scrolls away, the lines slide apart and the copy sinks back */
+  /* as the hero scrolls away, the lines slide apart and the copy sinks back (compositor only) */
   @supports (animation-timeline: view()) {
     .hero {
       view-timeline-name: --hero;
@@ -170,49 +200,5 @@
   to {
     transform: translateY(-60px);
     opacity: 0;
-  }
-}
-
-.aside {
-  display: grid;
-  gap: var(--space-5);
-  max-width: 26rem;
-}
-
-.intro {
-  font-size: var(--fs-small);
-  line-height: 1.6;
-  color: var(--fg-muted);
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3) var(--space-5);
-}
-
-.hint {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .bottom {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .hint {
-    display: block;
-    position: absolute;
-    right: var(--margin);
-    top: 50%;
-    writing-mode: vertical-rl;
-    color: var(--fg-subtle);
-  }
-}
-
-@media (max-width: 599px) {
-  .title {
-    text-wrap: balance;
   }
 }

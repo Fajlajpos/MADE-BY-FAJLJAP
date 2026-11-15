@@ -134,7 +134,8 @@ export const home = {
       { label: 'Odpovídám', value: 'do dvou dnů' },
     ],
     portraitSlot: 'home.about',
-    caption: 'Já u stolu, kolem půlnoci.',
+    // OVĚŘIT: popisek k fotce
+    caption: 'Já, zima 2026. Ne vždycky sedím u stolu.',
   },
 
   /** What it roughly costs, and the questions companies ask first. Prices to confirm (CHECKLIST). */

@@ -44,7 +44,7 @@ export const projects: ProjectSummary[] = [
     mock: 'app',
     featured: true,
   },
-  // A real project: the screenshot is the live site (public/projects/lindashop.jpg).
+  // A real project: the screenshot is the live site (public/projects/lindashop-karty.webp).
   // OVĚŘIT: rok, rozsah práce a text
   {
     slug: 'lindashop',

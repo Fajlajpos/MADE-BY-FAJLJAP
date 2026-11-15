@@ -461,7 +461,7 @@
 
 .shot {
   position: relative;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 2 / 1;
 }
 
 .shotImg {

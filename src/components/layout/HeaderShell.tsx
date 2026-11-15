@@ -8,17 +8,17 @@ export function HeaderShell({ className, children }: { className?: string; child
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    let last = false
-    const onScroll = () => {
-      const now = window.scrollY > 24
-      if (now !== last) {
-        last = now
-        el.toggleAttribute('data-scrolled', now)
-      }
+    // a 1 px sentinel at the top of the page: no scroll handler, nothing read while scrolling
+    const sentinel = document.createElement('div')
+    sentinel.setAttribute('aria-hidden', 'true')
+    sentinel.style.cssText = 'position:absolute;top:24px;left:0;width:1px;height:1px;pointer-events:none'
+    document.body.prepend(sentinel)
+    const io = new IntersectionObserver(([e]) => el.toggleAttribute('data-scrolled', !(e?.isIntersecting ?? true)))
+    io.observe(sentinel)
+    return () => {
+      io.disconnect()
+      sentinel.remove()
     }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
   }, [])
   return (
     <header ref={ref} className={className}>
