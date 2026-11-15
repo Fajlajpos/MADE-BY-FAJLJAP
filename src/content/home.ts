@@ -1,7 +1,7 @@
 /**
- * Homepage copy, phase 1g (night print). Raw strings — components run prose through typo() at
- * render time. Voice: FAJLAJP writing it himself — first person, tykání, short sentences, plain
- * spoken Czech, concrete over adjectives, no slogans. Headings stay short (2–6 words): they are
+ * Homepage copy. Raw strings — components run prose through typo() at render time. Voice:
+ * FAJLAJP as he talks — first person, tykání, spoken Czech ("fakt", "furt", "prostě",
+ * "klidně", an occasional -ej), direct, a bit cheeky, no slogans. Readable for companies too. Headings stay short (2–6 words): they are
  * set huge. `// OVĚŘIT:` marks facts to confirm.
  * Phase 2: becomes SiteText rows editable in the admin.
  */
@@ -25,7 +25,7 @@ export const home = {
     // Short lines: the hero sets them huge, the last one in the accent ink.
     title: ['Ahoj,', 'dělám weby', 'a e-shopy.'],
     intro:
-      'Jsem FAJLAJP a dělám to sám, takže nepíšeš žádnému obchodníkovi, ale rovnou mně. Web nebo e-shop ti navrhnu i postavím, od první skici po spuštění. Ozvu se do dvou dnů.',
+      'Jsem FAJLAJP a všechno dělám sám. Žádnej obchodník, žádná agentura, píšeš rovnou mně. Web nebo e-shop ti navrhnu i postavím, prostě celý od začátku do konce. Ozvu se do dvou dnů, většinou dřív.',
     ctaPrimary: 'Napiš mi',
     ctaSecondary: 'Co dělám',
   },
@@ -35,7 +35,7 @@ export const home = {
     index: '01',
     label: 'Video',
     heading: 'Takhle u toho sedím',
-    caption: 'Pár minut z toho, jak u mě vzniká web. Ve skutečnosti to trvá týdny a padne u toho víc kafe, než bych rád přiznal.',
+    caption: 'Pár minut z toho, jak u mě vzniká web. Ve skutečnosti to trvá týdny a vypije se u toho fakt hodně kafe.',
     soon: 'Video ještě stříhám, brzo tu bude.',
     soundOn: 'Zapnout zvuk',
     soundOff: 'Vypnout zvuk',
@@ -47,14 +47,14 @@ export const home = {
     index: '02',
     label: 'Co dělám',
     heading: 'S čím ti pomůžu',
-    lead: 'Dělám jen weby a věci kolem nich. Zato je dělám celé: návrh, stavbu i to, co přijde po spuštění. A starý web ti klidně předělám.',
+    lead: 'Dělám weby a všechno kolem nich. Návrh, stavbu i to, co přijde potom. A jestli máš starej web, kterej se ti nelíbí, klidně ho předělám.',
     items: [
       {
         id: 'weby',
         object: 'browser',
         index: '01',
         title: 'Weby',
-        body: 'Web pro firmu, portfolio, nebo jedna stránka k akci. Hlídám, aby se rychle načetl a dal se v klidu číst na telefonu. Texty si v něm pak přepisuješ sám a nemusíš mi psát kvůli každé čárce.',
+        body: 'Web pro firmu, portfolio nebo jen jedna stránka na akci. Hlídám, aby se načetl rychle a dal se v pohodě číst na mobilu. Texty si v něm pak měníš sám, takže mi nemusíš psát kvůli každé čárce.',
         points: ['Návrh kreslím od nuly', 'Rychlé načítání a základ SEO', 'Texty a fotky si měníš sám'],
       },
       {
@@ -62,7 +62,7 @@ export const home = {
         object: 'parcel',
         index: '02',
         title: 'E-shopy',
-        body: 'Postavím ti obchod, kde zákazník zaplatí kartou a sám si vybere dopravu. Faktura se vystaví sama, takže ty hlavně balíš objednávky.',
+        body: 'Postavím ti obchod, kde zákazník zaplatí kartou a sám si vybere dopravu. Faktury se dělají samy, takže ty fakt jen balíš objednávky.',
         points: ['Pokladna na pár kliknutí', 'Platba kartou, doprava, faktury', 'Produkty přidáváš sám'],
       },
       {
@@ -70,16 +70,16 @@ export const home = {
         object: 'pen',
         index: '03',
         title: 'Redesign webu',
-        body: 'Máš web, který funguje, ale vypadá jako z roku 2012 a na telefonu se rozpadá. Překreslím ho a postavím znovu tak, aby byl rychlý a čitelný. Texty a adresy stránek nechám, ať o nic nepřijdeš ve vyhledávání.',
-        points: ['Nový vzhled, stejný obsah', 'Konečně pořádně na telefonu', 'Adresy a SEO zůstanou'],
+        body: 'Máš web, kterej funguje, ale vypadá jako z roku 2012 a na mobilu se rozpadá? Překreslím ho a postavím znova, aby byl rychlej a dalo se v něm vyznat. Texty a adresy stránek nechám, ať o nic nepřijdeš na Googlu.',
+        points: ['Nový vzhled, stejný obsah', 'Konečně pořádně na mobilu', 'Adresy a SEO zůstanou'],
       },
       {
         id: 'aplikace',
         object: 'phone',
         index: '04',
         title: 'Aplikace',
-        body: 'Tady jsem upřímně na začátku. Umím navrhnout obrazovky a udělat klikací prototyp, na kterém si to vyzkoušíš dřív, než se začne programovat. Svoji první vlastní aplikaci mám rozdělanou a pořád se na ní učím.',
-        points: ['Klikací prototyp, než se začne programovat', 'Návrh obrazovek pro web i mobil', 'Vlastní aplikace zatím rozdělaná'],
+        body: 'Tady budu upřímnej, jsem na začátku. Umím navrhnout obrazovky a udělat klikací prototyp, kde si to vyzkoušíš dřív, než se to začne programovat. Svoji první appku mám rozdělanou a furt se na ní učím.',
+        points: ['Klikací prototyp, než se začne programovat', 'Návrh obrazovek pro web i mobil', 'Vlastní appka zatím rozdělaná'],
         tag: 'rozdělané',
       },
     ] satisfies Service[],
@@ -91,21 +91,21 @@ export const home = {
   depth: {
     label: 'Jak to vzniká',
     lines: [
-      'Každá zakázka začne jednou zprávou.',
-      'Pak sedím u stolu, kreslím a škrtám, dokud to nesedí.',
-      'A potom to postavím. Sám, takže víš, komu psát, když něco nejde.',
+      'Všechno začne jednou zprávou.',
+      'Pak sedím u počítače a kreslím, dokud to fakt nesedí.',
+      'A pak to postavím. Sám, takže víš, komu napsat, když něco nejde.',
     ],
   },
   process: {
     index: '03',
     label: 'Jak to probíhá',
     heading: 'Jak to u mě chodí',
-    lead: 'Nejsem agentura, takže tě nikdo nepřehazuje mezi lidmi. Celou dobu si píšeš se mnou, i když se něco zasekne.',
+    lead: 'Nejsem agentura, takže tě nikdo nepřehazuje mezi lidma. Celou dobu si píšeš se mnou, i když se něco zasekne.',
     steps: [
       { title: 'Napíšeš mi', time: 'do 2 dnů', body: 'Stačí pár vět o tom, co potřebuješ. Ozvu se do dvou dnů, většinou dřív.' },
-      { title: 'Zavoláme si', time: 'do týdne', body: 'Probereme, co to má umět a do kdy to potřebuješ. Pak ti pošlu cenu a termín písemně a toho se oba držíme.' },
+      { title: 'Zavoláme si', time: 'do týdne', body: 'Probereme, co to má umět a do kdy to chceš. Pak ti pošlu cenu a termín písemně a toho se oba držíme.' },
       // OVĚŘIT: obvyklá délka návrhu a stavby
-      { title: 'Návrh a stavba', time: '3–8 týdnů', body: 'Nejdřív ti ukážu návrh a doladíme ho. Pak stavím a jednou týdně ti pošlu odkaz, kde vidíš, jak jsem daleko.' },
+      { title: 'Návrh a stavba', time: '3–8 týdnů', body: 'Nejdřív ti ukážu návrh a doladíme ho spolu. Pak stavím a každej týden ti pošlu odkaz, kde vidíš, jak jsem daleko.' },
       { title: 'Spuštění', time: 'pak průběžně', body: 'Web pustím ven a ukážu ti, jak si ho upravovat. Když se pak něco rozbije nebo budeš chtít něco přidat, prostě mi napíšeš.' },
     ],
   },
@@ -123,19 +123,28 @@ export const home = {
     label: 'O mně',
     heading: 'Kdo u stolu sedí',
     body: [
-      'Jsem FAJLAJP, webdesignér. Skoro všechno začínám tužkou ve skicáku, protože tam je škrtání zadarmo. Nikoho dalšího na to nemám, takže všechno, co ode mě dostaneš, jsem dělal já. Včetně chyb, které pak taky opravuju já.',
-      'Nejlíp se mi pracuje v noci, kdy nikdo nevolá a na stole svítí jen lampa. Na zprávy ale odpovídám i přes den. Teď k tomu dělám svoji první aplikaci a pořád se na ní něco učím.',
+      'Jsem FAJLAJP a dělám weby. Nikoho dalšího na to nemám, takže všechno, co ode mě dostaneš, jsem dělal já. Včetně chyb, který pak taky opravuju já.',
+      'Nejlíp se mi pracuje večer a v noci, kdy nikdo nevolá. Na zprávy ale odpovídám i přes den. K tomu teď dělám svoji první appku a furt se na ní něco učím.',
     ],
     facts: [
       { label: 'Pracuju', value: 'sám, bez agentury' },
       // OVĚŘIT: kdy pracuje nejradši
-      { label: 'Nejlíp mi to jde', value: '22:00–03:00' },
-      { label: 'Na stole', value: 'lampa a plecháček' },
+      { label: 'Nejlíp mi to jde', value: 'večer a v noci' },
+      { label: 'Dělám', value: 'weby a e-shopy' },
       { label: 'Odpovídám', value: 'do dvou dnů' },
     ],
     portraitSlot: 'home.about',
     // OVĚŘIT: popisek k fotce
     caption: 'Já, zima 2026. Ne vždycky sedím u stolu.',
+    /** A short voice note from me. Record ~30 s on the phone, put it in /public/audio/ and set `src`. */
+    voice: {
+      src: '',
+      title: 'Pusť si mě',
+      sub: 'asi 30 vteřin, můj hlas',
+      soon: 'Nahrávku sem brzo namluvím',
+      // OVĚŘIT: přepis podle skutečné nahrávky
+      transcript: [] as string[],
+    },
     /** The portrait as a real print: the camera's date (from the photo, 31. 1. 2026) and its back. */
     print: {
       stamp: "'26 1 31",
@@ -149,7 +158,7 @@ export const home = {
     index: '06',
     label: 'Kolik to stojí',
     heading: 'Kolik to zhruba vyjde',
-    lead: 'Přesnou cenu ti řeknu, až si zavoláme a budu vědět, co to má umět. Tohle jsou čísla, od kterých obvykle začínám.',
+    lead: 'Přesnou cenu ti řeknu, až si zavoláme a budu vědět, co to má umět. Tohle jsou čísla, od kterých většinou začínám.',
     // OVĚŘIT: není plátce DPH
     note: 'Ceny jsou orientační. Nejsem plátce DPH, takže se k nim nic nepřičítá.',
     items: [
@@ -160,19 +169,19 @@ export const home = {
       // OVĚŘIT: cena
       { title: 'Redesign webu', from: 'od 20 000 Kč', body: 'Nový vzhled a nová stavba pro web, který už máš. Obsah a adresy zůstanou.' },
       // OVĚŘIT: cena
-      { title: 'Úpravy a péče', from: 'od 800 Kč/h', body: 'Oprava nebo vylepšení webu, který už máš. Platíš jen za čas, který tomu dám.' },
+      { title: 'Úpravy a péče', from: 'od 800 Kč/h', body: 'Oprava nebo vylepšení webu, kterej už máš. Platíš jen za čas, co tomu dám.' },
     ],
     faqLabel: 'Na co se lidi ptají',
     faq: [
       // OVĚŘIT: délky zakázek
       { q: 'Jak dlouho to trvá?', a: 'Web obvykle 4 až 6 týdnů, e-shop 6 až 10. Nejvíc to zdrží texty a fotky, takže je dobré je mít připravené dřív.' },
-      { q: 'Budu si pak web umět upravovat sám?', a: 'Ano. Texty, fotky i produkty si měníš sám a na konci ti to ukážu.' },
-      { q: 'Zařídíš i doménu a hosting?', a: 'Ano. Buď to založíme na tebe, nebo to zařídím já.' },
-      { q: 'Vezmeš i malou zakázku?', a: 'Jasně. Jedna stránka k akci nebo oprava starého webu je úplně v pohodě.' },
+      { q: 'Budu si pak web umět upravovat sám?', a: 'Jo. Texty, fotky i produkty si měníš sám a na konci ti všechno ukážu.' },
+      { q: 'Zařídíš i doménu a hosting?', a: 'Jo. Buď to založíme na tebe, nebo to klidně zařídím já.' },
+      { q: 'Vezmeš i malou zakázku?', a: 'Jasně. Jedna stránka na akci nebo oprava starýho webu je úplně v pohodě.' },
       // OVĚŘIT: platební podmínky
       { q: 'Jak se platí?', a: 'Polovinu zaplatíš na začátku, zbytek při spuštění. Dostaneš ode mě fakturu, klidně na firmu.' },
       // OVĚŘIT: práce na dálku po celém Česku
-      { q: 'Musíme se potkat osobně?', a: 'Nemusíme. Většinu věcí vyřešíme přes e-mail a videohovor, takže je jedno, kde v Česku jsi.' },
+      { q: 'Musíme se potkat osobně?', a: 'Nemusíme. Většinu věcí vyřešíme přes zprávy a videohovor, takže je jedno, kde v Česku jsi.' },
     ],
   },
 
@@ -180,7 +189,7 @@ export const home = {
     index: '07',
     label: 'Kontakt',
     heading: 'Napiš mi',
-    body: 'Stačí pár vět o tom, co děláš a co potřebuješ. Když víš termín nebo rozpočet, napiš ho taky. Odpovím do dvou dnů, většinou dřív a často v noci.',
+    body: 'Stačí pár vět o tom, co děláš a co potřebuješ. Jestli víš termín nebo rozpočet, napiš ho taky. Odpovím do dvou dnů, většinou dřív a klidně i v noci.',
     copyLabel: 'Zkopírovat e-mail',
     copied: 'Zkopírováno',
     form: {
@@ -203,17 +212,17 @@ export const home = {
       budgets: ['do 30 tis. Kč', '30 až 80 tis. Kč', '80 až 150 tis. Kč', 'přes 150 tis. Kč', 'Zatím nevím'],
       deadlineLabel: 'Termín',
       deadlines: ['Co nejdřív', 'Do měsíce', 'Do tří měsíců', 'Nespěchá'],
-      messageHint: 'Pár vět stačí. Jestli máš odkaz na web, který se ti líbí, nebo na ten svůj starý, přidej ho.',
+      messageHint: 'Pár vět stačí. Jestli máš odkaz na web, kterej se ti líbí, nebo na ten svůj starej, hoď ho sem.',
       consent: 'Souhlasím se zpracováním osobních údajů',
       consentLink: 'zásady',
       submit: 'Odeslat poptávku',
       pending: 'Odesílám…',
       sent: {
         title: 'Díky, mám to.',
-        body: 'Přečtu si to a ozvu se nejpozději do dvou dnů.',
+        body: 'Přečtu si to a ozvu se nejpozdějc do dvou dnů.',
         again: 'Poslat další',
       },
-      failed: 'Něco se pokazilo a zpráva neodešla. Zkus to znovu, nebo mi napiš rovnou na',
+      failed: 'Něco se pokazilo a zpráva neodešla. Zkus to znova, nebo mi napiš rovnou na',
       errors: {
         name: 'Napiš, jak ti mám říkat.',
         email: 'Bez e-mailu ti nemám kam odpovědět.',

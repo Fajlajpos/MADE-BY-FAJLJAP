@@ -20,8 +20,8 @@
 
 .frame {
   position: relative;
-  /* leave room on the right for the mug on narrow screens */
-  margin-right: clamp(2.5rem, 10vw, 4rem);
+  /* a little room on the right for the print underneath */
+  margin-right: clamp(0.75rem, 4vw, 2rem);
 }
 
 .portrait {
@@ -31,16 +31,6 @@
   overflow: hidden;
 }
 
-.mug {
-  position: absolute;
-  right: calc(-1 * clamp(3rem, 14vw, 6.5rem));
-  /* on a phone it stands below the print's white strip, so the note stays readable */
-  bottom: calc(-1 * clamp(4rem, 22vw, 6rem));
-  width: clamp(8rem, 36vw, 15rem);
-  aspect-ratio: 1;
-  z-index: 1;
-  pointer-events: none;
-}
 
 .caption {
   margin-top: var(--space-4);
@@ -126,11 +116,6 @@
     margin-right: 0;
   }
 
-  .mug {
-    right: -22%;
-    bottom: -9%;
-    width: 44%;
-  }
 
   .copy {
     grid-column: 7 / 13;

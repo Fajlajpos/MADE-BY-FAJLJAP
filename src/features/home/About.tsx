@@ -1,15 +1,14 @@
 import type { CSSProperties } from 'react'
+import { VoiceNote } from '@/components/media/VoiceNote'
 import { PhotoPrint } from '@/components/print/PhotoPrint'
 import { home } from '@/content/home'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
-import { Slot3D } from '@/three/site/Slot3D'
 import shared from './home.module.css'
 import styles from './About.module.css'
 
 /**
- * O mně — my photo on the left as a real print (taped, dated, turn it over), the chrome mug
- * standing over its corner; the copy on
+ * O mně — my photo on the left as a real print (taped, dated, turn it over); the copy on
  * the right: heading, two paragraphs, then the facts as a ruled two-column list.
  */
 export function About() {
@@ -29,10 +28,7 @@ export function About() {
               note={typo(about.caption)}
               back={about.print.back}
               sizes="(min-width: 1024px) 40vw, 92vw"
-            >
-              {/* the mug stands just over the print's corner */}
-              <Slot3D object="mug" className={styles.mug} scale={1.1} label="Chromový plecháček, můj hrnek ze stolu" />
-            </PhotoPrint>
+            />
           </div>
           <figcaption className="visually-hidden">{typo(about.caption)}</figcaption>
         </figure>
@@ -48,6 +44,16 @@ export function About() {
                 {typo(p)}
               </p>
             ))}
+          </div>
+
+          <div data-reveal="" style={{ '--reveal-i': 2 } as CSSProperties}>
+            <VoiceNote
+              src={about.voice.src || undefined}
+              title={about.voice.title}
+              sub={about.voice.sub}
+              soon={about.voice.soon}
+              transcript={about.voice.transcript}
+            />
           </div>
 
           <dl className={styles.facts} data-reveal="" style={{ '--reveal-i': 2 } as CSSProperties}>
