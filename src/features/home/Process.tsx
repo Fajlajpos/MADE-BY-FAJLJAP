@@ -39,7 +39,7 @@ export function Process() {
         {process.steps.map((step, i) => (
           <li
             key={step.title}
-            className={styles.step}
+            className={`${styles.step} glow-card`}
             data-reveal=""
             style={{ '--reveal-i': i } as CSSProperties}
           >

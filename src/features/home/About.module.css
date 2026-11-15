@@ -86,7 +86,7 @@
   padding: var(--space-5);
   border-radius: var(--r-m);
   background: var(--surface);
-  box-shadow: var(--surface-edge), var(--surface-drop);
+  box-shadow: var(--surface-edge), var(--surface-drop), var(--card-glow);
 }
 
 .fact dt {

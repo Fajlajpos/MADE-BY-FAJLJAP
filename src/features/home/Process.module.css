@@ -36,7 +36,7 @@
   padding: var(--space-6);
   border-radius: var(--r-l);
   background: var(--surface);
-  box-shadow: var(--surface-edge), var(--surface-drop);
+  box-shadow: var(--surface-edge), var(--surface-drop), var(--card-glow);
   overflow: hidden;
   isolation: isolate;
 }

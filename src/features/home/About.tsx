@@ -44,7 +44,7 @@ export function About() {
 
           <dl className={styles.facts} data-reveal="" style={{ '--reveal-i': 2 } as CSSProperties}>
             {about.facts.map((f) => (
-              <div key={f.label} className={styles.fact}>
+              <div key={f.label} className={`${styles.fact} glow-card`}>
                 <dt>{f.label}</dt>
                 <dd>{typo(f.value)}</dd>
               </div>

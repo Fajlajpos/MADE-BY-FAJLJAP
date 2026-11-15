@@ -33,6 +33,9 @@
   --surface-hover: linear-gradient(170deg, #222228 0%, #16161a 55%, #0f0f12 100%);
   --surface-edge: inset 0 1px 0 rgb(255 255 255 / 0.085), inset 0 0 0 1px rgb(255 255 255 / 0.045);
   --surface-drop: 0 22px 36px -26px rgb(0 0 0 / 0.85);
+  /* the soft light around every card (see .glow-card in globals.css) */
+  --card-glow: 0 0 46px -14px rgb(255 106 43 / 0.28), 0 0 90px -30px rgb(140 90 255 / 0.25);
+  --card-glow-hot: 0 0 56px -10px rgb(255 106 43 / 0.45), 0 0 110px -26px rgb(140 90 255 / 0.4);
   --accent: var(--c-accent);
   /* (older code asks for a second accent: it is the same orange) */
   --accent-2: var(--c-accent);

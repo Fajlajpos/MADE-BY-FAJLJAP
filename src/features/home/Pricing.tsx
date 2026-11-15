@@ -45,7 +45,7 @@ export function Pricing() {
 
       <ul className={styles.items} role="list">
         {pricing.items.map((item, i) => (
-          <li key={item.title} className={styles.item} data-reveal="" style={{ '--reveal-i': i } as CSSProperties}>
+          <li key={item.title} className={`${styles.item} glow-card`} data-reveal="" style={{ '--reveal-i': i } as CSSProperties}>
             <div className={styles.what}>
               <h3 className={styles.itemTitle}>{typo(item.title)}</h3>
               <p className={styles.itemBody}>{typo(item.body)}</p>
@@ -68,7 +68,7 @@ export function Pricing() {
         </div>
         <div className={styles.qas}>
           {pricing.faq.map((qa) => (
-            <details key={qa.q} className={styles.qa}>
+            <details key={qa.q} className={`${styles.qa} glow-card`}>
               <summary className={styles.q}>
                 <span>{typo(qa.q)}</span>
                 <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true">

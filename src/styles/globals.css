@@ -164,20 +164,54 @@ body::after {
 body::before {
   content: '';
   position: fixed;
-  inset: -20vmax;
+  inset: -30vmax;
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(28vmax 24vmax at 18% 22%, rgb(255 106 43 / 0.075), rgb(255 106 43 / 0) 70%),
-    radial-gradient(32vmax 26vmax at 84% 38%, rgb(70 110 255 / 0.07), rgb(70 110 255 / 0) 70%),
-    radial-gradient(30vmax 24vmax at 40% 86%, rgb(140 90 255 / 0.06), rgb(140 90 255 / 0) 70%);
-  animation: glowDrift 48s ease-in-out infinite alternate;
+    /* warm orange, high on the left */
+    radial-gradient(34vmax 28vmax at 30% 26%, rgb(255 106 43 / 0.16), rgb(255 106 43 / 0) 70%),
+    /* cold blue, on the right */
+    radial-gradient(38vmax 30vmax at 74% 38%, rgb(70 110 255 / 0.14), rgb(70 110 255 / 0) 70%),
+    /* violet, low and to the left */
+    radial-gradient(34vmax 26vmax at 38% 72%, rgb(140 90 255 / 0.12), rgb(140 90 255 / 0) 70%),
+    /* a deep ember glow in the lower right */
+    radial-gradient(28vmax 22vmax at 72% 80%, rgb(255 70 40 / 0.09), rgb(255 70 40 / 0) 70%),
+    /* a faint cool haze across the middle, so the lights read as one room */
+    radial-gradient(60vmax 40vmax at 50% 50%, rgb(120 140 200 / 0.035), rgb(120 140 200 / 0) 75%);
+  /* the lights drift on their own, and slowly travel up and turn as you scroll the page */
+  animation:
+    glowDrift 40s ease-in-out infinite alternate,
+    glowScroll linear both;
+  animation-timeline: auto, scroll(root);
 }
 
 @keyframes glowDrift {
   to {
-    transform: translate3d(4vmax, -3vmax, 0) rotate(8deg);
+    transform: translate3d(5vmax, -4vmax, 0) rotate(10deg) scale(1.06);
   }
+}
+
+@keyframes glowScroll {
+  from {
+    translate: 0 6vmax;
+    rotate: -6deg;
+  }
+
+  to {
+    translate: 0 -10vmax;
+    rotate: 14deg;
+  }
+}
+
+/* A soft vignette over the lights: the edges of the screen fall off into black, so the glows
+   sit in a space with depth instead of on a flat sheet. Fixed, never repainted on scroll. */
+html::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(120% 95% at 50% 45%, rgb(8 8 10 / 0) 55%, rgb(4 4 5 / 0.75) 100%);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -191,4 +225,92 @@ body::before {
    makes no scroll container, so sticky parts keep working. */
 #obsah {
   overflow-x: clip;
+}
+
+/* ── Glow cards ─────────────────────────────────────────────────
+   Every card has a light running round its edge: a short bright arc (orange into peach into
+   violet) that circles the rim, plus a soft halo around the card. On hover or focus the arc
+   and the halo brighten. Each card runs on its own clock, so they never pulse together. */
+@property --glow-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.glow-card {
+  position: relative;
+  isolation: isolate;
+  box-shadow: var(--surface-edge), var(--surface-drop), var(--card-glow);
+  transition: box-shadow var(--dur-slow) var(--ease-out);
+}
+
+.glow-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  padding: 1.5px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--glow-angle),
+    rgb(255 106 43 / 0) 0deg,
+    rgb(255 106 43 / 0) 200deg,
+    rgb(255 106 43 / 0.95) 255deg,
+    rgb(255 205 170 / 1) 275deg,
+    rgb(150 110 255 / 0.85) 300deg,
+    rgb(150 110 255 / 0) 345deg
+  );
+  /* only the 1.5 px rim shows */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: 0.7;
+  animation: glowSpin 9s linear infinite;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+/* each card starts the arc somewhere else on its rim, and some run a little faster */
+.glow-card:nth-child(2n)::after {
+  animation-delay: -3s;
+  animation-duration: 11s;
+}
+
+.glow-card:nth-child(3n)::after {
+  animation-delay: -6.5s;
+}
+
+.glow-card:nth-child(4n + 1)::after {
+  animation-delay: -1.5s;
+  animation-duration: 8s;
+}
+
+/* doubled class: wins over the cards' own (module) box-shadow */
+.glow-card.glow-card:hover,
+.glow-card.glow-card:focus-within,
+[data-hover] > .glow-card.glow-card {
+  box-shadow: var(--surface-edge), var(--surface-drop), var(--card-glow-hot);
+}
+
+.glow-card:hover::after,
+.glow-card:focus-within::after,
+[data-hover] > .glow-card::after {
+  opacity: 1;
+}
+
+@keyframes glowSpin {
+  to {
+    --glow-angle: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-card::after {
+    animation: none;
+    --glow-angle: 220deg;
+  }
 }
