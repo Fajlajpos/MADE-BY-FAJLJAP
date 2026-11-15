@@ -1,3 +1,4 @@
+import { Interactions } from '@/components/fx/Interactions'
 import { Reveal } from '@/components/fx/Reveal'
 import { SmoothScroll } from '@/components/fx/SmoothScroll'
 import { Footer } from '@/components/layout/Footer'
@@ -16,6 +17,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       </main>
       <Footer />
       <Reveal />
+      <Interactions />
       <SmoothScroll />
     </ThreeRoot>
   )

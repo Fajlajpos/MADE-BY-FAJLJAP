@@ -47,7 +47,7 @@ export function PhotoPrint({ slot, stamp, note, back, children, sizes = '(min-wi
       el.style.setProperty('--py', y.toFixed(3))
     }
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType === 'touch') return
+      if (e.pointerType === 'touch' || document.documentElement.hasAttribute('data-scrolling')) return
       const r = el.getBoundingClientRect()
       x = ((e.clientX - r.left) / r.width - 0.5) * 2
       y = ((e.clientY - r.top) / r.height - 0.5) * 2

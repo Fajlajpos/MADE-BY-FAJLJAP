@@ -59,7 +59,8 @@ export function Slot3D({ object, label, className, style, active = false, scale 
     if (still) return
     const onMove = (e: PointerEvent) => {
       const el = wrap.current
-      if (!el || e.pointerType === 'touch') return
+      // nothing to measure while the page scrolls (Interactions.tsx sets the flag)
+      if (!el || e.pointerType === 'touch' || document.documentElement.hasAttribute('data-scrolling')) return
       const r = el.getBoundingClientRect()
       const dx = e.clientX - (r.left + r.width / 2)
       const dy = e.clientY - (r.top + r.height / 2)

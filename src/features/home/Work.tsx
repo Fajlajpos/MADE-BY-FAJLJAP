@@ -44,7 +44,10 @@ export function Work() {
           const hasPhoto = Boolean(media.src)
           // the first and the last project run across the full width
           const wide = i === 0 || (i === featured.length - 1 && featured.length % 2 === 0)
-          const shot = project.url && media.src ? { src: media.src, alt: media.alt, url: project.url, video: project.video } : undefined
+          const shot =
+            project.url && media.src
+              ? { src: media.src, alt: media.alt, url: project.url, video: project.video }
+              : undefined
           return (
             <li
               key={project.slug}
@@ -54,17 +57,52 @@ export function Work() {
               style={{ '--reveal-i': i % 2 } as CSSProperties}
             >
               <article className={styles.project} aria-labelledby={`projekt-${project.slug}`}>
-                <Showcase
-                  mock={project.mock}
-                  object={project.object}
-                  hue={HUES[i % HUES.length]}
-                  corner={CORNERS[i % CORNERS.length]}
-                  wide={wide}
-                  shot={shot}
-                  chip={shot ? 'Skutečný e-shop · živě' : undefined}
-                >
-                  {hasPhoto && !shot ? <Media slot={project.slot} className={styles.media} sizes={SIZES[wide ? 0 : 1]} /> : undefined}
-                </Showcase>
+                {project.url ? (
+                  <a
+                    className={styles.cardLink}
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Otevřít ${project.title} (nové okno)`}
+                    tabIndex={-1}
+                  >
+                    <Showcase
+                      mock={project.mock}
+                      object={project.object}
+                      hue={HUES[i % HUES.length]}
+                      corner={CORNERS[i % CORNERS.length]}
+                      wide={wide}
+                      shot={shot}
+                      chip={shot ? 'Skutečný e-shop · živě' : undefined}
+                    >
+                      {hasPhoto && !shot ? (
+                        <Media
+                          slot={project.slot}
+                          className={styles.media}
+                          sizes={SIZES[wide ? 0 : 1]}
+                        />
+                      ) : undefined}
+                    </Showcase>
+                  </a>
+                ) : (
+                  <Showcase
+                    mock={project.mock}
+                    object={project.object}
+                    hue={HUES[i % HUES.length]}
+                    corner={CORNERS[i % CORNERS.length]}
+                    wide={wide}
+                    shot={shot}
+                    chip={shot ? 'Skutečný e-shop · živě' : undefined}
+                  >
+                    {hasPhoto && !shot ? (
+                      <Media
+                        slot={project.slot}
+                        className={styles.media}
+                        sizes={SIZES[wide ? 0 : 1]}
+                      />
+                    ) : undefined}
+                  </Showcase>
+                )}
                 <div className={styles.caption}>
                   <div className={styles.titleRow}>
                     <h3 id={`projekt-${project.slug}`} className={styles.title}>
@@ -77,7 +115,12 @@ export function Work() {
                   </p>
                   <p className={styles.summary}>{typo(project.summary)}</p>
                   {project.url && (
-                    <a className={`${shared.link} ${styles.visit}`} href={project.url} target="_blank" rel="noopener noreferrer">
+                    <a
+                      className={`${shared.link} ${styles.visit}`}
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       Otevřít {project.url.replace(/^https?:\/\//, '')}
                       <Arrow className={`${shared.arrow} ${styles.visitIcon}`} />
                       <span className="visually-hidden"> (otevře se v novém okně)</span>

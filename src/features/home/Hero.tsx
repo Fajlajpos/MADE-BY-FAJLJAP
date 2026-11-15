@@ -42,7 +42,7 @@ export function Hero() {
           <div className={styles.aside}>
             <p className={styles.intro}>{typo(hero.intro)}</p>
             <div className={styles.actions}>
-              <a className={shared.button} href="#kontakt">
+              <a className={shared.button} href="#kontakt" data-magnetic="">
                 {hero.ctaPrimary}
                 <Arrow className={shared.arrow} />
               </a>

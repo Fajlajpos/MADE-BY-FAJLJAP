@@ -22,7 +22,7 @@ export function Header() {
           <NavList className={styles.list} linkClassName={styles.link} />
         </nav>
 
-        <Link href="/#kontakt" className={styles.cta}>
+        <Link href="/#kontakt" className={styles.cta} data-magnetic="">
           Napiš mi
         </Link>
         <MobileMenu />

@@ -95,7 +95,8 @@
   text-decoration: none;
   transition:
     background-color var(--dur-fast) var(--ease-out),
-    transform var(--dur-fast) var(--ease-out);
+    transform var(--dur-fast) var(--ease-out),
+    translate 0.35s var(--ease-out);
 }
 
 .button:hover {
@@ -130,16 +131,24 @@
   right: 0;
   bottom: 9px;
   height: 1px;
-  background: currentColor;
-  opacity: 0.35;
-  transition:
-    opacity var(--dur-base) var(--ease-out),
-    transform var(--dur-base) var(--ease-out);
+  /* a quiet line, and a bright one that runs over it from the left on hover */
+  background:
+    linear-gradient(currentColor 0 0) left / 0% 100% no-repeat,
+    rgb(244 244 242 / 0.35);
+  transition: background-size 0.45s var(--ease-out);
 }
 
 .link:hover::after,
-.ghost:hover::after {
-  opacity: 1;
+.ghost:hover::after,
+.link:focus-visible::after {
+  background-size: 100% 100%, auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link::after,
+  .ghost::after {
+    transition: none;
+  }
 }
 
 .arrow {

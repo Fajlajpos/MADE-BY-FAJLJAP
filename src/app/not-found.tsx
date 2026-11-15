@@ -36,7 +36,7 @@ export default function NotFound() {
             <p className={styles.lead}>
               {typo('Buď jsem ji přesunul, nebo nikdy neexistovala. Já jsem se taky jednou zasekl, viz fotka. Zbytek webu ale jede.')}
             </p>
-            <Link href="/" className={`${shared.button} ${styles.home}`}>
+            <Link href="/" className={`${shared.button} ${styles.home}`} data-magnetic="">
               Zpátky na úvod
               <Arrow className={shared.arrow} />
             </Link>

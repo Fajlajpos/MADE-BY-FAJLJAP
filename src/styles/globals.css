@@ -315,3 +315,9 @@ html::after {
     animation: none;
   }
 }
+
+/* while the page scrolls, its content ignores the pointer: cards passing under a resting cursor
+   do not switch their hover look on and off every frame (Interactions.tsx sets the flag) */
+html[data-scrolling] #obsah {
+  pointer-events: none;
+}

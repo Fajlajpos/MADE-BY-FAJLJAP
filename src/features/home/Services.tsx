@@ -83,7 +83,7 @@ export function Services() {
       </div>
 
       <p className={styles.cta}>
-        <a className={shared.button} href="#kontakt">
+        <a className={shared.button} href="#kontakt" data-magnetic="">
           {services.cta}
           <Arrow className={shared.arrow} />
         </a>

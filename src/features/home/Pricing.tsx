@@ -61,7 +61,7 @@ export function Pricing() {
       <div className={styles.faq}>
         <div className={styles.faqHead}>
           <h3 className={styles.faqTitle}>{typo(pricing.faqLabel)}</h3>
-          <a className={shared.button} href="#kontakt">
+          <a className={shared.button} href="#kontakt" data-magnetic="">
             Zeptej se na přesnou cenu
             <Arrow className={shared.arrow} />
           </a>

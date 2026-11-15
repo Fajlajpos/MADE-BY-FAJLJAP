@@ -92,7 +92,9 @@
   font-size: var(--fs-small);
   font-weight: 600;
   text-decoration: none;
-  transition: background-color var(--dur-fast) var(--ease-out);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    translate 0.35s var(--ease-out);
 }
 
 .cta:hover {

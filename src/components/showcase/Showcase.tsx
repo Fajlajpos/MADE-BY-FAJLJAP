@@ -58,7 +58,7 @@ export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, 
       el.style.setProperty('--my', y.toFixed(3))
     }
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType === 'touch') return
+      if (e.pointerType === 'touch' || document.documentElement.hasAttribute('data-scrolling')) return
       const r = el.getBoundingClientRect()
       x = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width))
       y = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height))
