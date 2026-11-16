@@ -19,7 +19,7 @@ export const site: SiteContent = {
   // Placeholders — real values in CHECKLIST.md › „Doplní FAJLAJP později“.
   contact: { email: 'hello@fajlajp.cz', city: 'Česko' },
   socials: [
-    { label: 'Instagram', href: '#' },
+    { label: 'Instagram', href: 'https://www.instagram.com/fajlajpos/' },
     { label: 'Behance', href: '#' },
     { label: 'LinkedIn', href: '#' },
   ],

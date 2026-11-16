@@ -27,6 +27,7 @@ export function About() {
               stamp={about.print.stamp}
               note={typo(about.caption)}
               back={about.print.back}
+              tag={{ label: '@fajlajpos', href: 'https://www.instagram.com/fajlajpos/', at: [44, 41] }}
               sizes="(min-width: 1024px) 40vw, 92vw"
             />
           </div>

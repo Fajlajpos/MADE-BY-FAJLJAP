@@ -14,6 +14,8 @@ type Props = {
   note?: string
   /** What is written on the back (shown when the print is turned over). */
   back?: string[]
+  /** An Instagram-style tag on the photo: who is in it and where it links. `at` in % of the photo. */
+  tag?: { label: string; href: string; at: [number, number] }
   /** Something standing over the print's corner (the 3D mug). */
   children?: ReactNode
   sizes?: string
@@ -27,7 +29,7 @@ type Props = {
  * stretched). The print leans toward the cursor and lifts; a click (or Enter) turns it over to
  * what is written on the back. It drops onto the page once, the first time it comes into view.
  */
-export function PhotoPrint({ slot, stamp, note, back, children, sizes = '(min-width: 1024px) 40vw, 90vw', className }: Props) {
+export function PhotoPrint({ slot, stamp, note, back, tag, children, sizes = '(min-width: 1024px) 40vw, 90vw', className }: Props) {
   const media = getSlot(slot)
   const root = useRef<HTMLDivElement>(null)
   const [flipped, setFlipped] = useState(false)
@@ -114,6 +116,20 @@ export function PhotoPrint({ slot, stamp, note, back, children, sizes = '(min-wi
           <span className={styles.backMark}>FAJLAJP · tisk 10 × 13</span>
         </span>
       </button>
+
+      {/* the tag sits on the photo but outside the button, so it is its own link */}
+      {tag && (
+        <a
+          className={styles.tag}
+          href={tag.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ left: `${tag.at[0]}%`, top: `${tag.at[1]}%` }}
+        >
+          {tag.label}
+          <span className="visually-hidden"> na Instagramu (otevře se v novém okně)</span>
+        </a>
+      )}
 
       {/* two pieces of tape holding it to the page */}
       <span className={`${styles.tape} ${styles.tapeL}`} aria-hidden="true" />
