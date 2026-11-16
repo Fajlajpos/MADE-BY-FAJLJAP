@@ -4,6 +4,7 @@ import { home } from '@/content/home'
 import { getSlot } from '@/content/media'
 import { site } from '@/content/site'
 import { typo } from '@/lib/typo/czech'
+import { ArchTitle } from './ArchTitle'
 import { HeroStage } from './HeroStage'
 import shared from './home.module.css'
 import styles from './Hero.module.css'
@@ -33,17 +34,7 @@ export function Hero() {
         <div className={styles.stage}>
           <h1 id="hero-title" className={styles.arch}>
             <span className="visually-hidden">{hero.arch.join(' ')} – webdesignér, weby a e-shopy</span>
-            <Image
-              src="/brand/made-by-fajlajp.webp"
-              alt=""
-              width={2400}
-              height={615}
-              priority
-              unoptimized
-              className={styles.archImg}
-            />
-            {/* a white flash running across the metal now and then, clipped to the letters */}
-            <span className={styles.archGlint} aria-hidden="true" />
+            <ArchTitle />
           </h1>
 
           <div className={styles.photo}>
