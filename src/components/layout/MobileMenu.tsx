@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { site } from '@/content/site'
 import { NavList } from './NavList'
-import { Status } from './Status'
 import styles from './MobileMenu.module.css'
 
 const DESKTOP = '(min-width: 1024px)'
@@ -142,7 +141,6 @@ export function MobileMenu() {
         </nav>
 
         <div className={styles.foot}>
-          <Status />
           <a className={styles.mail} href={`mailto:${site.contact.email}`}>
             {site.contact.email}
           </a>

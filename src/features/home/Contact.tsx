@@ -1,5 +1,4 @@
 import type { CSSProperties } from 'react'
-import { Status } from '@/components/layout/Status'
 import { home } from '@/content/home'
 import { site } from '@/content/site'
 import { typo } from '@/lib/typo/czech'
@@ -43,7 +42,23 @@ export function Contact() {
             </a>
             <CopyEmail email={site.contact.email} label={contact.copyLabel} copied={contact.copied} />
           </div>
-          <Status className={styles.status} />
+          <div className={styles.igBlock} data-reveal="" style={{ '--reveal-i': 2 } as CSSProperties}>
+            <p className={styles.mailLabel}>Nebo mi napiš na Instagram</p>
+            <a
+              className={styles.igButton}
+              href="https://ig.me/m/fajlajpos"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4.2" />
+                <circle cx="17.4" cy="6.6" r="1" className={styles.igDot} />
+              </svg>
+              @fajlajpos
+              <span className="visually-hidden"> – napsat zprávu na Instagramu (otevře se v novém okně)</span>
+            </a>
+          </div>
         </div>
         <ContactStage />
       </div>

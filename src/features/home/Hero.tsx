@@ -2,7 +2,6 @@ import Image from 'next/image'
 import { Arrow } from '@/components/ui/Arrow'
 import { home } from '@/content/home'
 import { getSlot } from '@/content/media'
-import { site } from '@/content/site'
 import { typo } from '@/lib/typo/czech'
 import { ArchTitle } from './ArchTitle'
 import { HeroStage } from './HeroStage'
@@ -25,10 +24,6 @@ export function Hero() {
       <div className={styles.inner}>
         <div className={styles.top}>
           <p className="label">{typo(hero.tag)}</p>
-          <p className={`label ${styles.status}`}>
-            <span className={styles.dot} data-open={site.availability.open} aria-hidden="true" />
-            {typo(site.availability.label)}
-          </p>
         </div>
 
         <div className={styles.stage}>

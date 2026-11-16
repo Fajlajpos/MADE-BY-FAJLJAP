@@ -1,3 +1,4 @@
+import { ConsoleHello } from '@/components/fx/ConsoleHello'
 import { Interactions } from '@/components/fx/Interactions'
 import { MoodLight } from '@/components/fx/Mood'
 import { Reveal } from '@/components/fx/Reveal'
@@ -20,6 +21,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <Footer />
       <Reveal />
       <Interactions />
+      <ConsoleHello />
       <SmoothScroll />
     </ThreeRoot>
   )

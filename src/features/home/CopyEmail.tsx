@@ -1,9 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, type MouseEvent } from 'react'
 import styles from './Contact.module.css'
 
-/** Copies the address; the button says so and a live region announces it. */
+/**
+ * Copies the address; the button says so, a small „Zkopírováno“ bubble pops up where you
+ * clicked, and a live region announces it.
+ */
 export function CopyEmail({
   email,
   label,
@@ -14,6 +17,7 @@ export function CopyEmail({
   copied: string
 }) {
   const [state, setState] = useState<'idle' | 'done' | 'failed'>('idle')
+  const [pop, setPop] = useState<{ x: number; y: number; id: number } | null>(null)
 
   return (
     <>
@@ -21,10 +25,16 @@ export function CopyEmail({
         type="button"
         className={styles.copyButton}
         data-state={state}
-        onClick={async () => {
+        onClick={async (e: MouseEvent<HTMLButtonElement>) => {
+          // keyboard clicks have no position: pop over the button's middle instead
+          const r = e.currentTarget.getBoundingClientRect()
+          const x = e.clientX || r.left + r.width / 2
+          const y = e.clientY || r.top
           try {
             await navigator.clipboard.writeText(email)
             setState('done')
+            setPop({ x, y, id: Date.now() })
+            window.setTimeout(() => setPop(null), 1300)
           } catch {
             setState('failed')
           }
@@ -64,6 +74,11 @@ export function CopyEmail({
         </svg>
         {state === 'done' ? copied : state === 'failed' ? 'Nejde to, zkopíruj ručně' : label}
       </button>
+      {pop && (
+        <span key={pop.id} className={styles.copyPop} style={{ left: pop.x, top: pop.y }} aria-hidden="true">
+          {copied}
+        </span>
+      )}
       <span className="visually-hidden" role="status">
         {state === 'done' ? `${copied}: ${email}` : ''}
       </span>

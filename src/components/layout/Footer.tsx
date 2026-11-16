@@ -2,7 +2,6 @@ import Image from 'next/image'
 import { site } from '@/content/site'
 import { typo } from '@/lib/typo/czech'
 import { NavList } from './NavList'
-import { Status } from './Status'
 import styles from './Footer.module.css'
 
 const YEAR = 2026
@@ -22,7 +21,6 @@ export function Footer() {
           <a className={styles.mail} href={`mailto:${site.contact.email}`}>
             {site.contact.email}
           </a>
-          <Status />
         </div>
 
         <nav className={`${styles.col} ${styles.colNav}`} aria-labelledby="pata-stranka">

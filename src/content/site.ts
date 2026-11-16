@@ -17,7 +17,7 @@ export const site: SiteContent = {
   // OVĚŘIT: od kdy bere nové zakázky
   availability: { open: true, label: 'Beru nové zakázky od listopadu' },
   // Placeholders — real values in CHECKLIST.md › „Doplní FAJLAJP později“.
-  contact: { email: 'hello@fajlajp.cz', city: 'Česko' },
+  contact: { email: 'filipmayer7@gmail.com', city: 'Česko' },
   socials: [
     { label: 'Instagram', href: 'https://www.instagram.com/fajlajpos/' },
     { label: 'Behance', href: '#' },
