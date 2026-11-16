@@ -229,6 +229,8 @@ export const home = {
         title: 'Díky, mám to.',
         body: 'Přečtu si to a ozvu se nejpozdějc do dvou dnů.',
         again: 'Poslat další',
+        /** My reply in the little DM thread after sending ({name} = their first name). */
+        chat: ['Čau {name}, mám to 👊', 'Přečtu si to a ozvu se nejpozdějc do dvou dnů. Většinou dřív.'],
       },
       failed: 'Něco se pokazilo a zpráva neodešla. Zkus to znova, nebo mi napiš rovnou na',
       errors: {

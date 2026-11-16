@@ -50,11 +50,8 @@ export function Contact() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="3" y="3" width="18" height="18" rx="5" />
-                <circle cx="12" cy="12" r="4.2" />
-                <circle cx="17.4" cy="6.6" r="1" className={styles.igDot} />
-              </svg>
+              {/* eslint-disable-next-line @next/next/no-img-element -- a 240 px avatar */}
+              <img className={styles.igAvatar} src="/photos/profilovka.webp" alt="" width={32} height={32} />
               @fajlajpos
               <span className="visually-hidden"> – napsat zprávu na Instagramu (otevře se v novém okně)</span>
             </a>

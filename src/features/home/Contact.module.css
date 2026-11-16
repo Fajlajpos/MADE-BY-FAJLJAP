@@ -574,9 +574,17 @@
   stroke-width: 1.8;
 }
 
-.igDot {
-  fill: currentColor;
-  stroke: none;
+/* my profile photo, in Instagram's story ring */
+.igAvatar {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  margin-left: calc(-1 * var(--space-2));
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 3.5px #e1306c;
 }
 
 /* on hover the Instagram gradient lights up around it */
@@ -641,6 +649,153 @@
 
 @media (prefers-reduced-motion: reduce) {
   .copyPop {
+    animation: none;
+  }
+}
+
+/* ── the DM thread after sending ─────────────────────────────── */
+.chat {
+  width: 100%;
+  max-width: 26rem;
+  padding: var(--space-4);
+  border-radius: var(--r-l);
+  background: var(--surface);
+  box-shadow: var(--surface-edge);
+}
+
+.chatHead {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-3);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-small);
+}
+
+.chatHead b {
+  display: block;
+  font-weight: 600;
+}
+
+.chatHead small {
+  font-size: var(--fs-label);
+  color: var(--fg-subtle);
+}
+
+/* the avatar with an Instagram ring */
+.chatAvatar {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow:
+    0 0 0 2px #16161a,
+    0 0 0 4px #e1306c;
+}
+
+.chatThread {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--fs-small);
+  line-height: 1.35;
+}
+
+.msgMe,
+.msgThem {
+  max-width: 80%;
+  min-width: 0;
+  /* a long word with no spaces breaks inside the bubble instead of running out of it */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  padding: 0.6em 0.9em;
+  border-radius: 18px;
+  animation: msgIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* their message: right, in Instagram's blue-violet */
+.msgMe {
+  justify-self: end;
+  border-bottom-right-radius: 6px;
+  background: linear-gradient(135deg, #5b51d8, #833ab4);
+  color: #fff;
+}
+
+/* mine: left, dark */
+.msgThem {
+  justify-self: start;
+  border-bottom-left-radius: 6px;
+  background: rgb(255 255 255 / 0.09);
+  color: var(--fg);
+}
+
+.typing {
+  justify-self: start;
+  display: inline-flex;
+  gap: 4px;
+  padding: 0.8em 0.9em;
+  border-radius: 18px;
+  border-bottom-left-radius: 6px;
+  background: rgb(255 255 255 / 0.09);
+  animation: msgIn 0.3s ease-out both;
+}
+
+.typing i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fg-muted);
+  animation: dot 1s ease-in-out infinite;
+}
+
+.typing i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.typing i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.seen {
+  margin-top: 6px;
+  font-size: 0.72rem;
+  color: var(--fg-subtle);
+  text-align: right;
+  animation: msgIn 0.4s ease-out both;
+}
+
+@keyframes msgIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+}
+
+@keyframes dot {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msgMe,
+  .msgThem,
+  .typing,
+  .typing i,
+  .seen {
     animation: none;
   }
 }

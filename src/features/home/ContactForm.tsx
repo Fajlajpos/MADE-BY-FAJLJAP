@@ -15,6 +15,7 @@ import {
 } from './inquiry'
 import { sendInquiry } from './sendInquiry'
 import shared from './home.module.css'
+import { SentChat } from './SentChat'
 import styles from './Contact.module.css'
 
 const { form } = home.contact
@@ -74,9 +75,8 @@ export function ContactForm({ onSent, onAgain }: { onSent?: () => void; onAgain?
   if (state.status === 'sent') {
     return (
       <div className={styles.sent} role="status">
-        <p className={styles.sentNo}>Poptávka č. {state.no}</p>
         <p className={styles.sentTitle}>{typo(form.sent.title)}</p>
-        <p className={styles.sentBody}>{typo(form.sent.body)}</p>
+        <SentChat name={values.name} message={values.message} reply={form.sent.chat} no={String(state.no)} />
         <button type="button" className={`${shared.link} ${styles.back}`} onClick={onAgain}>
           {form.sent.again}
           <Arrow className={shared.arrow} />
