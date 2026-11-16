@@ -203,3 +203,154 @@
     display: block;
   }
 }
+
+/* ── easter egg: five quick clicks — the logo beats twice and a ring of light ripples out ── */
+.brand[data-melt] .logo {
+  animation: eggPulse 1s cubic-bezier(0.3, 0, 0.2, 1) both;
+}
+
+.brand[data-melt] .glint {
+  animation: glint 0.9s cubic-bezier(0.25, 0.8, 0.3, 1) 0.2s both;
+}
+
+/* the ripple: a glowing outline that grows from the logo and fades */
+.brand[data-melt]::after {
+  content: '';
+  position: absolute;
+  inset: -6px -10px;
+  border-radius: 999px;
+  box-shadow:
+    0 0 0 1.5px rgb(255 255 255 / 0.8),
+    0 0 18px 2px rgb(255 255 255 / 0.35);
+  pointer-events: none;
+  animation: eggRipple 0.9s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+@keyframes eggPulse {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+
+  18% {
+    transform: scale(1.14);
+    filter: brightness(1.6) drop-shadow(0 0 8px rgb(255 255 255 / 0.6));
+  }
+
+  34% {
+    transform: scale(0.97);
+  }
+
+  52% {
+    transform: scale(1.08);
+    filter: brightness(1.35) drop-shadow(0 0 6px rgb(255 255 255 / 0.4));
+  }
+
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+@keyframes eggRipple {
+  from {
+    opacity: 1;
+    transform: scale(0.85);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+.eggAnchor {
+  position: absolute;
+  left: 0;
+  top: 100%;
+}
+
+/* the note: a small dark chip, quiet, like a notification */
+.egg {
+  position: absolute;
+  left: 0;
+  top: 14px;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  max-width: min(86vw, 26rem);
+  padding: 10px 8px 10px 16px;
+  border-radius: 16px;
+  background: rgb(14 14 17 / 0.94);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.1),
+    0 12px 30px -12px rgb(0 0 0 / 0.8);
+  color: var(--fg-muted);
+  font-size: var(--fs-label);
+  line-height: 1.4;
+  white-space: normal;
+  animation: eggIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
+}
+
+.egg strong {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+.egg em {
+  font-style: normal;
+  color: #3ddc84;
+}
+
+.egg code {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.1);
+  color: var(--fg);
+  font-family: inherit;
+  font-weight: 600;
+}
+
+.eggClose {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.06);
+  color: var(--fg-subtle);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.eggClose:hover {
+  color: var(--fg);
+  background: rgb(255 255 255 / 0.12);
+}
+
+@keyframes eggIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (max-width: 599px) {
+  .egg {
+    white-space: normal;
+    border-radius: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand[data-melt] .logo,
+  .brand[data-melt] .glint,
+  .brand[data-melt]::after,
+  .egg {
+    animation: none;
+  }
+}

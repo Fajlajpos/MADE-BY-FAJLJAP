@@ -12,7 +12,25 @@
   height: 100svh;
   overflow: hidden;
   isolation: isolate;
-  background: radial-gradient(50% 50% at 50% 50%, rgb(30 30 36 / 0.6) 0%, rgb(30 30 36 / 0) 100%);
+  /* a deep blue light at the end of the tunnel, a cooler haze around it; faded out at the top
+     and bottom so it melts into the page */
+  background:
+    radial-gradient(38% 50% at 82% 45%, rgb(70 110 255 / 0.12) 0%, rgb(70 110 255 / 0) 100%),
+    radial-gradient(60% 65% at 90% 55%, rgb(40 70 200 / 0.08) 0%, rgb(40 70 200 / 0) 100%),
+    radial-gradient(50% 50% at 50% 50%, rgb(30 30 36 / 0.6) 0%, rgb(30 30 36 / 0) 100%);
+  /* a long, eased fade at the top and bottom: the blue comes in gradually, no visible edge
+     while the section slides into view */
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgb(0 0 0 / 0.15) 12%,
+    rgb(0 0 0 / 0.55) 26%,
+    #000 42%,
+    #000 58%,
+    rgb(0 0 0 / 0.55) 74%,
+    rgb(0 0 0 / 0.15) 88%,
+    transparent 100%
+  );
 }
 
 /* the corridor fades in and out at the top and bottom, so it reads as deep, not as a box */

@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { site } from '@/content/site'
 import { HeaderShell } from './HeaderShell'
+import { LogoEgg } from './LogoEgg'
 import { MobileMenu } from './MobileMenu'
 import { NavList } from './NavList'
 import styles from './Header.module.css'
@@ -28,6 +29,7 @@ export function Header() {
           />
           {/* a glint that runs across the metal on hover, clipped to the letters */}
           <span className={styles.glint} aria-hidden="true" />
+          <LogoEgg />
         </Link>
 
         <nav className={styles.nav} aria-label="Hlavní navigace">
