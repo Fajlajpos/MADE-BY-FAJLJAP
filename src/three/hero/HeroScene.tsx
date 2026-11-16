@@ -101,7 +101,7 @@ export function HeroScene({
   const narrow = size.width < 700
   const scale = narrow ? 0.5 : size.width < 1100 ? 0.62 : 0.74
   // the cluster's resting place: upper right on a wide screen, the top half on a phone
-  const lift = narrow ? 1.05 : 0.62
+  const lift = narrow ? 0.4 : 0
 
   const bodies = useMemo<Body[]>(
     () =>
@@ -145,6 +145,9 @@ export function HeroScene({
     for (let i = 0; i < bodies.length; i++) {
       const b = bodies[i]!
       const home = tmp.b.set(...b.def.home).multiplyScalar(spread)
+      // the middle is kept free for the title and the photo: every piece moves out to its side
+      const side = b.def.home[0] < 0 || (b.def.home[0] === 0 && i % 2) ? -1 : 1
+      home.x = side * (Math.abs(home.x) * (narrow ? 0.35 : 0.55) + (narrow ? 2.6 : 5.4))
       if (still) {
         b.pos.copy(home)
         continue

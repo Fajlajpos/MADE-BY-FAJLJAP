@@ -26,6 +26,14 @@ export const home = {
     title: ['Ahoj,', 'dělám weby', 'a e-shopy.'],
     intro:
       'Jsem FAJLAJP a všechno dělám sám. Žádnej obchodník, žádná agentura, píšeš rovnou mně. Web nebo e-shop ti navrhnu i postavím, prostě celý od začátku do konce. Ozvu se do dvou dnů, většinou dřív.',
+    /** The arched title over the photo. */
+    arch: ['MADE BY', 'FAJLAJP'],
+    /** Short notes beside the photo. */
+    notes: [
+      { k: 'Weby & e-shopy', v: 'navrhnu i postavím' },
+      { k: 'Bez agentury', v: 'píšeš rovnou mně' },
+      { k: 'Odpověď', v: 'do dvou dnů' },
+    ],
     ctaPrimary: 'Napiš mi',
     ctaSecondary: 'Co dělám',
   },

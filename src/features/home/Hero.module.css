@@ -88,40 +88,193 @@
   box-shadow: 0 0 0 4px rgb(var(--accent-rgb) / 0.15);
 }
 
-.bottom {
-  align-self: end;
-  display: grid;
-  gap: var(--space-7) var(--gutter);
-  align-items: end;
+.inner {
+  grid-template-rows: auto 1fr auto;
 }
 
-.title {
-  font-size: var(--fs-display);
+/* ── the arch and the photo ──────────────────────── */
+.stage {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  min-height: 0;
+}
+
+.arch {
+  width: min(100%, 64rem);
+  margin: 0;
+  line-height: 0;
+}
+
+.arch {
+  position: relative;
+}
+
+.archGlint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask: url('/brand/made-by-fajlajp.webp') center / 100% 100% no-repeat;
+  mask: url('/brand/made-by-fajlajp.webp') center / 100% 100% no-repeat;
+  background: linear-gradient(
+      105deg,
+      rgb(255 255 255 / 0) 40%,
+      rgb(255 255 255 / 0.55) 47%,
+      rgb(255 255 255 / 0.95) 50%,
+      rgb(255 255 255 / 0.55) 53%,
+      rgb(255 255 255 / 0) 60%
+    )
+    no-repeat;
+  background-size: 300% 100%;
+  background-position: 120% 0;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .archGlint {
+    animation: archGlint 5s cubic-bezier(0.4, 0.1, 0.3, 1) 1.4s infinite;
+  }
+}
+
+@keyframes archGlint {
+  0% {
+    opacity: 1;
+    background-position: 120% 0;
+  }
+
+  28% {
+    opacity: 1;
+    background-position: -20% 0;
+  }
+
+  29%,
+  100% {
+    opacity: 0;
+    background-position: -20% 0;
+  }
+}
+
+.archImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 18px 30px rgb(0 0 0 / 0.6));
+}
+
+.archSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.archText {
+  font-family: var(--font-display);
+  fill: var(--fg);
+}
+
+.archSmall {
+  font-size: 72px;
   font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.archBig {
+  font-size: 150px;
+  font-weight: 700;
   font-stretch: 88%;
-  line-height: var(--lh-display);
-  letter-spacing: var(--tracking-display);
-  text-wrap: nowrap;
+  letter-spacing: -0.02em;
 }
 
-.mask {
-  display: block;
-  padding-block: 0.08em;
-  margin-block: -0.08em;
-  overflow: clip;
+/* the photo sits up into the arch */
+.photo {
+  position: relative;
+  width: min(92%, 46rem);
+  aspect-ratio: 16 / 9;
+  margin-top: clamp(-3rem, -3vw, -1rem);
 }
 
-.line {
-  display: block;
+.photoImg {
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 30px 40px rgb(0 0 0 / 0.6));
 }
 
-.aside {
+.photoStandIn {
   display: grid;
+  place-items: center;
+  height: 100%;
+  border: 1px dashed rgb(244 244 242 / 0.22);
+  border-radius: var(--r-l);
+  background: radial-gradient(60% 60% at 50% 70%, rgb(244 244 242 / 0.05), rgb(244 244 242 / 0));
+  color: var(--fg-subtle);
+  font-size: var(--fs-label);
+  text-align: center;
+  padding: var(--space-5);
+}
+
+/* short notes on either side of the photo */
+.notes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3) var(--space-6);
+  margin: var(--space-5) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.notes li {
+  display: grid;
+  gap: 2px;
+  font-size: var(--fs-label);
+  text-align: center;
+}
+
+.notes b {
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.notes span {
+  color: var(--fg-subtle);
+}
+
+@media (min-width: 1024px) {
+  .notes {
+    position: absolute;
+    inset: auto 0 22%;
+    justify-content: space-between;
+    margin: 0;
+    pointer-events: none;
+  }
+
+  .notes li {
+    width: 13rem;
+    text-align: left;
+  }
+
+  .notes li:nth-child(2) {
+    display: none;
+  }
+
+  .notes li:last-child {
+    text-align: right;
+  }
+}
+
+/* ── the bottom: intro and the way on ────────────── */
+.bottom {
+  display: grid;
+  justify-items: center;
   gap: var(--space-5);
-  max-width: 26rem;
+  margin-top: var(--space-6);
+  text-align: center;
 }
 
 .intro {
+  max-width: 34rem;
   font-size: var(--fs-small);
   line-height: 1.6;
   color: var(--fg-muted);
@@ -130,63 +283,27 @@
 .actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: var(--space-3) var(--space-5);
 }
 
-@media (min-width: 1024px) {
-  .bottom {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-}
-
-@media (max-width: 599px) {
-  .title {
-    text-wrap: balance;
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
-  /* on load the three lines rise out of their masks, one after another */
-  .line {
-    animation: lineIn 1.2s var(--ease-out) both;
-    animation-delay: calc(0.25s + var(--li, 0) * 0.12s);
+  .arch {
+    animation: archIn 1.2s var(--ease-out) 0.15s both;
   }
 
-  .aside {
-    animation: fadeUp 1s var(--ease-out) 0.75s both;
-  }
-
-  /* as the hero scrolls away, the lines slide apart and the copy sinks back (compositor only) */
-  @supports (animation-timeline: view()) {
-    .hero {
-      view-timeline-name: --hero;
-    }
-
-    .mask {
-      animation: lineOut linear both;
-      animation-timeline: --hero;
-      animation-range: exit 0% exit 75%;
-    }
-
-    .mask:nth-child(2) {
-      animation-name: lineOutRight;
-    }
-
-    .aside,
-    .top {
-      animation:
-        fadeUp 1s var(--ease-out) 0.75s both,
-        sink linear both;
-      animation-timeline: auto, --hero;
-      animation-range: normal, exit 0% exit 50%;
-    }
+  .photo,
+  .notes,
+  .bottom {
+    animation: fadeUp 1s var(--ease-out) 0.5s both;
   }
 }
 
-@keyframes lineIn {
+@keyframes archIn {
   from {
-    translate: 0 110%;
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
   }
 }
 
@@ -194,26 +311,5 @@
   from {
     opacity: 0;
     translate: 0 20px;
-  }
-}
-
-@keyframes lineOut {
-  to {
-    transform: translateX(-14vw);
-    opacity: 0.15;
-  }
-}
-
-@keyframes lineOutRight {
-  to {
-    transform: translateX(10vw);
-    opacity: 0.15;
-  }
-}
-
-@keyframes sink {
-  to {
-    transform: translateY(-60px);
-    opacity: 0;
   }
 }

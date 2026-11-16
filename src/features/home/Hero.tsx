@@ -1,6 +1,7 @@
-import type { CSSProperties } from 'react'
+import Image from 'next/image'
 import { Arrow } from '@/components/ui/Arrow'
 import { home } from '@/content/home'
+import { getSlot } from '@/content/media'
 import { site } from '@/content/site'
 import { typo } from '@/lib/typo/czech'
 import { HeroStage } from './HeroStage'
@@ -8,13 +9,14 @@ import shared from './home.module.css'
 import styles from './Hero.module.css'
 
 /**
- * The opening: one screen, a cluster of polished chrome behind the copy — the things I make,
- * which you can push around with the cursor and knock with a click. The title is set large and
- * plain at the bottom left; the intro and the two ways on sit at the bottom right. As the hero
- * scrolls away, the title's lines slide apart (CSS only, nothing pinned).
+ * The opening: „MADE BY FAJLAJP“ in one line, bent over the top in an arch;
+ * under it me on the sofa with a laptop (a cut-out photo; until it comes, a framed stand-in);
+ * short notes on either side, the intro and the way on at the bottom. The chrome cluster stays
+ * behind, at the sides.
  */
 export function Hero() {
   const { hero } = home
+  const sofa = getSlot('home.sofa')
   return (
     <section className={styles.hero} aria-labelledby="hero-title">
       <HeroStage />
@@ -28,28 +30,52 @@ export function Hero() {
           </p>
         </div>
 
-        <div className={styles.bottom}>
-          <h1 id="hero-title" className={styles.title}>
-            {hero.title.map((line, i) => (
-              <span key={line} className={styles.mask}>
-                <span className={styles.line} style={{ '--li': i } as CSSProperties}>
-                  {typo(line)}
-                </span>
-              </span>
-            ))}
+        <div className={styles.stage}>
+          <h1 id="hero-title" className={styles.arch}>
+            <span className="visually-hidden">{hero.arch.join(' ')} – webdesignér, weby a e-shopy</span>
+            <Image
+              src="/brand/made-by-fajlajp.webp"
+              alt=""
+              width={2400}
+              height={615}
+              priority
+              unoptimized
+              className={styles.archImg}
+            />
+            {/* a white flash running across the metal now and then, clipped to the letters */}
+            <span className={styles.archGlint} aria-hidden="true" />
           </h1>
 
-          <div className={styles.aside}>
-            <p className={styles.intro}>{typo(hero.intro)}</p>
-            <div className={styles.actions}>
-              <a className={shared.button} href="#kontakt" data-magnetic="">
-                {hero.ctaPrimary}
-                <Arrow className={shared.arrow} />
-              </a>
-              <a className={shared.link} href="#co-delam">
-                {hero.ctaSecondary}
-              </a>
-            </div>
+          <div className={styles.photo}>
+            {sofa.src ? (
+              <Image src={sofa.src} alt={sofa.alt} fill priority sizes="(min-width: 1024px) 50vw, 90vw" className={styles.photoImg} />
+            ) : (
+              <div className={styles.photoStandIn} role="img" aria-label={sofa.alt}>
+                <span>Sem přijde fotka: já na gauči s notebookem</span>
+              </div>
+            )}
+          </div>
+
+          <ul className={styles.notes} role="list">
+            {hero.notes.map((n) => (
+              <li key={n.k}>
+                <b>{n.k}</b>
+                <span>{typo(n.v)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className={styles.bottom}>
+          <p className={styles.intro}>{typo(hero.intro)}</p>
+          <div className={styles.actions}>
+            <a className={shared.button} href="#kontakt" data-magnetic="">
+              {hero.ctaPrimary}
+              <Arrow className={shared.arrow} />
+            </a>
+            <a className={shared.link} href="#co-delam">
+              {hero.ctaSecondary}
+            </a>
           </div>
         </div>
       </div>

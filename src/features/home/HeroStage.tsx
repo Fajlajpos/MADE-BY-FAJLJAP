@@ -42,7 +42,7 @@ export function HeroStage() {
     }
     const onResize = () => {
       const w = window.innerWidth
-      setShift(w < 760 ? 0 : w < 1100 ? 1.1 : 1.55)
+      setShift(0)
       onScroll()
     }
     onResize()
