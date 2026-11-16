@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { site } from '@/content/site'
 import { typo } from '@/lib/typo/czech'
 import { NavList } from './NavList'
@@ -66,6 +67,12 @@ export function Footer() {
         <p>
           © {YEAR} {site.brand}
         </p>
+        {/* the signature I put on every job: small, in the middle */}
+        <span className={styles.signature}>
+          <Image src="/brand/made-by-fajlajp-small.webp" alt="Made by FAJLAJP" width={900} height={154} unoptimized />
+          {/* a small glint that runs across it now and then */}
+          <span className={styles.signatureGlint} aria-hidden="true" />
+        </span>
         <a className={styles.top} href="#obsah">
           Zpátky nahoru
           <svg viewBox="0 0 24 24" aria-hidden="true">

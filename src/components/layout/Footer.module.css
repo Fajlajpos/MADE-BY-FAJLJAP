@@ -116,10 +116,10 @@
 }
 
 .base {
-  display: flex;
-  flex-wrap: wrap;
+  /* © left, the signature in the middle, „Zpátky nahoru“ right */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-4);
   margin-top: var(--space-8);
   padding-top: var(--space-4);
@@ -189,5 +189,96 @@
 
   .colOperator {
     grid-column: 11 / 13;
+  }
+}
+
+/* „MADE BY FAJLAJP“ — the signature, small, in the middle of the base row. It floats a little,
+   catches a soft light from above, and a thin glint runs across it now and then. */
+.signature {
+  position: relative;
+  justify-self: center;
+  display: block;
+  line-height: 0;
+}
+
+.signature img {
+  display: block;
+  width: auto;
+  height: 24px;
+  /* lifted: the dark chrome reads on the black */
+  filter: brightness(1.2) contrast(1.05) drop-shadow(0 4px 6px rgb(0 0 0 / 0.6));
+}
+
+.signatureGlint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask: url('/brand/made-by-fajlajp-small.webp') center / 100% 100% no-repeat;
+  mask: url('/brand/made-by-fajlajp-small.webp') center / 100% 100% no-repeat;
+  background: linear-gradient(105deg, rgb(255 255 255 / 0) 44%, rgb(255 255 255 / 0.45) 50%, rgb(255 255 255 / 0) 56%) no-repeat;
+  background-size: 300% 100%;
+  background-position: 120% 0;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .signature {
+    animation: signFloat 4.5s ease-in-out infinite alternate;
+  }
+
+  .signatureGlint {
+    animation: signGlint 7s ease-in-out 1s infinite;
+  }
+
+  /* on hover it lifts a bit and flashes right away */
+  .signature:hover {
+    animation-play-state: paused;
+  }
+
+  .signature:hover .signatureGlint {
+    animation: signGlint 0.9s ease-out;
+  }
+}
+
+@keyframes signFloat {
+  from {
+    transform: translateY(-3px) rotate(-0.6deg);
+  }
+
+  to {
+    transform: translateY(3px) rotate(0.6deg);
+  }
+}
+
+@keyframes signGlint {
+  0% {
+    opacity: 1;
+    background-position: 120% 0;
+  }
+
+  14% {
+    opacity: 1;
+    background-position: -20% 0;
+  }
+
+  15%,
+  100% {
+    opacity: 0;
+    background-position: -20% 0;
+  }
+}
+
+.base > :last-child {
+  justify-self: end;
+}
+
+@media (max-width: 599px) {
+  .base {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .base > :last-child {
+    justify-self: center;
   }
 }
