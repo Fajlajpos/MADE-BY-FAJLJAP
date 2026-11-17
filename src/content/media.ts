@@ -23,7 +23,11 @@ export const mediaSlots = {
   // the photo lying on the night desk (3D hero); drawn as a print on the polaroid
   'desk.photo': { alt: 'Fotka na stole', placeholder: 'dusk', focal: [0.5, 0.45] },
   'project.seda-zona': { alt: 'Ateliér Šedá Zóna, web', placeholder: 'cold' },
-  'project.kavarna-sum': { alt: 'Kavárna Šum, e-shop', placeholder: 'warm' },
+  'project.cukrarna-kapucin': {
+    src: '/projects/cukrarnakapucin.webp',
+    alt: 'Web Cukrárna Kapucín: krémová stránka s velkým nápisem Cukrárna Kapucín, podtitulem Poctivé zakázkové pečení a vaše vysněné dorty od roku 1991 a zlatým tlačítkem Poptat pečení',
+    placeholder: 'warm',
+  },
   'project.servis-brzda': { alt: 'Servis Brzda, objednávky v telefonu', placeholder: 'dusk' },
   'project.karbyvisuals': {
     src: '/projects/karbyvisuals.webp',

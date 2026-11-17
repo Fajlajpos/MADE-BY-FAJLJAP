@@ -49,18 +49,20 @@ export const projects: ProjectSummary[] = [
     mock: 'web',
     featured: true,
   },
-  // OVĚŘIT: ukázkový projekt
+  // A real project: the screenshot is the live site (public/projects/cukrarnakapucin.webp).
+  // OVĚŘIT: rok, rozsah práce a text
   {
-    slug: 'kavarna-sum',
+    slug: 'cukrarna-kapucin',
     index: '04',
-    title: 'Kavárna Šum',
-    summary: 'Kavárna, která má otevřeno do rána a prodává i vlastní kávu. Udělal jsem jí e-shop, kde si ji objednáš na tři kliknutí. Sedí tam hlavně lidi s notebookem, takže jsem to dělal pro lidi, jako jsem já.',
+    title: 'Cukrárna Kapucín',
+    summary: 'Rodinná cukrárna, která peče dorty na zakázku už od roku 1991. Web jsem jí udělal teplý a klidný jako jejich výloha: krémová barva, elegantní písmo a drobné kresby zákusků. Dort si u nich poptáš rovnou z webu a je česky i německy.',
     year: 2026,
-    categories: ['e-shop'],
-    role: 'Návrh a stavba e-shopu',
-    slot: 'project.kavarna-sum',
+    categories: ['web', 'navrh'],
+    role: 'Návrh a stavba webu',
+    slot: 'project.cukrarna-kapucin',
     object: 'mug',
-    mock: 'shop',
+    mock: 'web',
+    url: 'https://cukrarnakapucin.cz',
     featured: true,
   },
   // OVĚŘIT: ukázkový projekt
