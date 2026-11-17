@@ -46,7 +46,7 @@ export function Work() {
           const wide = i === 0 || (i === featured.length - 1 && featured.length % 2 === 0)
           const shot =
             project.url && media.src
-              ? { src: media.src, alt: media.alt, url: project.url, video: project.video }
+              ? { src: media.src, alt: media.alt, url: project.url, video: project.video, dark: project.window === 'dark' }
               : undefined
           return (
             <li
@@ -73,7 +73,7 @@ export function Work() {
                       corner={CORNERS[i % CORNERS.length]}
                       wide={wide}
                       shot={shot}
-                      chip={shot ? 'Skutečný e-shop · živě' : undefined}
+                      chip={shot ? (project.categories.includes('e-shop') ? 'Skutečný e-shop · živě' : 'Skutečný web · živě') : undefined}
                     >
                       {hasPhoto && !shot ? (
                         <Media
@@ -92,7 +92,7 @@ export function Work() {
                     corner={CORNERS[i % CORNERS.length]}
                     wide={wide}
                     shot={shot}
-                    chip={shot ? 'Skutečný e-shop · živě' : undefined}
+                    chip={shot ? (project.categories.includes('e-shop') ? 'Skutečný e-shop · živě' : 'Skutečný web · živě') : undefined}
                   >
                     {hasPhoto && !shot ? (
                       <Media

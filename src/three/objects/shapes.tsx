@@ -24,6 +24,7 @@ import { setText } from './glyphs'
  * cardboard or black plastic on the night desk (which morphs it into chrome as it lifts off).
  *   browser → Weby · parcel → E-shopy · pen → Grafika · phone → Aplikace
  *   mug → me · plane → the contact form · play → the reel · tag → prices · wordmark → my name
+ *   camera → a film camera (a project for a cinematographer)
  */
 
 export type MaterialSet = {
@@ -80,6 +81,63 @@ function Cursor({ material, position }: { material: Material; position: [number,
     return g
   }, [])
   return <mesh geometry={geometry} material={material} position={position} rotation={[0, 0, 0.18]} />
+}
+
+/* ── A film camera: the body, two reels on top, the lens toward you ───── */
+
+export function CameraShape({ set }: Props) {
+  return (
+    <group position={[0, -0.12, 0]}>
+      {/* the body */}
+      <RoundedBox args={[0.92, 0.56, 0.5]} radius={0.06} smoothness={4} material={set.body} />
+      {/* a dark panel on the side and the recording light */}
+      <RoundedBox args={[0.42, 0.26, 0.02]} radius={0.02} position={[0.08, 0.02, 0.255]} material={set.inset} />
+      <mesh position={[0.36, 0.2, 0.26]} material={set.accent}>
+        <sphereGeometry args={[0.035, 20, 14]} />
+      </mesh>
+      {/* the lens: a barrel stepping out of the front, its glass and a hood */}
+      <group position={[-0.62, -0.02, 0]} rotation={[0, 0, Math.PI / 2]}>
+        <mesh position={[0, 0.06, 0]} material={set.body}>
+          <cylinderGeometry args={[0.17, 0.19, 0.12, 40]} />
+        </mesh>
+        <mesh position={[0, -0.06, 0]} material={set.body}>
+          <cylinderGeometry args={[0.15, 0.15, 0.14, 40]} />
+        </mesh>
+        {[0.02, -0.04].map((y) => (
+          <mesh key={y} position={[0, y, 0]} material={set.inset}>
+            <torusGeometry args={[0.165, 0.012, 10, 40]} />
+          </mesh>
+        ))}
+        <mesh position={[0, -0.17, 0]} material={set.body}>
+          <cylinderGeometry args={[0.2, 0.15, 0.1, 40, 1, true]} />
+        </mesh>
+        <mesh position={[0, -0.135, 0]} material={set.accent2}>
+          <sphereGeometry args={[0.13, 32, 16, 0, Math.PI * 2, Math.PI * 0.62, Math.PI * 0.38]} />
+        </mesh>
+      </group>
+      {/* the two reels on top */}
+      {[
+        [-0.2, 0.52, 0.27],
+        [0.24, 0.48, 0.23],
+      ].map(([x, y, r]) => (
+        <group key={x} position={[x!, y!, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <mesh material={set.body}>
+            <cylinderGeometry args={[r!, r!, 0.1, 48]} />
+          </mesh>
+          <mesh position={[0, 0.052, 0]} material={set.inset}>
+            <cylinderGeometry args={[r! * 0.32, r! * 0.32, 0.01, 24]} />
+          </mesh>
+          {[0, 1, 2].map((i) => (
+            <mesh key={i} position={[Math.cos((i * Math.PI * 2) / 3) * r! * 0.62, 0.052, Math.sin((i * Math.PI * 2) / 3) * r! * 0.62]} material={set.inset}>
+              <cylinderGeometry args={[r! * 0.18, r! * 0.18, 0.01, 20]} />
+            </mesh>
+          ))}
+        </group>
+      ))}
+      {/* the handle at the back */}
+      <RoundedBox args={[0.12, 0.3, 0.14]} radius={0.04} position={[0.36, -0.36, 0]} material={set.body} />
+    </group>
+  )
 }
 
 /* ── E-shopy: a parcel with tape and a label ────────────────────────── */

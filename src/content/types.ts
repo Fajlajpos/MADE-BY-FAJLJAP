@@ -34,9 +34,11 @@ export type ProjectSummary = {
   /** Key into mediaSlots, e.g. 'project.seda-zona'. */
   slot: string
   /** The chrome symbol shown on the card until the project has a photo. */
-  object: 'browser' | 'parcel' | 'pen' | 'phone' | 'mug' | 'play' | 'tag' | 'plane'
+  object: 'browser' | 'parcel' | 'pen' | 'phone' | 'mug' | 'camera' | 'play' | 'tag' | 'plane'
   /** The live site, for real projects: the card links to it and shows its screenshot in a browser window. */
   url?: string
+  /** The browser window around the screenshot: light (default) or black, for a dark site. */
+  window?: 'light' | 'dark'
   /** A looping screen recording of the live site (mp4 in /public/video) and its first frame. */
   video?: { src: string; poster: string }
   /** The drawn picture of the work shown on the card until the photo comes. */

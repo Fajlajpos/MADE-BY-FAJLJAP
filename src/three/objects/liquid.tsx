@@ -13,7 +13,8 @@ import { MathUtils, Vector3, type Mesh, type MeshPhysicalMaterial } from 'three'
  */
 export type LampState = { position: Vector3; power: number }
 
-const NOISE = /* glsl */ `
+/** 3D simplex noise in GLSL as `lq_noise(vec3)`; shared with the other liquid shapes. */
+export const SIMPLEX = /* glsl */ `
 // 3D simplex noise (Ashima Arts / Stefan Gustavson, MIT)
 vec3 lq_mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec4 lq_mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -58,7 +59,10 @@ float lq_noise(vec3 v) {
   m = m * m;
   return 105.0 * dot(m * m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));
 }
+`
 
+const NOISE = /* glsl */ `
+${SIMPLEX}
 uniform float uTime;
 uniform float uStir;
 uniform vec3 uLampDir;

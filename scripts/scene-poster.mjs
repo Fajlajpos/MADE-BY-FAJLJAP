@@ -1,4 +1,4 @@
-// Usage: node scripts/scene-poster.mjs   (with `npm run dev` running)
+// Usage: node scripts/scene-poster.mjs   (with `npm run dev` running; KINDS=camera for one object)
 // Renders the stills shown before the 3D is up, without JS, and on devices that get no 3D:
 //  - public/objects/<kind>.webp — every chrome object, on a transparent background
 // Re-run after changing a scene or an object.
@@ -43,7 +43,8 @@ await page.addStyleTag({
     canvas { visibility: visible !important; }
     main > section:first-child canvas { visibility: hidden !important; }`,
 })
-const kinds = ['browser', 'parcel', 'pen', 'phone', 'mug', 'plane', 'play', 'tag', 'wordmark']
+// KINDS=camera,tag renders just those
+const kinds = process.env.KINDS?.split(',') ?? ['browser', 'parcel', 'pen', 'phone', 'mug', 'camera', 'plane', 'play', 'tag', 'wordmark']
 for (const kind of kinds) {
   const slot = page.locator(`[data-object="${kind}"]`).first()
   if ((await slot.count()) === 0) {

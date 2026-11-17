@@ -3,28 +3,42 @@
 import { View } from '@react-three/drei'
 import { Canvas, useThree } from '@react-three/fiber'
 import { useEffect, useState } from 'react'
+import { liveSlots } from './context'
 import { ACESFilmicToneMapping } from 'three'
 import type { Tier } from '../quality'
 import { ChromeObject, KitProvider, type ObjectKind } from './ChromeObject'
 
 /** Every object a slot on the page can show; their shaders are compiled up front. */
-const KINDS: ObjectKind[] = ['browser', 'parcel', 'phone', 'pen', 'plane', 'play', 'tag', 'mug', 'wordmark']
+const KINDS: ObjectKind[] = ['browser', 'parcel', 'phone', 'pen', 'plane', 'camera', 'play', 'tag', 'mug', 'wordmark']
 
 /**
  * One transparent canvas fixed over the page (under the header, never catching the pointer).
  * Every <Slot3D/> on the page is a drei View: its object is drawn into the slot's own rectangle
- * with a scissor, so one WebGL context serves all of them, and slots off screen cost nothing.
+ * with a scissor, so one WebGL context serves all of them. Slots off screen are not drawn,
+ * and with none near, the canvas stops drawing.
  */
 export default function SiteCanvas({ tier }: { tier: Exclude<Tier, 'none'> }) {
+  // draw only while some slot is near the screen; the first frames run regardless (warm-up)
+  const [live, setLive] = useState(true)
+  useEffect(() => {
+    const t = setTimeout(() => setLive(liveSlots.get() > 0), 1500)
+    const off = liveSlots.subscribe((n) => setLive(n > 0))
+    return () => {
+      clearTimeout(t)
+      off()
+    }
+  }, [])
   return (
     <Canvas
       aria-hidden="true"
-      dpr={tier === 'high' ? [1, 1.5] : 1}
+      frameloop={live ? 'always' : 'never'}
+      dpr={tier === 'high' ? [1, 1.25] : 1}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance', toneMapping: ACESFilmicToneMapping }}
       style={{ position: 'fixed', inset: 0, zIndex: 50, pointerEvents: 'none' }}
       eventPrefix="client"
     >
       <KitProvider>
+        <ClearWhenIdle live={live} />
         <Warmup />
         <View.Port />
       </KitProvider>
@@ -67,4 +81,15 @@ function Warmup() {
       ))}
     </group>
   )
+}
+
+/** When the canvas stops, wipe its last frame, or the objects would hang over the page. */
+function ClearWhenIdle({ live }: { live: boolean }) {
+  const gl = useThree((s) => s.gl)
+  useEffect(() => {
+    if (live) return
+    gl.setScissorTest(false)
+    gl.clear()
+  }, [live, gl])
+  return null
 }

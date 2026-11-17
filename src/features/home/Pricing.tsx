@@ -4,6 +4,7 @@ import { home } from '@/content/home'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import { Slot3D } from '@/three/site/Slot3D'
+import { FaqCases } from './FaqCases'
 import shared from './home.module.css'
 import styles from './Pricing.module.css'
 
@@ -21,7 +22,8 @@ function Price({ value }: { value: string }) {
 
 /**
  * Kolik to stojí — heading and lead beside the chrome price tag, the price list as ruled rows
- * (job left, price large right), the small print, then the common questions as native <details>.
+ * (job left, price large right), the small print, then the common questions as a pile of game
+ * cases (FaqCases), with the same pile in 3D beside them.
  */
 export function Pricing() {
   const { pricing } = home
@@ -58,29 +60,18 @@ export function Pricing() {
       </ul>
       <p className={styles.note}>{typo(pricing.note)}</p>
 
-      <div className={styles.faq}>
-        <div className={styles.faqHead}>
-          <h3 className={styles.faqTitle}>{typo(pricing.faqLabel)}</h3>
-          <a className={shared.button} href="#kontakt" data-magnetic="">
-            Zeptej se na přesnou cenu
-            <Arrow className={shared.arrow} />
-          </a>
-        </div>
-        <div className={styles.qas}>
-          {pricing.faq.map((qa) => (
-            <details key={qa.q} className={`${styles.qa} glow-card`}>
-              <summary className={styles.q}>
-                <span>{typo(qa.q)}</span>
-                <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M5 12h14" />
-                  <path className={styles.iconV} d="M12 5v14" />
-                </svg>
-              </summary>
-              <p className={styles.a}>{typo(qa.a)}</p>
-            </details>
-          ))}
-        </div>
-      </div>
+      <FaqCases
+        head={
+          <>
+            <h3 className={styles.faqTitle}>{typo(pricing.faqLabel)}</h3>
+            <a className={shared.button} href="#kontakt" data-magnetic="">
+              Zeptej se na přesnou cenu
+              <Arrow className={shared.arrow} />
+            </a>
+          </>
+        }
+        faq={pricing.faq.map((qa) => ({ q: typo(qa.q), a: typo(qa.a) }))}
+      />
     </section>
   )
 }

@@ -4,8 +4,9 @@ import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import type { ServiceObject } from '@/content/home'
 import { prefersReducedMotion } from '@/lib/dom'
+import type { CaseSpec, PileRef } from '../objects/cases'
 import type { ObjectKind } from './ChromeObject'
-import { useThreeEnabled } from './context'
+import { liveSlots, useThreeEnabled } from './context'
 import styles from './Slot3D.module.css'
 
 // three.js lives only in this chunk; the page loads it once 3D is switched on
@@ -32,6 +33,9 @@ type Props = {
   ring?: RingProps
   /** Read every frame: >0 sends the object flying off (the paper plane after sending). */
   launch?: { current: number }
+  /** The FAQ pile: which question is open or hovered, and the cases themselves. */
+  pile?: PileRef
+  cases?: CaseSpec[]
 }
 
 /** Where the lamp (cursor) is, relative to the slot: x, y in half-widths/heights from its centre (y down). */
@@ -46,12 +50,41 @@ const LAMP_REST = { x: -0.9, y: -1.1 }
  * from /public/objects shows instead. Under it the shadow is printed in halftone (plain CSS
  * either way) and slides away from the lamp.
  */
-export function Slot3D({ object, label, className, style, active = false, scale = 1, tone = 'dusk', ring, launch }: Props) {
+export function Slot3D({
+  object,
+  label,
+  className,
+  style,
+  active = false,
+  scale = 1,
+  tone = 'dusk',
+  ring,
+  launch,
+  pile,
+  cases,
+}: Props) {
   const enabled = useThreeEnabled()
   const wrap = useRef<HTMLDivElement>(null)
   const pointer = useRef({ x: 0, y: 0 })
   const lamp = useRef({ ...LAMP_REST })
   const [still] = useState(prefersReducedMotion)
+  // whether the slot is on (or about to come on) the screen: with no slot near, the shared canvas
+  // stops drawing. The object stays mounted either way (mounting again costs more than it saves)
+  const [near, setNear] = useState(false)
+  useEffect(() => {
+    const el = wrap.current
+    if (!enabled || !el) return
+    const io = new IntersectionObserver(([e]) => setNear(e?.isIntersecting ?? false), {
+      rootMargin: '50% 0px',
+    })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [enabled])
+  useEffect(() => {
+    if (!enabled || !near) return
+    liveSlots.add()
+    return () => liveSlots.remove()
+  }, [enabled, near])
 
   // the object leans toward the cursor wherever it is on the page, and the lamp (the cursor)
   // lights it from where it is; the printed shadow slides the other way
@@ -60,7 +93,12 @@ export function Slot3D({ object, label, className, style, active = false, scale 
     const onMove = (e: PointerEvent) => {
       const el = wrap.current
       // nothing to measure while the page scrolls (Interactions.tsx sets the flag)
-      if (!el || e.pointerType === 'touch' || document.documentElement.hasAttribute('data-scrolling')) return
+      if (
+        !el ||
+        e.pointerType === 'touch' ||
+        document.documentElement.hasAttribute('data-scrolling')
+      )
+        return
       const r = el.getBoundingClientRect()
       const dx = e.clientX - (r.left + r.width / 2)
       const dy = e.clientY - (r.top + r.height / 2)
@@ -69,7 +107,11 @@ export function Slot3D({ object, label, className, style, active = false, scale 
       lamp.current.x = Math.max(-5, Math.min(5, dx / (r.width / 2)))
       lamp.current.y = Math.max(-5, Math.min(5, dy / (r.height / 2)))
       // only slots near the cursor need their shadow moved
-      if (Math.abs(lamp.current.y) < 4) el.style.setProperty('--lamp-x', (Math.max(-1.5, Math.min(1.5, lamp.current.x)) / 1.5).toFixed(3))
+      if (Math.abs(lamp.current.y) < 4)
+        el.style.setProperty(
+          '--lamp-x',
+          (Math.max(-1.5, Math.min(1.5, lamp.current.x)) / 1.5).toFixed(3),
+        )
     }
     window.addEventListener('pointermove', onMove, { passive: true })
     return () => window.removeEventListener('pointermove', onMove)
@@ -89,19 +131,27 @@ export function Slot3D({ object, label, className, style, active = false, scale 
       <span className={styles.shadow} aria-hidden="true" />
       {enabled ? (
         <Slot3DView
-          className={styles.view}
-          object={object}
-          pointer={pointer}
-          lamp={lamp}
-          active={active}
-          still={still}
-          scale={scale}
-          ring={ring}
-          launch={launch}
-        />
+            className={styles.view}
+            object={object}
+            pointer={pointer}
+            lamp={lamp}
+            active={active}
+            still={still}
+            scale={scale}
+            ring={ring}
+            launch={launch}
+            pile={pile}
+            cases={cases}
+          />
       ) : (
         // eslint-disable-next-line @next/next/no-img-element -- a fixed still of the 3D object, sized by its slot
-        <img className={styles.still} src={`/objects/${ring ? 'ring' : object}.webp`} alt="" loading="lazy" decoding="async" />
+        <img
+          className={styles.still}
+          src={`/objects/${ring ? 'ring' : object}.webp`}
+          alt=""
+          loading="lazy"
+          decoding="async"
+        />
       )}
     </div>
   )

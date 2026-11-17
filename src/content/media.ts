@@ -25,6 +25,11 @@ export const mediaSlots = {
   'project.seda-zona': { alt: 'Ateliér Šedá Zóna, web', placeholder: 'cold' },
   'project.kavarna-sum': { alt: 'Kavárna Šum, e-shop', placeholder: 'warm' },
   'project.servis-brzda': { alt: 'Servis Brzda, objednávky v telefonu', placeholder: 'dusk' },
+  'project.karbyvisuals': {
+    src: '/projects/karbyvisuals.webp',
+    alt: 'Web Karbyvisuals: velký nápis KARBYVISUALS, pod ním Video produkce, natáčení akcí a střih videa a vedle přehrávač s úvodním videem',
+    placeholder: 'dusk',
+  },
   'project.lindashop': {
     src: '/projects/lindashop-karty.webp',
     alt: 'E-shop Linda Fashion: dvě karty, Novinky sezóny právě dorazily a Dárkový poukaz potěší vždy, pod nimi doprava, vrácení, kamenná prodejna a poradenství',

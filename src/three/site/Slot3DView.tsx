@@ -6,7 +6,8 @@ import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { MathUtils, Vector3, type Group, type PerspectiveCamera as Camera, type PointLight } from 'three'
 import type { LampState } from '../objects/liquid'
 import { tokenColor } from '../tokens'
-import { ChromeObject, LampContext, poseOf, Showcase, type ObjectKind, type PointerRef } from './ChromeObject'
+import type { CaseSpec, PileRef } from '../objects/cases'
+import { ChromeObject, InkContext, LampContext, poseOf, Showcase, type ObjectKind, type PointerRef } from './ChromeObject'
 import { ServiceRing } from './ServiceRing'
 import type { LampRef, RingProps } from './Slot3D'
 
@@ -21,6 +22,8 @@ export default function Slot3DView({
   scale,
   ring,
   launch,
+  pile,
+  cases,
 }: {
   className?: string
   object: ObjectKind
@@ -31,7 +34,10 @@ export default function Slot3DView({
   scale: number
   ring?: RingProps
   launch?: { current: number }
+  pile?: PileRef
+  cases?: CaseSpec[]
 }) {
+  const inkValue = useMemo(() => ({ still, pile, cases }), [still, pile, cases])
   const lampState = useMemo<LampState>(() => ({ position: new Vector3(-1, 1.4, LAMP_Z), power: 0.4 }), [])
   // when the next glint runs across the chrome (clock seconds)
   const [glint] = useState(() => ({ current: 2 + Math.random() * 4 }))
@@ -41,6 +47,7 @@ export default function Slot3DView({
       <CursorLamp lamp={lamp} state={lampState} glint={glint} />
       <Glint next={glint} still={still} />
       <LampContext value={lampState}>
+      <InkContext value={inkValue}>
       {ring ? (
         <ServiceRing objects={ring.objects} active={ring.active} land={ring.land} still={still} />
       ) : (
@@ -50,6 +57,7 @@ export default function Slot3DView({
           </Showcase>
         </Launch>
       )}
+      </InkContext>
       </LampContext>
     </View>
   )

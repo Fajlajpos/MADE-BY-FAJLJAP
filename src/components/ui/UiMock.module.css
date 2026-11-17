@@ -50,6 +50,29 @@
   color: #77736b;
 }
 
+/* a black window, for a dark site */
+.window[data-dark] {
+  background: var(--c-black);
+  color: var(--fg);
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.12),
+    0 3cqw 5cqw -2cqw rgb(0 0 0 / 0.7);
+}
+
+.window[data-dark] .bar {
+  background: var(--c-ink-1);
+  border-bottom: 1px solid rgb(255 255 255 / 0.06);
+}
+
+.window[data-dark] .dots i {
+  background: var(--c-grey-3);
+}
+
+.window[data-dark] .url {
+  background: var(--c-ink-3);
+  color: var(--fg-subtle);
+}
+
 /* web: an architecture studio */
 .webPage {
   padding: 3cqw 4cqw 4cqw;

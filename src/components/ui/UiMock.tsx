@@ -170,6 +170,7 @@ export function ShotWindow({
   url,
   sizes,
   video,
+  dark,
 }: {
   src: string
   alt: string
@@ -177,10 +178,12 @@ export function ShotWindow({
   sizes?: string
   /** A screen recording to loop instead of the still (the still is its poster). */
   video?: { src: string; poster: string }
+  /** A black window, for a dark site. */
+  dark?: boolean
 }) {
   return (
     <div className={styles.mock}>
-      <div className={styles.window}>
+      <div className={styles.window} data-dark={dark || undefined}>
         <Bar url={url.replace(/^https?:\/\//, '')} />
         <div className={styles.shot}>
           {video ? (

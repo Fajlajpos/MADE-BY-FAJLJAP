@@ -1,6 +1,6 @@
 import type { ProjectSummary } from './types'
 
-/** Three made-up sample projects (no photos yet), to be swapped for real work. Phase 2: moved to the DB seed. */
+/** Two real projects, then made-up samples (no photos yet), to be swapped for real work. Phase 2: moved to the DB seed. */
 export const projects: ProjectSummary[] = [
   // A real project: the screenshot is the live site (public/projects/lindashop-karty.webp).
   // OVĚŘIT: rok, rozsah práce a text
@@ -18,10 +18,27 @@ export const projects: ProjectSummary[] = [
     url: 'https://lindashop.cz',
     featured: true,
   },
+  // A real project: the screenshot is the live site (public/projects/karbyvisuals.webp).
+  // OVĚŘIT: rok, rozsah práce a text
+  {
+    slug: 'karbyvisuals',
+    index: '02',
+    title: 'Karbyvisuals',
+    summary: 'Portfolio kameramana a fotografa, který točí videoklipy, akce a stříhá pro české youtubery. Hlavní roli tam hraje jeho video hned v úvodu, kolem tmavé filmové zrno a velké písmo, aby web působil jako jeho práce. Je česky i anglicky a poptávku pošleš rovnou z webu.',
+    year: 2026,
+    categories: ['web', 'navrh'],
+    role: 'Návrh a stavba webu',
+    slot: 'project.karbyvisuals',
+    object: 'camera',
+    mock: 'web',
+    url: 'https://karbyvisuals.cz',
+    window: 'dark',
+    featured: true,
+  },
   // OVĚŘIT: ukázkový projekt
   {
     slug: 'seda-zona',
-    index: '02',
+    index: '03',
     title: 'Ateliér Šedá Zóna',
     summary: 'Web pro malé architektonické studio. Chtěli, aby tam byly hlavně jejich fotky, tak jsem kolem nich nechal hodně místa a písmo dal malý.',
     year: 2026,
@@ -35,7 +52,7 @@ export const projects: ProjectSummary[] = [
   // OVĚŘIT: ukázkový projekt
   {
     slug: 'kavarna-sum',
-    index: '03',
+    index: '04',
     title: 'Kavárna Šum',
     summary: 'Kavárna, která má otevřeno do rána a prodává i vlastní kávu. Udělal jsem jí e-shop, kde si ji objednáš na tři kliknutí. Sedí tam hlavně lidi s notebookem, takže jsem to dělal pro lidi, jako jsem já.',
     year: 2026,
@@ -49,7 +66,7 @@ export const projects: ProjectSummary[] = [
   // OVĚŘIT: ukázkový projekt
   {
     slug: 'servis-brzda',
-    index: '04',
+    index: '05',
     title: 'Servis Brzda',
     summary: 'Malý cykloservis, kde se opravy domlouvaly po telefonu a na papírku. Teď si zákazník opravu objedná v telefonu a dostane zprávu, když je kolo hotové.',
     year: 2025,
