@@ -1,7 +1,7 @@
 'use client'
 
 import { RoundedBox } from '@react-three/drei'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import {
   BufferGeometry,
   CatmullRomCurve3,
@@ -25,6 +25,8 @@ import { setText } from './glyphs'
  *   browser → Weby · parcel → E-shopy · pen → Grafika · phone → Aplikace
  *   mug → me · plane → the contact form · play → the reel · tag → prices · wordmark → my name
  *   camera → a film camera (a project for a cinematographer)
+ *   glasses · can · keys · headphones · controller → my own things: the sunglasses I wear all year,
+ *   an energy drink, the Octavia's key, my headphones, a game controller
  */
 
 export type MaterialSet = {
@@ -136,6 +138,201 @@ export function CameraShape({ set }: Props) {
       ))}
       {/* the handle at the back */}
       <RoundedBox args={[0.12, 0.3, 0.14]} radius={0.04} position={[0.36, -0.36, 0]} material={set.body} />
+    </group>
+  )
+}
+
+/* ── My things: sport sunglasses, a drink can, the car key ──────────── */
+
+/**
+ * My sunglasses: a chunky wraparound frame in the "catfish" shape — two oval lenses that curve
+ * round the face and narrow toward the temples, a thick rounded rim, broad arms. Silver chrome
+ * frame, green mirrored lenses.
+ */
+export function GlassesShape({ set }: Props) {
+  // the lenses: the frame's chrome tinted green, with an oily sheen, like a mirrored coating
+  const lens = useMemo(() => {
+    const m = set.body.clone() as MeshPhysicalMaterial
+    m.side = DoubleSide
+    if (m.isMeshPhysicalMaterial) {
+      m.color.set('#4d6a22')
+      m.metalness = 0.75
+      m.roughness = 0.1
+      m.iridescence = 0.8
+      m.iridescenceIOR = 1.8
+    }
+    return m
+  }, [set.body])
+  useEffect(() => () => lens.dispose(), [lens])
+  const turn = 0.46 // how far each lens turns round the face
+  const r = 0.62 // distance of the lens centres from the middle of the head
+  return (
+    <group rotation={[0.08, 0, 0]}>
+      {[-1, 1].map((s) => (
+        <group key={s} position={[s * Math.sin(turn) * r * 1.25, 0, Math.cos(turn) * r]} rotation={[0, s * turn, s * -0.1]}>
+          {/* the thick rim round the oval lens */}
+          <mesh material={set.body} scale={[1.45, 0.7, 1]}>
+            <torusGeometry args={[0.34, 0.1, 20, 56]} />
+          </mesh>
+          {/* the lens, slightly domed */}
+          <mesh material={lens} scale={[1.45, 0.7, 0.18]} position={[0, 0, -0.02]}>
+            <sphereGeometry args={[0.34, 40, 24, 0, Math.PI * 2, 0, Math.PI / 2]} />
+          </mesh>
+          {/* the frame thickening toward the outer end, where the arm grows out */}
+          <RoundedBox args={[0.22, 0.24, 0.16]} radius={0.07} position={[s * 0.5, 0.04, -0.06]} material={set.body} />
+        </group>
+      ))}
+      {/* the bridge, a heavy rounded bar between the lenses */}
+      <RoundedBox args={[0.2, 0.16, 0.16]} radius={0.07} position={[0, 0.08, 0.6]} material={set.body} />
+      {/* the broad arms, flaring back from the frame and narrowing to the ends */}
+      {[-1, 1].map((s) => (
+        <group key={s} position={[s * 0.86, 0.05, 0.18]} rotation={[0, s * -0.08, 0]}>
+          <RoundedBox args={[0.1, 0.24, 0.7]} radius={0.045} position={[0, 0, -0.3]} material={set.body} />
+          <RoundedBox args={[0.08, 0.13, 0.55]} radius={0.04} position={[0, -0.02, -0.88]} rotation={[0.12, 0, 0]} material={set.body} />
+        </group>
+      ))}
+    </group>
+  )
+}
+
+/** An energy drink: the tall slim can, a printed band in the accent, the neck, rim and ring pull. */
+export function CanShape({ set }: Props) {
+  const r = 0.27
+  return (
+    <group rotation={[0, 0, 0.12]}>
+      <mesh material={set.body}>
+        <cylinderGeometry args={[r, r, 1.3, 48]} />
+      </mesh>
+      {/* the printed band and a thin stripe above it */}
+      <mesh position={[0, -0.08, 0]} material={set.accent}>
+        <cylinderGeometry args={[r + 0.003, r + 0.003, 0.56, 48, 1, true]} />
+      </mesh>
+      <mesh position={[0, 0.3, 0]} material={set.accent}>
+        <cylinderGeometry args={[r + 0.003, r + 0.003, 0.05, 48, 1, true]} />
+      </mesh>
+      {/* the neck and the bottom curving in */}
+      <mesh position={[0, 0.7, 0]} material={set.body}>
+        <cylinderGeometry args={[0.22, r, 0.1, 48]} />
+      </mesh>
+      <mesh position={[0, -0.69, 0]} material={set.body}>
+        <cylinderGeometry args={[r, 0.22, 0.08, 48]} />
+      </mesh>
+      <mesh position={[0, 0.755, 0]} rotation={[Math.PI / 2, 0, 0]} material={set.body}>
+        <torusGeometry args={[0.215, 0.018, 10, 48]} />
+      </mesh>
+      <mesh position={[0, 0.748, 0]} material={set.inset}>
+        <cylinderGeometry args={[0.205, 0.205, 0.01, 40]} />
+      </mesh>
+      {/* the ring pull */}
+      <group position={[0.05, 0.765, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <mesh material={set.body}>
+          <torusGeometry args={[0.055, 0.015, 10, 24]} />
+        </mesh>
+        <RoundedBox args={[0.07, 0.1, 0.02]} radius={0.01} position={[-0.08, 0, 0]} material={set.body} />
+      </group>
+    </group>
+  )
+}
+
+/** Over-ear headphones: the arched headband with its padding, two big cups on yokes, soft cushions. */
+export function HeadphonesShape({ set }: Props) {
+  return (
+    <group rotation={[0, 0.3, 0]}>
+      {/* the headband: an arch, with a padded strip under it */}
+      <mesh position={[0, 0.05, 0]} material={set.body}>
+        <torusGeometry args={[0.62, 0.055, 16, 64, Math.PI]} />
+      </mesh>
+      <mesh position={[0, 0.05, 0]} rotation={[0, 0, Math.PI * 0.18]} material={set.inset}>
+        <torusGeometry args={[0.56, 0.05, 12, 48, Math.PI * 0.64]} />
+      </mesh>
+      {[-1, 1].map((s) => (
+        <group key={s} position={[s * 0.64, -0.12, 0]}>
+          {/* the yoke from the band down to the cup */}
+          <RoundedBox args={[0.06, 0.26, 0.1]} radius={0.025} position={[0, 0.13, 0]} material={set.body} />
+          {/* the cup, its accent ring and the cushion facing in */}
+          <group rotation={[0, 0, Math.PI / 2]}>
+            <mesh material={set.body}>
+              <cylinderGeometry args={[0.27, 0.29, 0.16, 48]} />
+            </mesh>
+            <mesh position={[0, s * -0.085, 0]} material={set.accent}>
+              <torusGeometry args={[0.2, 0.018, 10, 40]} />
+            </mesh>
+          </group>
+          <mesh position={[s * -0.11, 0, 0]} rotation={[0, Math.PI / 2, 0]} material={set.inset}>
+            <torusGeometry args={[0.2, 0.07, 14, 40]} />
+          </mesh>
+        </group>
+      ))}
+    </group>
+  )
+}
+
+/** A game controller: the body with two grips, a d-pad, four face buttons, two thumbsticks. */
+export function ControllerShape({ set }: Props) {
+  return (
+    <group rotation={[0.35, 0, 0]}>
+      <RoundedBox args={[1.2, 0.52, 0.26]} radius={0.12} smoothness={4} material={set.body} />
+      {/* the grips, sloping down and out */}
+      {[-1, 1].map((s) => (
+        <mesh key={s} position={[s * 0.45, -0.3, -0.02]} rotation={[0, 0, s * 0.45]} material={set.body}>
+          <capsuleGeometry args={[0.17, 0.28, 10, 24]} />
+        </mesh>
+      ))}
+      {/* the d-pad */}
+      <group position={[-0.36, 0.06, 0.14]}>
+        <RoundedBox args={[0.2, 0.065, 0.04]} radius={0.015} material={set.inset} />
+        <RoundedBox args={[0.065, 0.2, 0.04]} radius={0.015} material={set.inset} />
+      </group>
+      {/* the four face buttons, one in the accent */}
+      {[
+        [0.36, 0.15],
+        [0.45, 0.06],
+        [0.36, -0.03],
+        [0.27, 0.06],
+      ].map(([x, y], i) => (
+        <mesh key={i} position={[x!, y!, 0.14]} rotation={[Math.PI / 2, 0, 0]} material={i === 0 ? set.accent : set.inset}>
+          <cylinderGeometry args={[0.04, 0.04, 0.04, 20]} />
+        </mesh>
+      ))}
+      {/* the thumbsticks */}
+      {[-0.17, 0.17].map((x) => (
+        <group key={x} position={[x, -0.14, 0.13]}>
+          <mesh rotation={[Math.PI / 2, 0, 0]} material={set.inset}>
+            <cylinderGeometry args={[0.04, 0.05, 0.06, 20]} />
+          </mesh>
+          <mesh position={[0, 0, 0.05]} rotation={[Math.PI / 2, 0, 0]} material={set.body}>
+            <cylinderGeometry args={[0.085, 0.085, 0.035, 28]} />
+          </mesh>
+        </group>
+      ))}
+    </group>
+  )
+}
+
+/** The car key: a flip-key fob with three buttons, its blade out, on a key ring. */
+export function KeysShape({ set }: Props) {
+  return (
+    <group rotation={[0, 0, -0.35]}>
+      <RoundedBox args={[0.46, 0.8, 0.16]} radius={0.08} smoothness={4} material={set.body} />
+      {/* the buttons: lock, unlock, boot */}
+      {[0.18, 0, -0.18].map((y, i) => (
+        <mesh key={y} position={[0, y + 0.04, 0.08]} rotation={[Math.PI / 2, 0, 0]} material={i === 0 ? set.accent : set.inset}>
+          <cylinderGeometry args={[0.075, 0.075, 0.03, 28]} />
+        </mesh>
+      ))}
+      {/* the blade, flipped out of the bottom, with its cuts */}
+      <group position={[0.04, -0.4, 0]}>
+        <RoundedBox args={[0.12, 0.72, 0.05]} radius={0.015} position={[0, -0.36, 0]} material={set.body} />
+        {[-0.2, -0.38, -0.56].map((y) => (
+          <mesh key={y} position={[0.06, y, 0]} material={set.inset}>
+            <boxGeometry args={[0.04, 0.05, 0.055]} />
+          </mesh>
+        ))}
+      </group>
+      {/* the ring through the top */}
+      <mesh position={[0, 0.58, 0]} rotation={[0, Math.PI / 2, 0]} material={set.body}>
+        <torusGeometry args={[0.2, 0.025, 12, 48]} />
+      </mesh>
     </group>
   )
 }

@@ -7,6 +7,11 @@ import { Euler, MathUtils, Plane, Quaternion, Raycaster, Vector2, Vector3, type 
 import { useChromeKit, type ChromeKit } from '../chrome/materials'
 import {
   BrowserShape,
+  CanShape,
+  GlassesShape,
+  ControllerShape,
+  HeadphonesShape,
+  KeysShape,
   MugShape,
   ParcelShape,
   PenShape,
@@ -19,7 +24,8 @@ import {
 
 /**
  * The hero: a cluster of polished chrome — the things I make (a browser, a parcel, a phone, a pen
- * nib, a paper plane, a play button, a price tag, my mug) and a few pure forms between them.
+ * nib, a paper plane, a play button, a price tag), my own things (my mug, the sport sunglasses I
+ * wear all year, an energy drink, the Octavia's key, my headphones, a game controller) and a few pure forms between them.
  * Each one is a body on a spring toward its place in the cluster; bodies push each other apart,
  * the cursor pushes them away, a click knocks one spinning. As the hero scrolls out, the cluster
  * opens up and drifts toward the camera. A warm light follows the cursor, so the chrome flashes
@@ -35,6 +41,11 @@ export type Kind =
   | 'play'
   | 'tag'
   | 'mug'
+  | 'glasses'
+  | 'can'
+  | 'keys'
+  | 'headphones'
+  | 'controller'
   | 'sphere'
   | 'torus'
   | 'pill'
@@ -54,12 +65,12 @@ const BODIES: BodyDef[] = [
   { kind: 'play', home: [0.55, -1.75, 0.6], scale: 0.85, radius: 0.62, spin: 0.35 },
   { kind: 'tag', home: [2.75, 1.05, 0.5], scale: 0.7, radius: 0.55, spin: 0.45 },
   { kind: 'mug', home: [-2.85, 0.95, -0.4], scale: 0.75, radius: 0.55, spin: 0.3 },
-  { kind: 'sphere', home: [-0.8, -1.55, -0.8], scale: 0.55, radius: 0.55, spin: 0.2 },
-  { kind: 'torus', home: [3.2, -1.6, -0.6], scale: 0.62, radius: 0.62, spin: 0.5 },
-  { kind: 'pill', home: [-2.9, -1.5, 0.2], scale: 0.6, radius: 0.55, spin: 0.45 },
-  { kind: 'cube', home: [-0.25, 2.35, -1.2], scale: 0.55, radius: 0.5, spin: 0.4 },
+  { kind: 'glasses', home: [-0.8, -1.55, -0.6], scale: 0.85, radius: 0.75, spin: 0.25 },
+  { kind: 'headphones', home: [3.2, -1.6, -0.6], scale: 0.85, radius: 0.7, spin: 0.35 },
+  { kind: 'can', home: [-2.9, -1.5, 0.2], scale: 0.75, radius: 0.55, spin: 0.4 },
+  { kind: 'keys', home: [-0.25, 2.35, -1.2], scale: 0.7, radius: 0.5, spin: 0.35 },
   { kind: 'ring', home: [1.7, 0.2, 1.4], scale: 0.5, radius: 0.48, spin: 0.6 },
-  { kind: 'drop', home: [-3.6, -0.15, -1], scale: 0.45, radius: 0.42, spin: 0.3 },
+  { kind: 'controller', home: [-3.6, -0.15, -1], scale: 0.75, radius: 0.6, spin: 0.35 },
   { kind: 'sphere', home: [3.85, 0.1, -1.2], scale: 0.32, radius: 0.32, spin: 0.2 },
   { kind: 'torus', home: [-1.9, 2.75, -1.4], scale: 0.38, radius: 0.38, spin: 0.7 },
 ]
@@ -273,6 +284,16 @@ export function Shape({ kind, sets }: { kind: Kind; sets: Sets }): ReactNode {
       return <TagShape set={chrome} />
     case 'mug':
       return <MugShape set={{ body: kit.chrome, accent: kit.orange, accent2: kit.orange, inset: kit.dark }} />
+    case 'glasses':
+      return <GlassesShape set={chrome} />
+    case 'can':
+      return <CanShape set={chrome} />
+    case 'keys':
+      return <KeysShape set={chrome} />
+    case 'headphones':
+      return <HeadphonesShape set={chrome} />
+    case 'controller':
+      return <ControllerShape set={chrome} />
     case 'sphere':
       return (
         <mesh material={kit.chrome}>

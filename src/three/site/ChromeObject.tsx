@@ -8,6 +8,11 @@ import { useChromeKit, type ChromeKit } from '../chrome/materials'
 import {
   BrowserShape,
   CameraShape,
+  CanShape,
+  GlassesShape,
+  ControllerShape,
+  HeadphonesShape,
+  KeysShape,
   MugShape,
   ParcelShape,
   PenShape,
@@ -29,7 +34,7 @@ import { CasePile, type CaseSpec, type PileRef } from '../objects/cases'
  *   liquid → a drop of liquid chrome that swells toward the lamp (for <Drift/> between sections)
  *   cases → the FAQ as a pile of game cases (opens the one whose question is open)
  */
-export type ObjectKind = ServiceObject | 'mug' | 'plane' | 'camera' | 'play' | 'tag' | 'wordmark' | 'liquid' | 'cases'
+export type ObjectKind = ServiceObject | 'mug' | 'plane' | 'camera' | 'glasses' | 'can' | 'keys' | 'headphones' | 'controller' | 'play' | 'tag' | 'wordmark' | 'liquid' | 'cases'
 
 /** The FAQ pile's state and cases, for the cases object (set by Slot3DView). */
 export const InkContext = createContext<{ still: boolean; pile?: PileRef; cases?: CaseSpec[] }>({ still: false })
@@ -76,6 +81,16 @@ export function ChromeObject({ kind }: { kind: ObjectKind }) {
           <PlaneShape set={chrome} />
         </group>
       )
+    case 'glasses':
+      return <GlassesShape set={chrome} />
+    case 'can':
+      return <CanShape set={chrome} />
+    case 'keys':
+      return <KeysShape set={chrome} />
+    case 'headphones':
+      return <HeadphonesShape set={chrome} />
+    case 'controller':
+      return <ControllerShape set={chrome} />
     case 'camera':
       return <CameraShape set={chrome} />
     case 'play':
@@ -117,6 +132,7 @@ export type Pose = { yaw: number; sway: number; lean?: number }
 const POSES: Partial<Record<ObjectKind, Pose>> = {
   play: { yaw: -0.28, sway: 0.42 },
   camera: { yaw: -0.55, sway: 0.4 },
+  glasses: { yaw: 0.25, sway: 0.4 },
   tag: { yaw: -0.3, sway: 0.5 },
   wordmark: { yaw: 0, sway: 0.16, lean: 0.35 },
   liquid: { yaw: 0, sway: 0.5, lean: 0.4 },
