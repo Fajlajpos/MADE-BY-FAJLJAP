@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { site } from '@/content/site'
+import { rootOf } from '@/content'
+import { content } from '@/content/server'
+import { LangSwitch } from './LangSwitch'
 import { HeaderShell } from './HeaderShell'
 import { LogoEgg } from './LogoEgg'
 import { MobileMenu } from './MobileMenu'
@@ -12,11 +14,12 @@ import styles from './Header.module.css'
  * hero, and once the page moves it gets a dark ground (HeaderShell). Below 1024 px the sections
  * move into <MobileMenu/>.
  */
-export function Header() {
+export async function Header() {
+  const { site, ui, lang } = await content()
   return (
     <HeaderShell className={styles.header}>
       <div className={styles.bar}>
-        <Link href="/" className={styles.brand} aria-label={`${site.brand} – úvod`}>
+        <Link href={rootOf(lang)} className={styles.brand} aria-label={`${site.brand} – ${ui.homeLabel}`}>
           {/* the chrome logotype (public/brand, cut out by scripts/logo-cutout.mjs) */}
           <Image
             src="/brand/logo-fajlajp-nav.webp"
@@ -32,12 +35,13 @@ export function Header() {
           <LogoEgg />
         </Link>
 
-        <nav className={styles.nav} aria-label="Hlavní navigace">
+        <nav className={styles.nav} aria-label={ui.mainNav}>
           <NavList className={styles.list} linkClassName={styles.link} />
         </nav>
 
-        <Link href="/#kontakt" className={styles.cta} data-magnetic="">
-          Napiš mi
+        <LangSwitch className={styles.lang} />
+        <Link href={`${rootOf(lang)}#kontakt`} className={styles.cta} data-magnetic="">
+          {ui.cta}
         </Link>
         <MobileMenu />
       </div>

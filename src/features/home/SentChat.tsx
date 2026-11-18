@@ -1,5 +1,6 @@
 'use client'
 
+import { useContent } from '@/content/client'
 import { useEffect, useState } from 'react'
 import { typo } from '@/lib/typo/czech'
 import styles from './Contact.module.css'
@@ -10,6 +11,7 @@ import styles from './Contact.module.css'
  * name and a „seen“ under it. Reduced motion: everything at once.
  */
 export function SentChat({ name, message, reply, no }: { name: string; message: string; reply: string[]; no: string }) {
+  const t = useContent().ui.form
   // 0: only their message · 1: me typing · 2+: my lines, one by one
   // with reduced motion, everything is there from the start (this mounts only after a send, on
   // the client, so reading the setting here is safe)
@@ -36,7 +38,7 @@ export function SentChat({ name, message, reply, no }: { name: string; message: 
         <img className={styles.chatAvatar} src="/photos/profilovka.webp" alt="" width={36} height={36} />
         <span>
           <b>fajlajpos</b>
-          <small>poptávka č. {no}</small>
+          <small>{t.no} {no}</small>
         </span>
       </div>
 
@@ -47,7 +49,7 @@ export function SentChat({ name, message, reply, no }: { name: string; message: 
           </li>
         )}
         {stage === 1 && (
-          <li className={styles.typing} aria-label="píše…">
+          <li className={styles.typing} aria-label={t.typing}>
             <i />
             <i />
             <i />
@@ -59,7 +61,7 @@ export function SentChat({ name, message, reply, no }: { name: string; message: 
           </li>
         ))}
       </ol>
-      {stage >= 1 + reply.length && <p className={styles.seen}>Zobrazeno</p>}
+      {stage >= 1 + reply.length && <p className={styles.seen}>{t.seen}</p>}
     </div>
   )
 }

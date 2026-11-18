@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import { Arrow } from '@/components/ui/Arrow'
-import { home } from '@/content/home'
+import { content } from '@/content/server'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import { Slot3D } from '@/three/site/Slot3D'
@@ -10,7 +10,7 @@ import styles from './Pricing.module.css'
 
 /** "od 25 000 Kč" → a small "od", the amount set large, the currency small. */
 function Price({ value }: { value: string }) {
-  const m = /^(od|do|cca)\s+(.+?)(\s+Kč)?$/i.exec(value.trim())
+  const m = /^(od|do|cca|from|up to|about)\s+(.+?)(\s+Kč)?$/i.exec(value.trim())
   if (!m) return <>{typo(value)}</>
   return (
     <>
@@ -25,7 +25,8 @@ function Price({ value }: { value: string }) {
  * (job left, price large right), the small print, then the common questions as a pile of game
  * cases (FaqCases), with the same pile in 3D beside them.
  */
-export function Pricing() {
+export async function Pricing() {
+  const { home, ui } = await content()
   const { pricing } = home
   return (
     <section id="cenik" className={shared.section} aria-labelledby="cenik-title">
@@ -65,7 +66,7 @@ export function Pricing() {
           <>
             <h3 className={styles.faqTitle}>{typo(pricing.faqLabel)}</h3>
             <a className={shared.button} href="#kontakt" data-magnetic="">
-              Zeptej se na přesnou cenu
+              {ui.pricing.ask}
               <Arrow className={shared.arrow} />
             </a>
           </>

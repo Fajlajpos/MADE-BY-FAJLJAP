@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import { home } from '@/content/home'
-import { getSlot } from '@/content/media'
+import { useContent } from '@/content/client'
 import { prefersReducedMotion } from '@/lib/dom'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
@@ -21,6 +20,7 @@ const easeOut = (t: number) => 1 - (1 - t) ** 3
  * quiet controls for sound and pause. Reduced motion: full width from the start, no autoplay.
  */
 export function Reel() {
+  const { home, getSlot } = useContent()
   const { reel } = home
   const media = getSlot('home.reel')
   const stage = useRef<HTMLDivElement>(null)

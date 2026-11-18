@@ -130,7 +130,8 @@
 
 .foot {
   display: grid;
-  gap: var(--space-3);
+  justify-items: start;
+  gap: var(--space-4);
 }
 
 .mail {

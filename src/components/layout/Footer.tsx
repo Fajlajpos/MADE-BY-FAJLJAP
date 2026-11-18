@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { site } from '@/content/site'
+import { content } from '@/content/server'
 import { typo } from '@/lib/typo/czech'
 import { NavList } from './NavList'
 import styles from './Footer.module.css'
@@ -10,14 +10,16 @@ const YEAR = 2026
  * The foot of every page: quiet columns — a line
  * and the address, the sections, elsewhere, the operator's details (§ 435 OZ) — and the base row.
  */
-export function Footer() {
+export async function Footer() {
+  const { site, ui } = await content()
+  const t = ui.footer
   const { business } = site
   return (
     <footer className={styles.footer}>
 
       <div className={styles.inner}>
         <div className={styles.lead}>
-          <p className={styles.statement}>{typo('Weby a e-shopy od jednoho člověka. Od první skici po spuštění.')}</p>
+          <p className={styles.statement}>{typo(t.statement)}</p>
           <a className={styles.mail} href={`mailto:${site.contact.email}`}>
             {site.contact.email}
           </a>
@@ -25,14 +27,14 @@ export function Footer() {
 
         <nav className={`${styles.col} ${styles.colNav}`} aria-labelledby="pata-stranka">
           <h2 id="pata-stranka" className={styles.colTitle}>
-            Na stránce
+            {t.onPage}
           </h2>
           <NavList className={styles.list} linkClassName={styles.link} indexClassName={styles.index} indexes />
         </nav>
 
         <section className={`${styles.col} ${styles.colElse}`} aria-labelledby="pata-jinde">
           <h2 id="pata-jinde" className={styles.colTitle}>
-            Jinde
+            {t.elsewhere}
           </h2>
           <ul className={styles.list} role="list">
             {site.socials.map((s) => (
@@ -50,12 +52,12 @@ export function Footer() {
 
         <section className={`${styles.col} ${styles.colOperator}`} aria-labelledby="pata-provozovatel">
           <h2 id="pata-provozovatel" className={styles.colTitle}>
-            Provozovatel
+            {t.operator}
           </h2>
           <address className={styles.operator}>
             <span>{business.name}</span>
             <span>{business.address}</span>
-            <span>IČO {business.ico}</span>
+            <span>{t.ico} {business.ico}</span>
             <span className={styles.registry}>{typo(business.registry)}</span>
           </address>
         </section>
@@ -72,7 +74,7 @@ export function Footer() {
           <span className={styles.signatureGlint} aria-hidden="true" />
         </span>
         <a className={styles.top} href="#obsah">
-          Zpátky nahoru
+          {t.top}
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 19V6M6 11l6-6 6 6" />
           </svg>

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { CSSProperties } from 'react'
-import { site } from '@/content/site'
+import { useContent } from '@/content/client'
 
 type Props = {
   className?: string
@@ -34,6 +34,7 @@ export function NavList({
   currentHref,
 }: Props) {
   const pathname = usePathname()
+  const { site } = useContent()
   return (
     <ol className={className} role="list">
       {site.nav.map((item, i) => {

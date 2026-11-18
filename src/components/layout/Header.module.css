@@ -172,6 +172,12 @@
   transform-origin: left;
 }
 
+/* CZ | EN, beside „Napiš mi“; on a phone it lives in the menu */
+.lang {
+  display: none;
+  margin-left: auto;
+}
+
 .cta {
   display: none;
   align-items: center;
@@ -193,7 +199,8 @@
 }
 
 @media (min-width: 640px) {
-  .cta {
+  .cta,
+  .lang {
     display: inline-flex;
   }
 }

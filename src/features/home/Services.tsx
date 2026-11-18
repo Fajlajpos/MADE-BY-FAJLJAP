@@ -2,7 +2,8 @@ import type { CSSProperties } from 'react'
 import { Showcase, type Corner, type Hue } from '@/components/showcase/Showcase'
 import { Arrow } from '@/components/ui/Arrow'
 import type { MockKind } from '@/components/ui/UiMock'
-import { home, type Service } from '@/content/home'
+import type { Service } from '@/content/home'
+import { content } from '@/content/server'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import shared from './home.module.css'
@@ -22,7 +23,8 @@ const LOOK: Record<Service['id'], { mock: MockKind; hue: Hue; corner: Corner }> 
  * plate's corner; beside it the title, what it is and what you get. On a wide screen the cards
  * alternate sides. Each service keeps its id (#sluzba-weby …) — other parts of the site link to them.
  */
-export function Services() {
+export async function Services() {
+  const { home } = await content()
   const { services } = home
   return (
     <section id="co-delam" className={shared.section} aria-labelledby="co-delam-title">

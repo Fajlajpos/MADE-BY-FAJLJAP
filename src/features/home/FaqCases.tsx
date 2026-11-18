@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent, 
 import type { CaseSpec, PileState } from '@/three/objects/cases'
 import { useThreeEnabled } from '@/three/site/context'
 import { Slot3D } from '@/three/site/Slot3D'
+import { useContent } from '@/content/client'
 import styles from './Faq.module.css'
 
 /**
@@ -30,10 +31,14 @@ const no = (i: number) => String(i + 1).padStart(2, '0')
  */
 export function FaqCases({ head, faq }: { head: ReactNode; faq: { q: string; a: string }[] }) {
   const three = useThreeEnabled()
+  const t = useContent().ui.faq
   const [active, setActive] = useState(0)
   const pile = useRef<PileState>({ open: 0, hover: -1, ndc: null, click: false, hit: -1 })
   const tabs = useRef<(HTMLButtonElement | null)[]>([])
-  const cases = useMemo<CaseSpec[]>(() => faq.map((qa, i) => ({ q: qa.q, ...PILE[i % PILE.length]! })), [faq])
+  const cases = useMemo<CaseSpec[]>(
+    () => faq.map((qa, i) => ({ q: qa.q, ...PILE[i % PILE.length]!, print: { chapter: t.chapter, cover: t.cover, readOn: t.readOn } })),
+    [faq, t],
+  )
   const count = faq.length
 
   const open = useCallback((i: number) => {
@@ -78,13 +83,13 @@ export function FaqCases({ head, faq }: { head: ReactNode; faq: { q: string; a: 
         >
           <Slot3D object="cases" className={styles.pile} pile={pile} cases={cases} />
           <p className={styles.hint} aria-hidden="true">
-            Klikni na krabičku
+            {t.hint}
           </p>
         </div>
       )}
 
       <div className={styles.book}>
-        <div role="tablist" aria-label="Kapitoly" className={styles.toc}>
+        <div role="tablist" aria-label={t.chapters} className={styles.toc}>
           {faq.map((item, i) => (
             <button
               key={item.q}
@@ -96,7 +101,7 @@ export function FaqCases({ head, faq }: { head: ReactNode; faq: { q: string; a: 
               id={`faq-tab-${i}`}
               aria-controls={`faq-panel-${i}`}
               aria-selected={i === active}
-              aria-label={`Kapitola ${i + 1}: ${item.q}`}
+              aria-label={`${t.chapter} ${i + 1}: ${item.q}`}
               tabIndex={i === active ? 0 : -1}
               className={styles.tab}
               data-band={PILE[i % PILE.length]!.band}
@@ -123,7 +128,7 @@ export function FaqCases({ head, faq }: { head: ReactNode; faq: { q: string; a: 
             data-band={PILE[i % PILE.length]!.band}
           >
             <p className={styles.kicker}>
-              Kapitola <b>{no(i)}</b> <span>/ {no(count - 1)}</span>
+              {t.chapter} <b>{no(i)}</b> <span>/ {no(count - 1)}</span>
             </p>
             <h4 className={styles.question}>{item.q}</h4>
             <p className={styles.answer}>{item.a}</p>
@@ -132,11 +137,11 @@ export function FaqCases({ head, faq }: { head: ReactNode; faq: { q: string; a: 
 
         <div className={styles.nav}>
           <button type="button" className={styles.navBtn} onClick={() => open((active - 1 + count) % count)}>
-            <span aria-hidden="true">←</span> Předchozí
+            <span aria-hidden="true">←</span> {t.prev}
           </button>
           <button type="button" className={`${styles.navBtn} ${styles.next}`} onClick={() => open((active + 1) % count)}>
             <span className={styles.nextLabel}>
-              Další kapitola
+              {t.next}
               <small>{faq[(active + 1) % count]!.q}</small>
             </span>
             <span aria-hidden="true">→</span>
@@ -144,7 +149,7 @@ export function FaqCases({ head, faq }: { head: ReactNode; faq: { q: string; a: 
         </div>
       </div>
       <span className="visually-hidden" aria-live="polite">
-        Kapitola {active + 1}: {qa.q}
+        {t.chapter} {active + 1}: {qa.q}
       </span>
     </div>
   )

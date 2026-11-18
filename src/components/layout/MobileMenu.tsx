@@ -3,7 +3,9 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useId, useRef, useState } from 'react'
-import { site } from '@/content/site'
+import { rootOf } from '@/content'
+import { useContent } from '@/content/client'
+import { LangSwitch } from './LangSwitch'
 import { NavList } from './NavList'
 import styles from './MobileMenu.module.css'
 
@@ -17,6 +19,7 @@ const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), [tabi
  */
 export function MobileMenu() {
   const dialogId = useId()
+  const { site, ui, lang } = useContent()
   const [open, setOpen] = useState(false)
   const openerRef = useRef<HTMLButtonElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
@@ -99,7 +102,7 @@ export function MobileMenu() {
         className={styles.opener}
         aria-expanded={open}
         aria-controls={dialogId}
-        aria-label="Otevřít menu"
+        aria-label={ui.menu.open}
         onClick={() => setOpen(true)}
       >
         <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
@@ -112,24 +115,24 @@ export function MobileMenu() {
         id={dialogId}
         role="dialog"
         aria-modal="true"
-        aria-label="Menu"
+        aria-label={ui.menu.label}
         className={styles.sheet}
         data-open={open}
         inert={!open}
       >
         <div className={styles.top}>
-          <Link href="/" className={styles.brand} aria-label={`${site.brand} – úvod`} onClick={onNavigate}>
+          <Link href={rootOf(lang)} className={styles.brand} aria-label={`${site.brand} – ${ui.homeLabel}`} onClick={onNavigate}>
             {site.brand}
             <span className={styles.dot} aria-hidden="true" />
           </Link>
-          <button ref={closeRef} type="button" className={styles.close} onClick={() => close(true)} aria-label="Zavřít menu">
+          <button ref={closeRef} type="button" className={styles.close} onClick={() => close(true)} aria-label={ui.menu.close}>
             <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
               <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none" />
             </svg>
           </button>
         </div>
 
-        <nav className={styles.nav} aria-label="Hlavní navigace">
+        <nav className={styles.nav} aria-label={ui.mainNav}>
           <NavList
             indexes
             className={styles.list}
@@ -141,6 +144,7 @@ export function MobileMenu() {
         </nav>
 
         <div className={styles.foot}>
+          <LangSwitch />
           <a className={styles.mail} href={`mailto:${site.contact.email}`}>
             {site.contact.email}
           </a>

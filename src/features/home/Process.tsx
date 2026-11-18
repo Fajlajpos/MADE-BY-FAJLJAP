@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import { home } from '@/content/home'
+import { content } from '@/content/server'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import shared from './home.module.css'
@@ -10,7 +10,8 @@ import styles from './Process.module.css'
  * cards (four columns stepping down on a wide screen, two by two on a tablet, stacked on a
  * phone): the number and how long it takes, the title, and a short description.
  */
-export function Process() {
+export async function Process() {
+  const { home } = await content()
   const { process } = home
   return (
     <section id="jak-to-probiha" className={shared.section} aria-labelledby="proces-title">

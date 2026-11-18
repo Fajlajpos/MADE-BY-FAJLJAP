@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react'
-import { home } from '@/content/home'
-import { site } from '@/content/site'
+import { content } from '@/content/server'
 import { typo } from '@/lib/typo/czech'
 import { ContactStage } from './ContactStage'
 import { CopyEmail } from './CopyEmail'
@@ -11,7 +10,8 @@ import styles from './Contact.module.css'
  * Kontakt — „Napiš mi“ across the page, then the address to copy on the left and the inquiry
  * form on the right. The chrome paper plane takes off once it is sent.
  */
-export function Contact() {
+export async function Contact() {
+  const { home, site, ui } = await content()
   const { contact } = home
   const heading = typo(contact.heading)
   const ends = /[.!?…]$/.test(heading)
@@ -36,14 +36,14 @@ export function Contact() {
             {typo(contact.body)}
           </p>
           <div className={styles.mailBlock} data-reveal="" style={{ '--reveal-i': 1 } as CSSProperties}>
-            <p className={styles.mailLabel}>Nebo rovnou na e-mail</p>
+            <p className={styles.mailLabel}>{ui.contact.mailLabel}</p>
             <a className={styles.mail} href={`mailto:${site.contact.email}`}>
               {site.contact.email}
             </a>
             <CopyEmail email={site.contact.email} label={contact.copyLabel} copied={contact.copied} />
           </div>
           <div className={styles.igBlock} data-reveal="" style={{ '--reveal-i': 2 } as CSSProperties}>
-            <p className={styles.mailLabel}>Nebo mi napiš na Instagram</p>
+            <p className={styles.mailLabel}>{ui.contact.igLabel}</p>
             <a
               className={styles.igButton}
               href="https://ig.me/m/fajlajpos"
@@ -53,7 +53,7 @@ export function Contact() {
               {/* eslint-disable-next-line @next/next/no-img-element -- a 240 px avatar */}
               <img className={styles.igAvatar} src="/photos/profilovka.webp" alt="" width={32} height={32} />
               @fajlajpos
-              <span className="visually-hidden"> – napsat zprávu na Instagramu (otevře se v novém okně)</span>
+              <span className="visually-hidden"> – {ui.contact.igSr} {ui.newWindow}</span>
             </a>
           </div>
         </div>

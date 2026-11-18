@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useContent } from '@/content/client'
 import styles from './Header.module.css'
 
 const CLICKS = 5
@@ -13,6 +14,7 @@ const WINDOW_MS = 2000
 export function LogoEgg() {
   const ref = useRef<HTMLSpanElement>(null)
   const [found, setFound] = useState(false)
+  const { egg } = useContent().ui
 
   useEffect(() => {
     const link = ref.current?.closest('a')
@@ -53,12 +55,12 @@ export function LogoEgg() {
       {found && (
         <span className={styles.egg} role="status">
           <span>
-            <strong>Našel jsi tajnou slevu <em>5 %</em>.</strong> Napiš do poptávky slovo <code>kaves</code> a sleva je tvoje.
+            <strong>{egg.found} <em>5 %</em>.</strong> {egg.write} <code>kaves</code> {egg.yours}
           </span>
           <button
             type="button"
             className={styles.eggClose}
-            aria-label="Zavřít"
+            aria-label={egg.close}
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()

@@ -6,13 +6,15 @@ import { SmoothScroll } from '@/components/fx/SmoothScroll'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { ThreeRoot } from '@/three/site/ThreeRoot'
+import { content } from '@/content/server'
 
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+  const { ui } = await content()
   return (
     <ThreeRoot>
       <MoodLight />
       <a className="skip-link" href="#obsah">
-        Přeskočit na obsah
+        {ui.skipLink}
       </a>
       <Header />
       <main id="obsah" tabIndex={-1}>

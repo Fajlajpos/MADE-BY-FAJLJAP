@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
-import { site } from '@/content/site'
+import { useContent } from '@/content/client'
 import { scrollToTarget } from '@/three/scroll'
 import styles from './CommandPalette.module.css'
 
@@ -22,6 +22,8 @@ type Command = { id: string; label: string; hint: string; run: () => void | Prom
  */
 export function CommandPalette({ triggerClassName }: { triggerClassName?: string }) {
   const router = useRouter()
+  const { site, ui } = useContent()
+  const t = ui.palette
   const uid = useId().replace(/:/g, '')
   const triggerRef = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -43,10 +45,10 @@ export function CommandPalette({ triggerClassName }: { triggerClassName?: string
 
   const commands = useMemo<Command[]>(
     () => [
-      ...site.nav.map((item) => ({ id: item.href, label: item.label, hint: 'sekce', run: () => goTo(item.href) })),
+      ...site.nav.map((item) => ({ id: item.href, label: item.label, hint: t.section, run: () => goTo(item.href) })),
       {
         id: 'mail',
-        label: 'Napsat e-mail',
+        label: t.writeEmail,
         hint: site.contact.email,
         run: () => {
           window.location.href = `mailto:${site.contact.email}`
@@ -54,21 +56,21 @@ export function CommandPalette({ triggerClassName }: { triggerClassName?: string
       },
       {
         id: 'copy',
-        label: 'Zkopírovat e-mail',
-        hint: 'do schránky',
+        label: t.copyEmail,
+        hint: t.copyEmailHint,
         run: async () => {
           try {
             await navigator.clipboard.writeText(site.contact.email)
-            setMessage(`Zkopírováno: ${site.contact.email}`)
+            setMessage(`${t.copied} ${site.contact.email}`)
           } catch {
-            setMessage(`Kopírování nešlo. E-mail: ${site.contact.email}`)
+            setMessage(`${t.copyFailed} ${site.contact.email}`)
           }
           window.setTimeout(() => setMessage(''), 2600)
         },
       },
-      { id: 'top', label: 'Nahoru', hint: 'začátek stránky', run: () => scrollToTarget(0) },
+      { id: 'top', label: t.top, hint: t.topHint, run: () => scrollToTarget(0) },
     ],
-    [goTo],
+    [goTo, site, t],
   )
 
   const needle = query.trim().toLocaleLowerCase('cs')
@@ -125,7 +127,7 @@ export function CommandPalette({ triggerClassName }: { triggerClassName?: string
         ref={triggerRef}
         type="button"
         className={[styles.trigger, triggerClassName].filter(Boolean).join(' ')}
-        aria-label="Rejstřík: hledat a přejít (Ctrl K)"
+        aria-label={t.open}
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={show}
@@ -135,16 +137,16 @@ export function CommandPalette({ triggerClassName }: { triggerClassName?: string
           <path d="M15 15l5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />
         </svg>
         <span className={styles.triggerText} aria-hidden="true">
-          rejstřík
+          {t.name}
         </span>
         <kbd className={styles.kbd}>Ctrl K</kbd>
       </button>
 
       {open && (
         <div className={styles.backdrop} onMouseDown={(e) => e.target === e.currentTarget && hide()}>
-          <div className={styles.panel} role="dialog" aria-modal="true" aria-label="Kam to bude?">
+          <div className={styles.panel} role="dialog" aria-modal="true" aria-label={t.title}>
             <p className={styles.head} aria-hidden="true">
-              <span>rejstřík</span>
+              <span>{t.name}</span>
               <span>Ctrl K</span>
             </p>
             <label className="visually-hidden" htmlFor={`${uid}-input`}>
@@ -155,7 +157,7 @@ export function CommandPalette({ triggerClassName }: { triggerClassName?: string
               id={`${uid}-input`}
               className={styles.input}
               type="text"
-              placeholder="Kam to bude? Práce, e-mail…"
+              placeholder={t.placeholder}
               role="combobox"
               aria-controls={`${uid}-list`}
               aria-expanded="true"
@@ -186,7 +188,7 @@ export function CommandPalette({ triggerClassName }: { triggerClassName?: string
                 }
               }}
             />
-            <ul id={`${uid}-list`} className={styles.list} role="listbox" aria-label="Příkazy">
+            <ul id={`${uid}-list`} className={styles.list} role="listbox" aria-label={t.commands}>
               {visible.map((command, i) => (
                 <li
                   key={command.id}
@@ -204,12 +206,12 @@ export function CommandPalette({ triggerClassName }: { triggerClassName?: string
               ))}
               {visible.length === 0 && (
                 <li className={styles.empty} role="presentation">
-                  Nic. Zkus „práce“ nebo „e-mail“.
+                  {t.empty}
                 </li>
               )}
             </ul>
             <p className={styles.foot} aria-hidden="true">
-              ↑↓ vybrat · Enter spustit · Esc zavřít
+              {t.keys}
             </p>
           </div>
         </div>

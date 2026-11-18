@@ -1,5 +1,6 @@
 'use server'
 
+import { isLang } from '@/content'
 import { readInquiry, validateInquiry, type InquiryState } from './inquiry'
 
 /** Faster than this from opening the page to submit is a bot, not a person typing. */
@@ -19,13 +20,14 @@ export async function sendInquiry(_prev: InquiryState, data: FormData): Promise<
   }
 
   const inquiry = readInquiry(data)
-  const errors = validateInquiry(inquiry)
+  const lang = data.get('lang')
+  const errors = validateInquiry(inquiry, isLang(lang) ? lang : 'cs')
   if (Object.keys(errors).length > 0) return { status: 'invalid', errors }
 
   try {
     // TODO (fáze 2): uložit do DB (Inquiry) a poslat oba e-maily přes frontu.
     // Do té doby poptávka skončí jen v logu serveru.
-    console.info('[poptavka]', no, JSON.stringify(inquiry))
+    console.info('[poptavka]', no, isLang(lang) ? lang : 'cs', JSON.stringify(inquiry))
     return { status: 'sent', no }
   } catch {
     return { status: 'failed' }

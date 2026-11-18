@@ -1,4 +1,6 @@
 import { home } from '@/content/home'
+import { home as homeEn } from '@/content/en/home'
+import type { Lang } from '@/content'
 
 /**
  * The inquiry printed on the receipt: one shape, one validator, shared by the form (on blur and
@@ -6,6 +8,19 @@ import { home } from '@/content/home'
  */
 
 const { form } = home.contact
+const forms = { cs: form, en: homeEn.contact.form }
+
+/**
+ * An option as the Czech label, whichever language the form was in: the lists have the same
+ * order in both, so a choice is matched by its position. Anything not offered is dropped.
+ */
+function toCzech(value: string, list: 'services' | 'budgets' | 'deadlines'): string {
+  for (const f of Object.values(forms)) {
+    const i = (f[list] as string[]).indexOf(value)
+    if (i >= 0) return form[list][i] ?? ''
+  }
+  return ''
+}
 
 export type Inquiry = {
   name: string
@@ -44,24 +59,24 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 const PHONE = /^\+?[\d\s()-]{6,20}$/
 
 /** Errors for the fields that are wrong; an empty object means it can be sent. */
-export function validateInquiry(v: Inquiry): InquiryErrors {
+export function validateInquiry(v: Inquiry, lang: Lang = 'cs'): InquiryErrors {
+  const { errors: e } = forms[lang]
   const errors: InquiryErrors = {}
-  if (!v.name.trim()) errors.name = form.errors.name
-  if (!v.email.trim()) errors.email = form.errors.email
-  else if (!EMAIL.test(v.email.trim())) errors.email = form.errors.emailFormat
-  if (v.phone.trim() && !PHONE.test(v.phone.trim())) errors.phone = form.errors.phone
-  if (v.message.trim().length < 10) errors.message = form.errors.message
-  if (!v.consent) errors.consent = form.errors.consent
+  if (!v.name.trim()) errors.name = e.name
+  if (!v.email.trim()) errors.email = e.email
+  else if (!EMAIL.test(v.email.trim())) errors.email = e.emailFormat
+  if (v.phone.trim() && !PHONE.test(v.phone.trim())) errors.phone = e.phone
+  if (v.message.trim().length < 10) errors.message = e.message
+  if (!v.consent) errors.consent = e.consent
   return errors
 }
 
-/** Reads FormData into an Inquiry, trimming lengths and dropping options that are not offered. */
+/**
+ * Reads FormData into an Inquiry, trimming lengths and keeping only offered options (stored as
+ * their Czech labels, so every inquiry reads the same whichever language it came in).
+ */
 export function readInquiry(data: FormData): Inquiry {
   const text = (key: string, max: number) => String(data.get(key) ?? '').slice(0, max)
-  const pick = (key: string, options: readonly string[]) => {
-    const value = text(key, 80)
-    return options.includes(value) ? value : ''
-  }
   return {
     name: text('name', 120),
     email: text('email', 200),
@@ -70,9 +85,10 @@ export function readInquiry(data: FormData): Inquiry {
     services: data
       .getAll('services')
       .map(String)
-      .filter((s) => form.services.includes(s)),
-    budget: pick('budget', form.budgets),
-    deadline: pick('deadline', form.deadlines),
+      .map((s) => toCzech(s, 'services'))
+      .filter(Boolean),
+    budget: toCzech(text('budget', 80), 'budgets'),
+    deadline: toCzech(text('deadline', 80), 'deadlines'),
     message: text('message', 5000),
     consent: data.get('consent') === 'on',
   }

@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
-import { home } from '@/content/home'
+import { useContent } from '@/content/client'
 import { prefersReducedMotion } from '@/lib/dom'
 import { typo } from '@/lib/typo/czech'
 import { detectTier, type Tier } from '@/three/quality'
@@ -16,7 +16,7 @@ const DepthCanvas = dynamic(() => import('@/three/depth/DepthCanvas'), { ssr: fa
  * reduced motion) it is just the three lines on a dark backdrop.
  */
 export function Depth() {
-  const { depth } = home
+  const { depth } = useContent().home
   const root = useRef<HTMLElement>(null)
   const lines = useRef<(HTMLParagraphElement | null)[]>([])
   const progress = useRef(0)

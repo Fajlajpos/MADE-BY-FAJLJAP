@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useContent } from '@/content/client'
 import styles from './VoiceNote.module.css'
 
 type Props = {
@@ -35,6 +36,7 @@ const time = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).
  * and the transcript to read. Until the recording is there, the player stands ready but quiet.
  */
 export function VoiceNote({ src, title, sub, soon, transcript }: Props) {
+  const t = useContent().ui.voice
   const audio = useRef<HTMLAudioElement>(null)
   const root = useRef<HTMLDivElement>(null)
   const [playing, setPlaying] = useState(false)
@@ -82,7 +84,7 @@ export function VoiceNote({ src, title, sub, soon, transcript }: Props) {
         className={styles.play}
         onClick={toggle}
         disabled={!ready}
-        aria-label={playing ? 'Pozastavit nahrávku' : `Přehrát: ${title}`}
+        aria-label={playing ? t.pause : `${t.play} ${title}`}
       >
         <svg viewBox="0 0 24 24" aria-hidden="true">
           {playing ? <path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" /> : <path d="M8 5.5v13l11-6.5z" />}
@@ -91,7 +93,7 @@ export function VoiceNote({ src, title, sub, soon, transcript }: Props) {
 
       <div className={styles.body}>
         <p className={styles.title}>{title}</p>
-        <p className={styles.sub}>{ready ? (left !== null ? `${time(left)} zbývá` : sub) : soon}</p>
+        <p className={styles.sub}>{ready ? (left !== null ? `${time(left)} ${t.left}` : sub) : soon}</p>
       </div>
 
       <span className={styles.wave} onClick={ready ? seek : undefined} aria-hidden="true">
@@ -106,7 +108,7 @@ export function VoiceNote({ src, title, sub, soon, transcript }: Props) {
 
       {transcript && transcript.length > 0 && (
         <details className={styles.transcript}>
-          <summary>Přečíst, co tam říkám</summary>
+          <summary>{t.transcript}</summary>
           {transcript.map((line) => (
             <p key={line}>{line}</p>
           ))}

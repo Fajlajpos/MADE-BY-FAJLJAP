@@ -1,21 +1,35 @@
 import type { Metadata, Viewport } from 'next'
-import { site } from '@/content/site'
-import { fontVariables } from './fonts'
+import { notFound } from 'next/navigation'
+import { LANGS, isLang } from '@/content'
+import { LangProvider } from '@/content/client'
+import { content, getLang } from '@/content/server'
+import { fontVariables } from '../fonts'
 import '@/styles/globals.css'
 
-export const metadata: Metadata = {
-  // OVĚŘIT: skutečná doména webu (nebo NEXT_PUBLIC_SITE_URL)
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://fajlajp.cz'),
-  title: { default: `${site.brand} — weby, e-shopy, aplikace`, template: `%s — ${site.brand}` },
-  description: site.tagline,
-  openGraph: {
-    type: 'website',
-    locale: 'cs_CZ',
-    siteName: site.brand,
-    title: `${site.brand} — weby a e-shopy od jednoho člověka`,
+/** Both languages are built ahead; no other first segment exists. */
+export function generateStaticParams() {
+  return LANGS.map((lang) => ({ lang }))
+}
+export const dynamicParams = false
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { site, ui } = await content()
+  return {
+    // OVĚŘIT: skutečná doména webu (nebo NEXT_PUBLIC_SITE_URL)
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://fajlajp.cz'),
+    title: { default: `${site.brand} — ${ui.meta.default}`, template: `%s — ${site.brand}` },
     description: site.tagline,
-  },
-  twitter: { card: 'summary_large_image' },
+    // the same page in the other language, for search engines
+    alternates: { languages: { cs: '/', en: '/en' } },
+    openGraph: {
+      type: 'website',
+      locale: ui.meta.locale,
+      siteName: site.brand,
+      title: `${site.brand} — ${ui.meta.og}`,
+      description: site.tagline,
+    },
+    twitter: { card: 'summary_large_image' },
+  }
 }
 
 export const viewport: Viewport = {
@@ -23,18 +37,18 @@ export const viewport: Viewport = {
   colorScheme: 'dark',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: LayoutProps<'/[lang]'>) {
+  const lang = await getLang()
+  if (!isLang(lang)) notFound()
   return (
-    <html
-      lang="cs"
-      className={fontVariables}
-      suppressHydrationWarning
-    >
+    <html lang={lang} className={fontVariables} suppressHydrationWarning>
       <head>
         {/* before the first paint: things that only reveal or step with JS may start hidden */}
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
       </head>
-      <body>{children}</body>
+      <body>
+        <LangProvider lang={lang}>{children}</LangProvider>
+      </body>
     </html>
   )
 }

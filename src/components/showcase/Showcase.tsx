@@ -4,15 +4,9 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { ShotWindow, UiMock, type MockKind } from '@/components/ui/UiMock'
 import type { ObjectKind } from '@/three/site/ChromeObject'
 import { Slot3D } from '@/three/site/Slot3D'
+import { useContent } from '@/content/client'
 import styles from './Showcase.module.css'
 
-/** A small piece of UI that floats in front of the picture, closer to you. */
-const CHIPS: Record<MockKind, string> = {
-  web: 'Načteno za 0,8 s',
-  shop: 'Nová objednávka · 578 Kč',
-  redesign: 'Načítání 6,2 s → 0,9 s',
-  app: 'Kolo je hotové',
-}
 
 export type Hue = 'warm' | 'cold' | 'violet' | 'green'
 export type Corner = 'tr' | 'tl' | 'br' | 'bl'
@@ -43,6 +37,8 @@ type Props = {
  * the picture leans toward it, and the object lifts while the cursor is on the card.
  */
 export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, shot, chip, wide, className }: Props) {
+  // a small piece of UI that floats in front of the picture, closer to you
+  const chips: Record<MockKind, string> = useContent().ui.chips
   const root = useRef<HTMLDivElement>(null)
   const [hover, setHover] = useState(false)
 
@@ -108,7 +104,7 @@ export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, 
           {!children && (
             <span className={styles.chip} aria-hidden="true">
               <i />
-              {chip ?? CHIPS[mock]}
+              {chip ?? chips[mock]}
             </span>
           )}
         </div>

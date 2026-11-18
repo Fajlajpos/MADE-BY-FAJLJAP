@@ -38,7 +38,14 @@ export type PileState = {
 export type PileRef = { current: PileState }
 
 /** One case on the pile: its question, the colour of its band, how it lies (yaw in degrees, shift in case widths). */
-export type CaseSpec = { q: string; band: 'accent' | 'blue' | 'grey'; tilt: number; shift: number }
+export type CaseSpec = {
+  q: string
+  band: 'accent' | 'blue' | 'grey'
+  tilt: number
+  shift: number
+  /** The words printed on the case, in the page's language. */
+  print: { chapter: string; cover: string; readOn: string }
+}
 
 // a case, in world units: X along the spine, Y its thickness, Z front (spine) to back
 const W = 1.9
@@ -254,8 +261,8 @@ function useCaseTextures(spec: CaseSpec, index: number) {
       const band = spec.band === 'accent' ? tokenColor('orange') : spec.band === 'blue' ? tokenColor('blue') : '#8a8a90'
       const no = String(index + 1).padStart(2, '0')
       drawSpine(tex.spine, { font, band, no, q: spec.q, vol: index + 1 })
-      drawCover(tex.cover, { font, band, no, vol: index + 1 })
-      drawInsert(tex.insert, { font, band, no, q: spec.q })
+      drawCover(tex.cover, { font, band, no, vol: index + 1, title: spec.print.cover })
+      drawInsert(tex.insert, { font, band, no, q: spec.q, chapter: spec.print.chapter, readOn: spec.print.readOn })
     }
     draw()
     void document.fonts?.ready.then(draw)
@@ -332,7 +339,7 @@ function drawSpine(t: CanvasTexture, p: Print & { q: string; vol: number }) {
   t.needsUpdate = true
 }
 
-function drawCover(t: CanvasTexture, p: Print & { vol: number }) {
+function drawCover(t: CanvasTexture, p: Print & { vol: number; title: string }) {
   const { c, g } = ctxOf(t)
   const { width: w, height: h } = c
   const bg = g.createLinearGradient(0, 0, w, h)
@@ -360,11 +367,11 @@ function drawCover(t: CanvasTexture, p: Print & { vol: number }) {
   g.textBaseline = 'alphabetic'
   g.fillText(p.no, 40, h - 150)
   g.font = `700 64px ${p.font}`
-  g.fillText('NA CO SE LIDI PTAJÍ', 56, h - 70)
+  g.fillText(p.title, 56, h - 70)
   t.needsUpdate = true
 }
 
-function drawInsert(t: CanvasTexture, p: Print & { q: string }) {
+function drawInsert(t: CanvasTexture, p: Print & { q: string; chapter: string; readOn: string }) {
   const { c, g, res } = ctxOf(t)
   const { width: w, height: h } = c
   g.fillStyle = '#ecebe6'
@@ -378,13 +385,13 @@ function drawInsert(t: CanvasTexture, p: Print & { q: string }) {
   g.fillStyle = '#5a5a60'
   g.font = `600 44px ${p.font}`
   g.textBaseline = 'top'
-  g.fillText(`KAPITOLA ${p.no}`, 90, 80)
+  g.fillText(`${p.chapter.toUpperCase()} ${p.no}`, 90, 80)
   g.fillStyle = '#0c0c0f'
   g.font = `800 92px ${p.font}`
   wrap(g, p.q.toUpperCase(), 90, 180, pw - 150, 104)
   g.fillStyle = '#5a5a60'
   g.font = `500 40px ${p.font}`
-  g.fillText('Čti dál vedle  →', 90, ph - 110)
+  g.fillText(p.readOn, 90, ph - 110)
   t.needsUpdate = true
 }
 

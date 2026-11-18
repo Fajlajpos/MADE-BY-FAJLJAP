@@ -1,9 +1,9 @@
 'use client'
 
+import Link from 'next/link'
 import { useActionState, useEffect, useId, useRef, useState } from 'react'
 import { Arrow } from '@/components/ui/Arrow'
-import { home } from '@/content/home'
-import { site } from '@/content/site'
+import { useContent } from '@/content/client'
 import { typo } from '@/lib/typo/czech'
 import {
   emptyInquiry,
@@ -18,7 +18,6 @@ import shared from './home.module.css'
 import { SentChat } from './SentChat'
 import styles from './Contact.module.css'
 
-const { form } = home.contact
 
 /** Which fields each step checks before moving on. */
 const STEP_FIELDS: InquiryField[][] = [['name', 'email', 'phone'], [], ['message', 'consent']]
@@ -30,6 +29,8 @@ const STEP_FIELDS: InquiryField[][] = [['name', 'email', 'phone'], [], ['message
  * `onSent` fires once it is through (the paper plane takes off).
  */
 export function ContactForm({ onSent, onAgain }: { onSent?: () => void; onAgain?: () => void }) {
+  const { home, site, ui, lang } = useContent()
+  const { form } = home.contact
   const uid = useId().replace(/:/g, '')
   const [state, action, pending] = useActionState<InquiryState, FormData>(sendInquiry, {
     status: 'idle',
@@ -58,7 +59,7 @@ export function ContactForm({ onSent, onAgain }: { onSent?: () => void; onAgain?
   }
 
   const check = (fields: InquiryField[]) => {
-    const all = validateInquiry(values)
+    const all = validateInquiry(values, lang)
     const found: InquiryErrors = {}
     for (const f of fields) if (all[f]) found[f] = all[f]
     setErrors((e) => ({ ...e, ...Object.fromEntries(fields.map((f) => [f, found[f]])) }))
@@ -128,7 +129,7 @@ export function ContactForm({ onSent, onAgain }: { onSent?: () => void; onAgain?
     <fieldset className={styles.group}>
       <legend className={styles.groupLabel}>
         {label}
-        {multiple && <span className={styles.groupHint}> (klidně víc)</span>}
+        {multiple && <span className={styles.groupHint}> {ui.form.many}</span>}
       </legend>
       <div className={styles.choices}>
         {options.map((option) => {
@@ -167,7 +168,7 @@ export function ContactForm({ onSent, onAgain }: { onSent?: () => void; onAgain?
       noValidate
       onSubmit={(e) => {
         // the first step's fields may have been skipped without JS-side checks: check both
-        const all = validateInquiry(values)
+        const all = validateInquiry(values, lang)
         if (Object.keys(all).length > 0) {
           e.preventDefault()
           setErrors(all)
@@ -187,7 +188,7 @@ export function ContactForm({ onSent, onAgain }: { onSent?: () => void; onAgain?
     >
       <div className={styles.formHead}>
         <p className={styles.formTitle}>{form.title}</p>
-        <ol className={styles.steps} aria-label="Kroky poptávky">
+        <ol className={styles.steps} aria-label={ui.form.steps}>
           {form.steps.map((label, i) => (
             <li
               key={label}
@@ -196,7 +197,7 @@ export function ContactForm({ onSent, onAgain }: { onSent?: () => void; onAgain?
               aria-current={step === i ? 'step' : undefined}
             >
               <span className={styles.stepNo}>
-                <span className="visually-hidden">Krok </span>
+                <span className="visually-hidden">{ui.form.step} </span>
                 {i + 1}/{form.steps.length}
               </span>{' '}
               <span className={styles.stepName}>{label}</span>
@@ -308,7 +309,7 @@ export function ContactForm({ onSent, onAgain }: { onSent?: () => void; onAgain?
               onChange={(e) => set('consent', e.target.checked)}
             />
             <span>
-              {form.consent} (<a href="/ochrana-osobnich-udaju">{form.consentLink}</a>)
+              {form.consent} (<Link href="/ochrana-osobnich-udaju">{form.consentLink}</Link>)
             </span>
           </label>
           {errorOf('consent') && (
@@ -324,6 +325,7 @@ export function ContactForm({ onSent, onAgain }: { onSent?: () => void; onAgain?
             Web <input type="text" name="website" tabIndex={-1} autoComplete="off" />
           </label>
         </div>
+        <input type="hidden" name="lang" value={lang} />
         <input type="hidden" name="t" defaultValue="0" />
         <input type="hidden" name="no" defaultValue="0" />
 

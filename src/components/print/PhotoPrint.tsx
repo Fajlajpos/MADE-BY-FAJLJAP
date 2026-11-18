@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { getSlot } from '@/content/media'
+import { useContent } from '@/content/client'
 import styles from './PhotoPrint.module.css'
 
 type Props = {
@@ -30,6 +30,8 @@ type Props = {
  * what is written on the back. It drops onto the page once, the first time it comes into view.
  */
 export function PhotoPrint({ slot, stamp, note, back, tag, children, sizes = '(min-width: 1024px) 40vw, 90vw', className }: Props) {
+  const { getSlot, ui } = useContent()
+  const t = ui.print
   const media = getSlot(slot)
   const root = useRef<HTMLDivElement>(null)
   const [flipped, setFlipped] = useState(false)
@@ -86,7 +88,7 @@ export function PhotoPrint({ slot, stamp, note, back, tag, children, sizes = '(m
         className={styles.card}
         onClick={() => setFlipped((f) => !f)}
         aria-pressed={flipped}
-        aria-label={flipped ? 'Otočit fotku zpátky' : 'Otočit fotku a přečíst, co je na zadní straně'}
+        aria-label={flipped ? t.flipBack : t.flip}
       >
         <span className={styles.front}>
           <span className={styles.photo}>
@@ -113,7 +115,7 @@ export function PhotoPrint({ slot, stamp, note, back, tag, children, sizes = '(m
               {line}
             </span>
           ))}
-          <span className={styles.backMark}>FAJLAJP · tisk 10 × 13</span>
+          <span className={styles.backMark}>{t.mark}</span>
         </span>
       </button>
 
@@ -127,7 +129,7 @@ export function PhotoPrint({ slot, stamp, note, back, tag, children, sizes = '(m
           style={{ left: `${tag.at[0]}%`, top: `${tag.at[1]}%` }}
         >
           {tag.label}
-          <span className="visually-hidden"> na Instagramu (otevře se v novém okně)</span>
+          <span className="visually-hidden"> {t.onInstagram} {ui.newWindow}</span>
         </a>
       )}
 
@@ -136,7 +138,7 @@ export function PhotoPrint({ slot, stamp, note, back, tag, children, sizes = '(m
       <span className={`${styles.tape} ${styles.tapeR}`} aria-hidden="true" />
 
       <span className={styles.hint} aria-hidden="true">
-        {flipped ? 'otočit zpátky' : 'klikni a otoč'}
+        {flipped ? t.hintBack : t.hint}
       </span>
 
       {children}

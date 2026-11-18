@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react'
 import { VoiceNote } from '@/components/media/VoiceNote'
 import { PhotoPrint } from '@/components/print/PhotoPrint'
-import { home } from '@/content/home'
+import { content } from '@/content/server'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import shared from './home.module.css'
@@ -11,7 +11,8 @@ import styles from './About.module.css'
  * O mně — my photo on the left as a real print (taped, dated, turn it over); the copy on
  * the right: heading, two paragraphs, then the facts as a ruled two-column list.
  */
-export function About() {
+export async function About() {
+  const { home } = await content()
   const { about } = home
   return (
     <section id="o-mne" className={`${shared.section} ${styles.section}`} aria-labelledby="o-mne-title">

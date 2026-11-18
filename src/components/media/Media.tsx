@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { getSlot } from '@/content/media'
+import { content } from '@/content/server'
 import styles from './Media.module.css'
 
 type Props = {
@@ -19,7 +19,8 @@ type Props = {
  * A photo from a media slot, or — until the slot has one — a quiet dark stand-in with the slot's
  * caption in the corner. Fills its box.
  */
-export function Media({ slot, className, sizes = '(min-width: 1024px) 50vw, 100vw', mark, priority }: Props) {
+export async function Media({ slot, className, sizes = '(min-width: 1024px) 50vw, 100vw', mark, priority }: Props) {
+  const { getSlot } = await content()
   const media = getSlot(slot)
   const cls = [styles.media, className].filter(Boolean).join(' ')
   if (media.src) {

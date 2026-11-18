@@ -1,5 +1,6 @@
 'use client'
 
+import { useContent } from '@/content/client'
 import { useState, type MouseEvent } from 'react'
 import styles from './Contact.module.css'
 
@@ -16,6 +17,7 @@ export function CopyEmail({
   label: string
   copied: string
 }) {
+  const { ui } = useContent()
   const [state, setState] = useState<'idle' | 'done' | 'failed'>('idle')
   const [pop, setPop] = useState<{ x: number; y: number; id: number } | null>(null)
 
@@ -72,7 +74,7 @@ export function CopyEmail({
             </>
           )}
         </svg>
-        {state === 'done' ? copied : state === 'failed' ? 'Nejde to, zkopíruj ručně' : label}
+        {state === 'done' ? copied : state === 'failed' ? ui.copyFailed : label}
       </button>
       {pop && (
         <span key={pop.id} className={styles.copyPop} style={{ left: pop.x, top: pop.y }} aria-hidden="true">

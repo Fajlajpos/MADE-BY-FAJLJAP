@@ -2,9 +2,7 @@ import type { CSSProperties } from 'react'
 import { Media } from '@/components/media/Media'
 import { Arrow } from '@/components/ui/Arrow'
 import { Showcase, type Corner, type Hue } from '@/components/showcase/Showcase'
-import { home } from '@/content/home'
-import { getSlot } from '@/content/media'
-import { categoryLabels, projects } from '@/content/projects'
+import { content } from '@/content/server'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import shared from './home.module.css'
@@ -19,7 +17,8 @@ const CORNERS: Corner[] = ['tr', 'tl', 'tr', 'tl']
  * side by side. Until a project has its photo, the plate shows a drawn picture of it; its chrome
  * object sits on the corner either way.
  */
-export function Work() {
+export async function Work() {
+  const { home, getSlot, projects, categories: categoryLabels, ui } = await content()
   const { work } = home
   const featured = projects.filter((p) => p.featured)
   return (
@@ -63,7 +62,7 @@ export function Work() {
                     href={project.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`Otevřít ${project.title} (nové okno)`}
+                    aria-label={`${ui.work.open} ${project.title} ${ui.newWindow}`}
                     tabIndex={-1}
                   >
                     <Showcase
@@ -73,7 +72,7 @@ export function Work() {
                       corner={CORNERS[i % CORNERS.length]}
                       wide={wide}
                       shot={shot}
-                      chip={shot ? (project.categories.includes('e-shop') ? 'Skutečný e-shop · živě' : 'Skutečný web · živě') : undefined}
+                      chip={shot ? (project.categories.includes('e-shop') ? ui.chips.liveShop : ui.chips.liveWeb) : undefined}
                     >
                       {hasPhoto && !shot ? (
                         <Media
@@ -92,7 +91,7 @@ export function Work() {
                     corner={CORNERS[i % CORNERS.length]}
                     wide={wide}
                     shot={shot}
-                    chip={shot ? (project.categories.includes('e-shop') ? 'Skutečný e-shop · živě' : 'Skutečný web · živě') : undefined}
+                    chip={shot ? (project.categories.includes('e-shop') ? ui.chips.liveShop : ui.chips.liveWeb) : undefined}
                   >
                     {hasPhoto && !shot ? (
                       <Media
@@ -121,9 +120,9 @@ export function Work() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Otevřít {project.url.replace(/^https?:\/\//, '')}
+                      {ui.work.open} {project.url.replace(/^https?:\/\//, '')}
                       <Arrow className={`${shared.arrow} ${styles.visitIcon}`} />
-                      <span className="visually-hidden"> (otevře se v novém okně)</span>
+                      <span className="visually-hidden"> {ui.newWindow}</span>
                     </a>
                   )}
                 </div>
