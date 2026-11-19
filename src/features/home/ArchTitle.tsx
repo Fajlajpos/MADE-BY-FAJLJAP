@@ -196,7 +196,7 @@ export function ArchTitle() {
     <div ref={ref} className={styles.archScene}>
       <div className={styles.archFloat}>
         <div className={styles.archTilt}>
-          <Image src={SRC} alt="" width={2400} height={615} priority unoptimized className={styles.archImg} />
+          <Image src={SRC} alt="" width={2400} height={693} priority unoptimized className={styles.archImg} />
           {/* a white flash running across now and then */}
           <span className={styles.archGlint} aria-hidden="true" />
           {/* the edges catching the cursor's light */}
