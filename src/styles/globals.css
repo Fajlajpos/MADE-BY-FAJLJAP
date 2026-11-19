@@ -286,20 +286,14 @@ body::after {
   mask-image: radial-gradient(70% 60% at 50% 45%, #000 0%, transparent 100%);
 }
 
-/* the dots drift up with the scroll, slower than the page (parallax), so the ground feels deep */
+/* the dots move with the page, one to one: the layer covers the whole document instead of the
+   screen, so it scrolls exactly as you do; it fades out toward the sides */
+body {
+  position: relative;
+}
+
 body::after {
-  animation: dotsDrift linear both;
-  animation-timeline: scroll(root);
-}
-
-@keyframes dotsDrift {
-  to {
-    background-position: 0 -1600px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  body::after {
-    animation: none;
-  }
+  position: absolute;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
 }
