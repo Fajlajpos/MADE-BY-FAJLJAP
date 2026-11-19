@@ -69,7 +69,7 @@ export async function Footer() {
         </p>
         {/* the signature I put on every job: small, in the middle */}
         <span className={styles.signature}>
-          <Image src="/brand/made-by-fajlajp-small.webp" alt="Made by FAJLAJP" width={900} height={154} unoptimized />
+          <Image src="/brand/made-by-fajlajp-liquid-small.webp" alt="Made by FAJLAJP" width={705} height={120} unoptimized />
           {/* a small glint that runs across it now and then */}
           <span className={styles.signatureGlint} aria-hidden="true" />
         </span>

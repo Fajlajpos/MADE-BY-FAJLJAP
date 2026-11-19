@@ -204,17 +204,17 @@
 .signature img {
   display: block;
   width: auto;
-  height: 24px;
-  /* lifted: the dark chrome reads on the black */
-  filter: brightness(1.2) contrast(1.05) drop-shadow(0 4px 6px rgb(0 0 0 / 0.6));
+  height: 26px;
+  /* the liquid chrome is already lightened; only a shadow to lift it off the black */
+  filter: drop-shadow(0 4px 6px rgb(0 0 0 / 0.6));
 }
 
 .signatureGlint {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  -webkit-mask: url('/brand/made-by-fajlajp-small.webp') center / 100% 100% no-repeat;
-  mask: url('/brand/made-by-fajlajp-small.webp') center / 100% 100% no-repeat;
+  -webkit-mask: url('/brand/made-by-fajlajp-liquid-small.webp') center / 100% 100% no-repeat;
+  mask: url('/brand/made-by-fajlajp-liquid-small.webp') center / 100% 100% no-repeat;
   background: linear-gradient(105deg, rgb(255 255 255 / 0) 44%, rgb(255 255 255 / 0.45) 50%, rgb(255 255 255 / 0) 56%) no-repeat;
   background-size: 300% 100%;
   background-position: 120% 0;
