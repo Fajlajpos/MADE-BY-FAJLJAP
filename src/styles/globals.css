@@ -121,7 +121,7 @@ select {
   vertical-align: top;
 }
 
-.w > span {
+.w>span {
   display: inline-block;
   transition: translate 1s var(--ease-out);
   transition-delay: calc(var(--reveal-i, 0) * 90ms + var(--wi, 0) * 65ms);
@@ -133,16 +133,16 @@ select {
   translate: none;
 }
 
-.js [data-reveal]:not([data-in]) .w > span {
+.js [data-reveal]:not([data-in]) .w>span {
   translate: 0 115%;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .w > span {
+  .w>span {
     transition: none;
   }
 
-  .js [data-reveal]:not([data-in]) .w > span {
+  .js [data-reveal]:not([data-in]) .w>span {
     translate: none;
   }
 }
@@ -177,16 +177,14 @@ select {
   padding: 1.5px;
   border-radius: inherit;
   pointer-events: none;
-  background: conic-gradient(
-    from 200deg,
-    rgb(200 184 255 / 0.15) 0deg,
-    rgb(143 240 255 / 0.9) 70deg,
-    rgb(255 255 255 / 1) 110deg,
-    rgb(255 184 230 / 0.9) 150deg,
-    rgb(255 242 184 / 0.7) 200deg,
-    rgb(200 184 255 / 0.15) 280deg,
-    rgb(200 184 255 / 0.15) 360deg
-  );
+  background: conic-gradient(from 200deg,
+      rgb(200 184 255 / 0.15) 0deg,
+      rgb(143 240 255 / 0.9) 70deg,
+      rgb(255 255 255 / 1) 110deg,
+      rgb(255 184 230 / 0.9) 150deg,
+      rgb(255 242 184 / 0.7) 200deg,
+      rgb(200 184 255 / 0.15) 280deg,
+      rgb(200 184 255 / 0.15) 360deg);
   /* only the 1.5 px rim shows */
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
@@ -219,13 +217,13 @@ select {
 /* doubled class: wins over the cards' own (module) box-shadow */
 .glow-card.glow-card:hover,
 .glow-card.glow-card:focus-within,
-[data-hover] > .glow-card.glow-card {
+[data-hover]>.glow-card.glow-card {
   box-shadow: var(--surface-edge), var(--surface-drop), var(--card-glow-hot);
 }
 
 .glow-card:hover::after,
 .glow-card:focus-within::after,
-[data-hover] > .glow-card::after {
+[data-hover]>.glow-card::after {
   animation: none;
   opacity: 1;
 }
@@ -256,4 +254,52 @@ html[data-scrolling] #obsah {
 ::selection {
   background: rgb(200 184 255 / 0.85);
   color: #101015;
+}
+
+/* Texture on the black: a fine film grain and a faint brushed-metal sheen, fixed over the page
+   background (under the content), so the black reads as a surface, not an empty void. */
+html::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.075;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 -.35'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.06) 0 1px, rgb(255 255 255 / 0) 1px 4px);
+  background-size: 180px 180px, auto;
+}
+
+/* A second, quieter texture: a fine grid of dots, like a halftone print or a speaker grille,
+   seen only toward the middle of the screen and fading out to the edges. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: radial-gradient(circle, rgb(220 214 255 / 0.22) 0.7px, transparent 1.2px);
+  background-size: 14px 14px;
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 45%, #000 0%, transparent 100%);
+  mask-image: radial-gradient(70% 60% at 50% 45%, #000 0%, transparent 100%);
+}
+
+/* the dots drift up with the scroll, slower than the page (parallax), so the ground feels deep */
+body::after {
+  animation: dotsDrift linear both;
+  animation-timeline: scroll(root);
+}
+
+@keyframes dotsDrift {
+  to {
+    background-position: 0 -1600px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::after {
+    animation: none;
+  }
 }
