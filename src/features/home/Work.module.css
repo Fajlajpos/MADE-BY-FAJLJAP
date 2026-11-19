@@ -146,3 +146,8 @@
   color: inherit;
   text-decoration: none;
 }
+
+/* Y2K: room under each framed project, so the liquid frame clears its caption */
+.project {
+  row-gap: var(--space-8);
+}

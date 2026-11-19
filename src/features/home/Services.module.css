@@ -1,282 +1,178 @@
-/* 02 Co dělám — four large cards, each a metal plate with a picture of the work and a chrome
-   object on its corner, the text beside it. */
+/* 02 Co dělám — four glossy Y2K tiles side by side: chrome art on top, the service below. */
 
-/* ── head ────────────────────────────────────────────────────── */
-
+/* ── head: centred, like the hero ───────────────────────────── */
 .head {
   display: grid;
+  justify-items: center;
   gap: var(--space-6);
   margin-bottom: var(--space-9);
+  text-align: center;
 }
 
 .h2 {
-  max-width: 11ch;
+  max-width: 16ch;
+  margin-inline: auto;
 }
 
 .lead {
-  max-width: 26rem;
+  max-width: 30rem;
+  margin-inline: auto;
   font-size: var(--fs-body);
   line-height: var(--lh-body);
 }
 
-/* ── the cards ───────────────────────────────────────────────── */
-
-.list {
+/* ── the tiles ───────────────────────────────────────────────── */
+.grid {
   display: grid;
-  gap: calc(var(--space-9) * 1.25);
+  gap: var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.item {
-  display: grid;
-  gap: var(--space-7);
-  align-items: center;
+.tile {
+  border-radius: var(--r-l);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.07) 0%, rgb(255 255 255 / 0) 30%),
+    linear-gradient(170deg, #17171d 0%, #0e0e12 60%, #0a0a0d 100%);
   scroll-margin-top: calc(var(--header-h) + var(--space-8));
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-slow) var(--ease-out);
 }
 
-.visual {
-  min-width: 0;
-  /* room for the object sticking out over the top edge */
-  padding-top: var(--space-8);
+.tile:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--surface-edge), var(--surface-drop), var(--card-glow-hot);
 }
 
-.text {
+.inner {
   display: grid;
   align-content: start;
-  gap: var(--space-5);
+  gap: var(--space-4);
+  height: 100%;
+  padding: var(--space-6);
+}
+
+/* the art slot: a soft holographic pool of light, the chrome piece standing in it */
+.art {
+  position: relative;
+  aspect-ratio: 1.15;
+  margin: calc(-1 * var(--space-2)) calc(-1 * var(--space-2)) var(--space-2);
+  border-radius: calc(var(--r-l) - 10px);
+  background:
+    radial-gradient(60% 55% at 50% 60%, rgb(200 184 255 / 0.16), rgb(200 184 255 / 0) 70%),
+    radial-gradient(40% 35% at 30% 30%, rgb(143 240 255 / 0.1), rgb(143 240 255 / 0) 70%);
+}
+
+.object,
+.artImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.artImg {
+  object-fit: contain;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
 }
 
 .num {
-  margin: 0;
-  font-size: var(--fs-label);
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  color: var(--fg-subtle);
-}
-
-.titleRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-2) var(--space-5);
-}
-
-.title {
-  font-size: clamp(2.4rem, 1.4rem + 3.2vw, 4.6rem);
-  font-weight: 500;
-  font-stretch: 90%;
-  line-height: var(--lh-tight);
-  letter-spacing: var(--tracking-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1;
+  background: var(--holo);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .tag {
-  margin: 0;
-  padding: 0.3rem 0.75rem;
+  padding: 0.25rem 0.7rem;
   border-radius: 999px;
-  background: rgb(var(--accent-2-rgb) / 0.14);
-  color: var(--accent-2);
+  background: rgb(255 255 255 / 0.06);
+  box-shadow: inset 0 0 0 1px rgb(200 184 255 / 0.3);
   font-size: var(--fs-label);
-  font-weight: 500;
+  color: var(--fg-muted);
+}
+
+.title {
+  font-size: clamp(1.8rem, 1.3rem + 1.2vw, 2.4rem);
+  font-weight: 600;
+  font-stretch: 90%;
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 55%, rgb(200 184 255 / 0.55) 100%),
+    var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .body {
-  max-width: 34rem;
-  font-size: var(--fs-body);
+  font-size: var(--fs-small);
   line-height: var(--lh-body);
   color: var(--fg-muted);
 }
 
-/* what you get: small metal pills */
 .points {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: var(--space-2);
-  max-width: 34rem;
-  margin: var(--space-2) 0 0;
-  padding: 0;
+  margin: auto 0 0;
+  padding: var(--space-4) 0 0;
+  border-top: 1px solid rgb(255 255 255 / 0.08);
   list-style: none;
   font-size: var(--fs-small);
   color: var(--fg);
 }
 
 .points li {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.6rem 1rem 0.6rem 0.85rem;
-  border-radius: 999px;
-  background: var(--surface);
-  box-shadow: var(--surface-edge);
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
 }
 
 .points li::before {
   content: '';
   flex: none;
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.18);
-}
-
-.cta {
-  margin-top: var(--space-9);
-}
-
-/* ── wide: picture and text side by side, alternating ───────── */
-@media (min-width: 1024px) {
-  .head {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--gutter);
-    row-gap: var(--space-8);
-    align-items: end;
-    margin-bottom: calc(var(--space-9) * 1.25);
-  }
-
-  .label {
-    grid-column: 1 / -1;
-  }
-
-  .h2 {
-    grid-column: 1 / 9;
-  }
-
-  .lead {
-    grid-column: 9 / -1;
-    padding-bottom: 0.5rem;
-  }
-
-  .list {
-    gap: calc(var(--space-9) * 1.6);
-  }
-
-  .item {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--gutter);
-  }
-
-  .visual {
-    grid-column: 1 / 8;
-    grid-row: 1;
-  }
-
-  .text {
-    grid-column: 9 / -1;
-    grid-row: 1;
-  }
-
-  .item:nth-child(even) .visual {
-    grid-column: 6 / -1;
-  }
-
-  .item:nth-child(even) .text {
-    grid-column: 1 / 5;
-  }
-
-  .cta {
-    text-align: center;
-  }
-}
-
-/* the text drifts up a little slower than the card beside it: two layers, two depths */
-@media (prefers-reduced-motion: no-preference) and (min-width: 1024px) {
-  @supports (animation-timeline: view()) {
-    .text {
-      animation: drift linear both;
-      animation-timeline: view();
-      animation-range: cover;
-    }
-  }
-}
-
-@keyframes drift {
-  from {
-    transform: translateY(90px);
-  }
-
-  to {
-    transform: translateY(-90px);
-  }
-}
-
-/* ── matched to the hero: a centred head, the liquid frame as the only edge, chrome type ── */
-.head {
-  justify-items: center;
-  text-align: center;
-}
-
-.h2,
-.lead {
-  margin-inline: auto;
-}
-
-.h2 {
-  max-width: 16ch;
-}
-
-@media (min-width: 1024px) {
-  .head {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .head > * {
-    grid-column: 1 / -1;
-  }
-}
-
-/* the number: big, outlined chrome */
-.num {
-  font-size: clamp(3rem, 2rem + 3vw, 5.5rem);
-  font-weight: 600;
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1.5px rgb(214 218 228 / 0.55);
-}
-
-/* the service's name in liquid chrome, like the title */
-.title {
-  background: linear-gradient(180deg, #ffffff 0%, #e4e5ea 34%, #8d9098 52%, #f1f2f5 64%, #b4b6bd 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* what you get: a plain list with chrome beads, not pills */
-.points {
-  display: grid;
-  gap: 0;
-}
-
-.points li {
-  padding: 0.85rem 0;
-  border-radius: 0;
-  background: none;
-  box-shadow: none;
-  border-top: 1px solid rgb(255 255 255 / 0.08);
-}
-
-.points li:last-child {
-  border-bottom: 1px solid rgb(255 255 255 / 0.08);
-}
-
-.points li::before {
-  width: 9px;
-  height: 9px;
-  background: radial-gradient(circle at 35% 30%, #ffffff 0%, #c9ccd3 35%, #5d6067 80%);
-  box-shadow: 0 0 8px rgb(255 255 255 / 0.25);
+  translate: 0 -1px;
+  background: var(--holo);
+  box-shadow: 0 0 10px rgb(200 184 255 / 0.6);
 }
 
 .cta {
   display: flex;
   justify-content: center;
+  margin-top: var(--space-9);
 }
 
-.head .label {
-  justify-self: center;
+@media (min-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
 
-/* Y2K: the points' beads in the holographic sheen */
-.points li::before {
-  background: var(--holo);
-  box-shadow: 0 0 10px rgb(200 184 255 / 0.6);
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .tile:hover {
+    transition: none;
+    transform: none;
+  }
 }

@@ -177,3 +177,47 @@
     inset 0 0 0 1px rgb(200 184 255 / 0.22),
     0 4px 14px -6px rgb(170 140 255 / 0.4);
 }
+
+/* Y2K: the steps hang from one holographic track, each from a chrome bead (no staircase) */
+.steps {
+  position: relative;
+}
+
+.step {
+  margin-top: 0 !important;
+}
+
+/* your own liquid tube render along the track (Process.tsx › TRACK_ART), when there is one */
+.trackArt {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .steps {
+    padding-top: var(--space-8);
+  }
+
+  /* the track */
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 4%;
+    right: 4%;
+    height: 4px;
+    border-radius: 4px;
+    background: var(--holo);
+    box-shadow: 0 0 18px rgb(200 184 255 / 0.55);
+  }
+
+
+  .trackArt {
+    display: block;
+    position: absolute;
+    top: -40px;
+    left: 0;
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+  }
+}

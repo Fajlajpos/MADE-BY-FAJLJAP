@@ -1,27 +1,28 @@
 import type { CSSProperties } from 'react'
-import { Showcase, type Corner, type Hue } from '@/components/showcase/Showcase'
 import { Arrow } from '@/components/ui/Arrow'
-import type { MockKind } from '@/components/ui/UiMock'
 import type { Service } from '@/content/home'
 import { content } from '@/content/server'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
+import { Slot3D } from '@/three/site/Slot3D'
 import shared from './home.module.css'
 import styles from './Services.module.css'
 
-/** What each service shows on its card: the picture, the light, where its object sits. */
-const LOOK: Record<Service['id'], { mock: MockKind; hue: Hue; corner: Corner }> = {
-  weby: { mock: 'web', hue: 'cold', corner: 'tr' },
-  'e-shopy': { mock: 'shop', hue: 'warm', corner: 'tl' },
-  redesign: { mock: 'redesign', hue: 'green', corner: 'tr' },
-  aplikace: { mock: 'app', hue: 'violet', corner: 'tl' },
+/**
+ * Your chrome art for each service (a cut-out PNG/WebP in /public/brand, transparent background).
+ * Empty: the service's 3D chrome object stands in its place until you add one.
+ */
+const ART: Record<Service['id'], string> = {
+  weby: '',
+  'e-shopy': '',
+  redesign: '',
+  aplikace: '',
 }
 
 /**
- * 02 Co dělám — the four services as large cards: on a dark metal plate a picture of that kind
- * of work (a website, a coffee e-shop, a brand board, an app), its chrome object sitting on the
- * plate's corner; beside it the title, what it is and what you get. On a wide screen the cards
- * alternate sides. Each service keeps its id (#sluzba-weby …) — other parts of the site link to them.
+ * 02 Co dělám — the four services as glossy tiles side by side (Y2K liquid chrome): on top the
+ * service's chrome art (or its 3D object until the art exists), then its number and name in
+ * chrome, what it is and what you get. Each keeps its id (#sluzba-weby …): other parts link to them.
  */
 export async function Services() {
   const { home } = await content()
@@ -32,57 +33,52 @@ export async function Services() {
         <p className={`${shared.label} ${styles.label}`} data-reveal="">
           <b>{services.index}</b> {services.label}
         </p>
-        <h2
-          id="co-delam-title"
-          className={`${shared.h2} ${styles.h2}`}
-          data-reveal=""
-          style={{ '--reveal-i': 1 } as CSSProperties}
-        >
+        <h2 id="co-delam-title" className={`${shared.h2} ${styles.h2}`} data-reveal="" style={{ '--reveal-i': 1 } as CSSProperties}>
           <Words text={services.heading} />
         </h2>
-        <p
-          className={`${shared.lead} ${styles.lead}`}
-          data-reveal=""
-          style={{ '--reveal-i': 2 } as CSSProperties}
-        >
+        <p className={`${shared.lead} ${styles.lead}`} data-reveal="" style={{ '--reveal-i': 2 } as CSSProperties}>
           {typo(services.lead)}
         </p>
       </header>
 
-      <div className={styles.list}>
-        {services.items.map((item, i) => {
-          const look = LOOK[item.id]
-          return (
-            <article
-              key={item.id}
-              id={`sluzba-${item.id}`}
-              className={styles.item}
-              aria-labelledby={`sluzba-${item.id}-title`}
-            >
-              <div className={styles.visual} data-reveal="">
-                <Showcase mock={look.mock} object={item.object} hue={look.hue} corner={look.corner} frame={i + 3} />
+      <ul className={styles.grid} role="list">
+        {services.items.map((item, i) => (
+          <li
+            key={item.id}
+            id={`sluzba-${item.id}`}
+            className={`${styles.tile} glow-card`}
+            data-reveal=""
+            style={{ '--reveal-i': i } as CSSProperties}
+          >
+            <article aria-labelledby={`sluzba-${item.id}-title`} className={styles.inner}>
+              {/* the art slot: your chrome piece, or the 3D object until it exists */}
+              <div className={styles.art}>
+                {ART[item.id] ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- a cut-out render, sized by the slot
+                  <img src={ART[item.id]} alt="" className={styles.artImg} loading="lazy" />
+                ) : (
+                  <Slot3D object={item.object} className={styles.object} scale={1.35} label={item.title} />
+                )}
               </div>
-              <div className={styles.text}>
-                <p className={styles.num} aria-hidden="true">
+              <div className={styles.meta}>
+                <span className={styles.num} aria-hidden="true">
                   {item.index}
-                </p>
-                <div className={styles.titleRow}>
-                  <h3 id={`sluzba-${item.id}-title`} className={styles.title}>
-                    {item.title}
-                  </h3>
-                  {item.tag && <p className={styles.tag}>{item.tag}</p>}
-                </div>
-                <p className={styles.body}>{typo(item.body)}</p>
-                <ul className={styles.points} role="list">
-                  {item.points.map((point) => (
-                    <li key={point}>{typo(point)}</li>
-                  ))}
-                </ul>
+                </span>
+                {item.tag && <span className={styles.tag}>{item.tag}</span>}
               </div>
+              <h3 id={`sluzba-${item.id}-title`} className={styles.title}>
+                {item.title}
+              </h3>
+              <p className={styles.body}>{typo(item.body)}</p>
+              <ul className={styles.points} role="list">
+                {item.points.map((point) => (
+                  <li key={point}>{typo(point)}</li>
+                ))}
+              </ul>
             </article>
-          )
-        })}
-      </div>
+          </li>
+        ))}
+      </ul>
 
       <p className={styles.cta}>
         <a className={shared.button} href="#kontakt" data-magnetic="">

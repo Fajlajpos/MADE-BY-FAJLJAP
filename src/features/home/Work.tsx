@@ -71,6 +71,7 @@ export async function Work() {
                       hue={HUES[i % HUES.length]}
                       corner={CORNERS[i % CORNERS.length]}
                       wide={wide}
+                      frame={i}
                       shot={shot}
                       chip={shot ? (project.categories.includes('e-shop') ? ui.chips.liveShop : ui.chips.liveWeb) : undefined}
                     >
@@ -90,6 +91,7 @@ export async function Work() {
                     hue={HUES[i % HUES.length]}
                     corner={CORNERS[i % CORNERS.length]}
                     wide={wide}
+                    frame={i}
                     shot={shot}
                     chip={shot ? (project.categories.includes('e-shop') ? ui.chips.liveShop : ui.chips.liveWeb) : undefined}
                   >

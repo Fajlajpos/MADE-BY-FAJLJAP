@@ -10,6 +10,9 @@ import styles from './Process.module.css'
  * cards (four columns stepping down on a wide screen, two by two on a tablet, stacked on a
  * phone): the number and how long it takes, the title, and a short description.
  */
+/** Your liquid chrome tube render to run along the steps (a cut-out in /public/brand). Empty: the holographic track in CSS. */
+const TRACK_ART = ''
+
 export async function Process() {
   const { home } = await content()
   const { process } = home
@@ -37,6 +40,10 @@ export async function Process() {
       </header>
 
       <ol className={styles.steps} role="list">
+        {TRACK_ART && (
+          // eslint-disable-next-line @next/next/no-img-element -- a decorative cut-out tube along the steps
+          <img className={styles.trackArt} src={TRACK_ART} alt="" aria-hidden="true" />
+        )}
         {process.steps.map((step, i) => (
           <li
             key={step.title}

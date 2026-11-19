@@ -363,3 +363,11 @@
     0 4px 14px -6px rgb(170 140 255 / 0.4);
   border-radius: 999px;
 }
+
+/* the wide project plate: the frame hugs it closer, so it never runs over the caption below */
+.showcase[data-wide] .frame {
+  left: -3%;
+  top: -5%;
+  width: 106%;
+  height: 110%;
+}

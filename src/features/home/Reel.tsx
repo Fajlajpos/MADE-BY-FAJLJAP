@@ -19,6 +19,9 @@ const easeOut = (t: number) => 1 - (1 - t) ** 3
  * With the film: muted autoplay only while on screen, a play button over the paused film, and
  * quiet controls for sound and pause. Reduced motion: full width from the start, no autoplay.
  */
+/** Your chrome frame or TV render to put round the video (a cut-out in /public/brand). Empty: the chrome bezel in CSS. */
+const FRAME_ART = ''
+
 export function Reel() {
   const { home, getSlot } = useContent()
   const { reel } = home
@@ -102,22 +105,22 @@ export function Reel() {
         </p>
         <h2
           id="video-title"
-          className={`${shared.h2} ${styles.title}`}
+          className="visually-hidden"
           data-reveal=""
           style={{ '--reveal-i': 1 } as CSSProperties}
         >
           <Words text={reel.heading} />
         </h2>
-        <p
-          className={`${shared.lead} ${styles.caption}`}
-          data-reveal=""
-          style={{ '--reveal-i': 2 } as CSSProperties}
-        >
-          {typo(reel.caption)}
-        </p>
       </header>
 
+      {/* the liquid chrome PROCESS title over the video (public/brand/process.webp) */}
+      {/* eslint-disable-next-line @next/next/no-img-element -- a cut-out chrome title */}
+      <img className={styles.processTitle} src="/brand/process.webp" alt="" width={2000} height={429} loading="lazy" />
       <div ref={stage} className={styles.stage}>
+        {FRAME_ART && (
+          // eslint-disable-next-line @next/next/no-img-element -- a decorative cut-out frame round the screen
+          <img className={styles.frameArt} src={FRAME_ART} alt="" aria-hidden="true" />
+        )}
         <div className={styles.frame} data-playing={playing || undefined}>
           {media.video ? (
             <>

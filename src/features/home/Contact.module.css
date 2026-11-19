@@ -827,3 +827,15 @@
     inset 0 0 0 1.5px rgb(200 184 255 / 0.7),
     0 0 18px -4px rgb(143 240 255 / 0.5);
 }
+
+/* Y2K: the form sits in a chrome device, its screen dark, holographic light round it */
+.card {
+  border-radius: calc(var(--r-l) + 6px);
+  border: 10px solid transparent;
+  background:
+    linear-gradient(var(--bg-raised), var(--bg-raised)) padding-box,
+    linear-gradient(150deg, #ffffff 0%, #9ea1a9 16%, #2a2b30 34%, #eceef1 52%, #c9b8ff 64%, #4a4c52 78%, #dfe1e6 100%) border-box;
+  box-shadow:
+    0 30px 60px -30px rgb(0 0 0 / 0.9),
+    var(--card-glow);
+}

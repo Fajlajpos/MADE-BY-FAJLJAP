@@ -202,3 +202,47 @@
     will-change: auto;
   }
 }
+
+/* Y2K: the screen sits in a rounded chrome bezel, glowing holographic round it */
+.frame {
+  border: 10px solid transparent;
+  background:
+    linear-gradient(var(--bg-raised), var(--bg-raised)) padding-box,
+    linear-gradient(150deg, #ffffff 0%, #9ea1a9 16%, #2a2b30 34%, #eceef1 52%, #c9b8ff 64%, #4a4c52 78%, #dfe1e6 100%) border-box;
+  box-shadow:
+    0 30px 60px -30px rgb(0 0 0 / 0.9),
+    var(--card-glow);
+}
+
+/* your own chrome frame render over the screen (Reel.tsx › FRAME_ART), when there is one */
+.frameArt {
+  position: absolute;
+  inset: -6% -4%;
+  z-index: 3;
+  width: 108%;
+  max-width: none;
+  height: 112%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+/* the liquid chrome PROCESS title above the video */
+.processTitle {
+  display: block;
+  width: min(100%, 42rem);
+  height: auto;
+  margin: 0 auto var(--space-5);
+  position: relative;
+  z-index: 4;
+  animation: processFloat 5s ease-in-out infinite alternate;
+  filter: drop-shadow(0 12px 24px rgb(0 0 0 / 0.6));
+}
+
+@keyframes processFloat {
+  from { transform: translateY(0); }
+  to { transform: translateY(-10px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .processTitle { animation: none; }
+}
