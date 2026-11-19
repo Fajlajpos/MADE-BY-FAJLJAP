@@ -1,7 +1,5 @@
 import { ConsoleHello } from '@/components/fx/ConsoleHello'
-import { Dust } from '@/components/fx/Dust'
 import { Interactions } from '@/components/fx/Interactions'
-import { MoodLight } from '@/components/fx/Mood'
 import { Reveal } from '@/components/fx/Reveal'
 import { SmoothScroll } from '@/components/fx/SmoothScroll'
 import { Footer } from '@/components/layout/Footer'
@@ -13,8 +11,6 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
   const { ui } = await content()
   return (
     <ThreeRoot>
-      <MoodLight />
-      <Dust />
       <a className="skip-link" href="#obsah">
         {ui.skipLink}
       </a>

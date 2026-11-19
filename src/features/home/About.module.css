@@ -122,3 +122,13 @@
     padding-top: var(--space-6);
   }
 }
+
+/* Y2K: the facts' values in liquid chrome */
+.fact dd {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 55%, rgb(200 184 255 / 0.55) 100%),
+    var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

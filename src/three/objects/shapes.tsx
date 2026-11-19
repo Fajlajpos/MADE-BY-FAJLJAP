@@ -1,6 +1,7 @@
 'use client'
 
-import { RoundedBox } from '@react-three/drei'
+import { RoundedBox as DreiRoundedBox } from '@react-three/drei'
+import type { ComponentProps } from 'react'
 import { useEffect, useMemo } from 'react'
 import {
   BufferGeometry,
@@ -39,6 +40,18 @@ export type MaterialSet = {
 }
 
 type Props = { set: MaterialSet }
+
+/**
+ * Every box of the objects, inflated like the liquid chrome title: its edges rounded to most of
+ * half its thinnest side, with enough segments to stay smooth, so nothing reads as a hard edge.
+ */
+function RoundedBox(props: ComponentProps<typeof DreiRoundedBox>) {
+  const args = (props.args ?? [1, 1, 1]) as [number, number, number]
+  const thin = Math.min(args[0], args[1], args[2])
+  // thin parts round all the way, big blocks (the parcel) only so far, so they keep their shape
+  const radius = Math.max(props.radius ?? 0, Math.min(thin * 0.46, 0.16))
+  return <DreiRoundedBox {...props} radius={radius} smoothness={8} />
+}
 
 /* ── Weby: a browser window ─────────────────────────────────────────── */
 

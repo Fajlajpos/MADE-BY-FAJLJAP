@@ -10,6 +10,8 @@
    studio haze in the middle. Its own layer, faded out over the bottom third, so it melts into
    the page instead of ending at the hero's edge. */
 .hero::before {
+  /* off: the page is plain black; the chrome carries its own glow */
+  display: none;
   content: '';
   position: absolute;
   inset: 0;
@@ -34,6 +36,8 @@
   inset: 0;
   opacity: 0;
   transition: opacity 1.2s var(--ease-out);
+  /* a soft warm halo around the chrome, following each object's shape */
+  filter: drop-shadow(0 0 36px rgb(255 255 255 / 0.16)) drop-shadow(0 0 80px rgb(255 255 255 / 0.1));
 }
 
 .scene[data-ready] .canvas {

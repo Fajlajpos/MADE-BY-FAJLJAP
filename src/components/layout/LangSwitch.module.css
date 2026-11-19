@@ -43,3 +43,9 @@ a.item:focus-visible {
   background: rgb(255 255 255 / 0.1);
   color: var(--fg);
 }
+
+/* Y2K: the current language as a chrome bead */
+.item[aria-current] {
+  background: var(--chrome);
+  color: #101015;
+}

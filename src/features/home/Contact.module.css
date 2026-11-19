@@ -793,3 +793,37 @@
     animation: none;
   }
 }
+
+/* Y2K: the big heading in liquid chrome, its dot in the holographic sheen */
+.heading {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 55%, rgb(200 184 255 / 0.55) 100%),
+    var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.dot {
+  background: var(--holo);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Y2K: the fields as glossy wells, the current step in the holographic sheen */
+.field input:not([type='checkbox']),
+.field textarea {
+  border-radius: var(--r-m);
+  box-shadow:
+    inset 0 2px 6px rgb(0 0 0 / 0.5),
+    inset 0 0 0 1px rgb(200 184 255 / 0.16);
+}
+
+.field input:not([type='checkbox']):focus,
+.field textarea:focus {
+  box-shadow:
+    inset 0 2px 6px rgb(0 0 0 / 0.5),
+    inset 0 0 0 1.5px rgb(200 184 255 / 0.7),
+    0 0 18px -4px rgb(143 240 255 / 0.5);
+}

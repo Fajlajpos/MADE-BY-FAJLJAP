@@ -50,7 +50,7 @@ export async function Services() {
       </header>
 
       <div className={styles.list}>
-        {services.items.map((item) => {
+        {services.items.map((item, i) => {
           const look = LOOK[item.id]
           return (
             <article
@@ -60,7 +60,7 @@ export async function Services() {
               aria-labelledby={`sluzba-${item.id}-title`}
             >
               <div className={styles.visual} data-reveal="">
-                <Showcase mock={look.mock} object={item.object} hue={look.hue} corner={look.corner} />
+                <Showcase mock={look.mock} object={item.object} hue={look.hue} corner={look.corner} frame={i + 3} />
               </div>
               <div className={styles.text}>
                 <p className={styles.num} aria-hidden="true">

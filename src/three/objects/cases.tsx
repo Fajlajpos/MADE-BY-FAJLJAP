@@ -17,7 +17,7 @@ import {
   type Group,
   type Texture,
 } from 'three'
-import type { ChromeKit } from '../chrome/materials'
+import { OBJECT_RED, type ChromeKit } from '../chrome/materials'
 import { tokenColor } from '../tokens'
 
 /**
@@ -258,7 +258,7 @@ function useCaseTextures(spec: CaseSpec, index: number) {
     const draw = () => {
       if (!live) return
       const font = getComputedStyle(document.body).fontFamily
-      const band = spec.band === 'accent' ? tokenColor('orange') : spec.band === 'blue' ? tokenColor('blue') : '#8a8a90'
+      const band = spec.band === 'accent' ? OBJECT_RED : spec.band === 'blue' ? tokenColor('blue') : '#8a8a90'
       const no = String(index + 1).padStart(2, '0')
       drawSpine(tex.spine, { font, band, no, q: spec.q, vol: index + 1 })
       drawCover(tex.cover, { font, band, no, vol: index + 1, title: spec.print.cover })

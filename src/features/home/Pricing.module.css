@@ -153,3 +153,13 @@
     transform: none;
   }
 }
+
+/* Y2K: the amounts in liquid chrome */
+.amount {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 55%, rgb(200 184 255 / 0.55) 100%),
+    var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

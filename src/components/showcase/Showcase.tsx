@@ -5,6 +5,7 @@ import { ShotWindow, UiMock, type MockKind } from '@/components/ui/UiMock'
 import type { ObjectKind } from '@/three/site/ChromeObject'
 import { Slot3D } from '@/three/site/Slot3D'
 import { useContent } from '@/content/client'
+import { LiquidFrame } from './LiquidFrame'
 import styles from './Showcase.module.css'
 
 
@@ -28,6 +29,8 @@ type Props = {
   chip?: string
   /** A wide plate (16:9 from tablet up) for the one project across the page. */
   wide?: boolean
+  /** A frame of liquid chrome round the card (its number seeds the wobble). */
+  frame?: number
   className?: string
 }
 
@@ -36,7 +39,7 @@ type Props = {
  * corner, half outside, like a paperweight. A soft light follows the cursor across the plate,
  * the picture leans toward it, and the object lifts while the cursor is on the card.
  */
-export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, shot, chip, wide, className }: Props) {
+export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, shot, chip, wide, frame, className }: Props) {
   // a small piece of UI that floats in front of the picture, closer to you
   const chips: Record<MockKind, string> = useContent().ui.chips
   const root = useRef<HTMLDivElement>(null)
@@ -91,6 +94,7 @@ export function Showcase({ mock, object, hue = 'warm', corner = 'tr', children, 
       {/* two more plates under this one, like prints in a stack */}
       <span className={styles.sheet} aria-hidden="true" />
       <span className={styles.sheet} aria-hidden="true" />
+      {frame !== undefined && <LiquidFrame seed={frame} />}
       <div className={`${styles.plate} glow-card`}>
         <span className={styles.glow} aria-hidden="true" />
         <span className={styles.spot} aria-hidden="true" />

@@ -197,3 +197,86 @@
     transform: translateY(-90px);
   }
 }
+
+/* ── matched to the hero: a centred head, the liquid frame as the only edge, chrome type ── */
+.head {
+  justify-items: center;
+  text-align: center;
+}
+
+.h2,
+.lead {
+  margin-inline: auto;
+}
+
+.h2 {
+  max-width: 16ch;
+}
+
+@media (min-width: 1024px) {
+  .head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .head > * {
+    grid-column: 1 / -1;
+  }
+}
+
+/* the number: big, outlined chrome */
+.num {
+  font-size: clamp(3rem, 2rem + 3vw, 5.5rem);
+  font-weight: 600;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgb(214 218 228 / 0.55);
+}
+
+/* the service's name in liquid chrome, like the title */
+.title {
+  background: linear-gradient(180deg, #ffffff 0%, #e4e5ea 34%, #8d9098 52%, #f1f2f5 64%, #b4b6bd 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* what you get: a plain list with chrome beads, not pills */
+.points {
+  display: grid;
+  gap: 0;
+}
+
+.points li {
+  padding: 0.85rem 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  border-top: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.points li:last-child {
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.points li::before {
+  width: 9px;
+  height: 9px;
+  background: radial-gradient(circle at 35% 30%, #ffffff 0%, #c9ccd3 35%, #5d6067 80%);
+  box-shadow: 0 0 8px rgb(255 255 255 / 0.25);
+}
+
+.cta {
+  display: flex;
+  justify-content: center;
+}
+
+.head .label {
+  justify-self: center;
+}
+
+
+/* Y2K: the points' beads in the holographic sheen */
+.points li::before {
+  background: var(--holo);
+  box-shadow: 0 0 10px rgb(200 184 255 / 0.6);
+}

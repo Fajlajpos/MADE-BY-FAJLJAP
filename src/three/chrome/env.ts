@@ -66,16 +66,17 @@ export function createChromeEnvironment(
  */
 export function createPageEnvironment(
   renderer: WebGLRenderer,
-  { warm, cold, lamp }: { warm: Color; cold: Color; lamp: Color },
+  // the inks are no longer mirrored (the page's chrome is plain silver); kept for the callers
+  _inks: { warm: Color; cold: Color; lamp: Color },
 ): Texture {
   const scene = new Scene()
   const disposables: { dispose(): void }[] = []
 
   // the dome: vertex colours from the floor (near black) to the ceiling (warm grey)
   const domeGeo = new SphereGeometry(30, 32, 16)
-  const top = new Color('#5c544a')
-  const horizon = new Color('#332e28')
-  const floor = new Color('#16130f')
+  const top = new Color('#4a4a4d')
+  const horizon = new Color('#1c1c1e')
+  const floor = new Color('#050506')
   const pos = domeGeo.getAttribute('position')
   const colors: number[] = []
   const c = new Color()
@@ -111,15 +112,16 @@ export function createPageEnvironment(
     card(w, h, pos3, color.clone().multiplyScalar(intensity), color.clone().multiplyScalar(intensity))
 
   // the big card in front: light grey at the top, gone by the bottom
-  card(22, 14, [0, 2, 9], new Color('#e2dccf').multiplyScalar(1.25), new Color('#221f1b'))
+  card(22, 14, [0, 2, 9], new Color('#f2f2f2').multiplyScalar(1.3), new Color('#0e0e10'))
   // the lit desk under the objects, bouncing a little warm light back up into their bellies
-  card(14, 10, [0, -7, 3], new Color('#4a3a2a'), new Color('#4a3a2a'))
-  strip(warm, 4.5, 1.6, 10, [-7, 0.5, 3.5]) // orange ink, a tall strip on the left
-  strip(cold, 5, 1.6, 10, [7, 0, 3]) // blue ink on the right
-  strip(lamp, 3.2, 6, 2.4, [-3, 7, 4]) // the warm softbox above left
+  card(14, 10, [0, -7, 3], new Color('#151517'), new Color('#151517'))
+  // white strips only: the chrome reads as liquid silver, like the title
+  strip(new Color('#ffffff'), 4.5, 1.2, 10, [-7, 0.5, 3.5]) // a tall strip on the left
+  strip(new Color('#ffffff'), 3.5, 1.2, 10, [7, 0, 3]) // and on the right
+  strip(new Color('#ffffff'), 3.4, 6, 2.4, [-3, 7, 4]) // a softbox above left
   strip(new Color('#ffffff'), 2.6, 9, 0.6, [0, 6, -4]) // a white rim behind, above
   strip(new Color('#ffffff'), 1.8, 0.5, 8, [-5, 1, -5]) // and one behind on the left
-  strip(cold, 1.4, 14, 2, [0, -4, -6]) // a cold wash low behind
+  strip(new Color('#9a9aa0'), 1.0, 14, 2, [0, -4, -6]) // a grey wash low behind
 
   const pmrem = new PMREMGenerator(renderer)
   const target = pmrem.fromScene(scene, 0.03)

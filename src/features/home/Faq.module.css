@@ -266,3 +266,10 @@
     transform: none;
   }
 }
+
+/* Y2K: the open chapter's tab in the holographic sheen */
+.tab[aria-selected='true'] {
+  border-color: transparent;
+  background: var(--holo);
+  color: #101015;
+}

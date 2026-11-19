@@ -8,11 +8,15 @@ import { createPageEnvironment } from './env'
  * The materials every object on the page is made of:
  *  - chrome:  polished metal, mirrors the page studio (warm grey room, orange + blue strips) and
  *             catches the lamp (cursor) as a warm highlight
- *  - orange / blue: glossy enamel in the two inks, for small parts (dots, tape, buttons)
+ *  - orange / blue: glossy enamel for small parts (dots, tape, buttons); the „orange“ one is now
+ *             a deep red (OBJECT_RED), the objects' own accent, apart from the page's orange
  *  - dark:    black glass, for screens and insets
  *  - enamel:  white enamel (the mug, the parcel's label)
  * One set per canvas (the env map belongs to its renderer).
  */
+/** The accent enamel of the 3D objects (buttons, tape, the can's print): a deep red. */
+export const OBJECT_RED = '#780e0e'
+
 export type ChromeKit = {
   env: Texture
   chrome: MeshPhysicalMaterial
@@ -31,22 +35,24 @@ export function useChromeKit(): ChromeKit {
       new MeshPhysicalMaterial({ envMap: env, ...params })
     const enamel = { metalness: 0.1, roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.06, envMapIntensity: 1 }
     const chrome = physical({
-      color: '#f1efea',
+      // liquid chrome like the title: a neutral silver mirror, sharp and high in contrast
+      color: '#eef0f3',
       metalness: 1,
-      roughness: 0.14,
-      envMapIntensity: 1.45,
-      clearcoat: 0.5,
-      clearcoatRoughness: 0.08,
-      iridescence: 0.55,
-      iridescenceIOR: 1.7,
-      iridescenceThicknessMinimum: 180,
-      iridescenceThicknessMaximum: 520,
+      roughness: 0.05,
+      envMapIntensity: 1.7,
+      clearcoat: 1,
+      clearcoatRoughness: 0.03,
+      // Y2K: a thin oily film, the highlights run lilac to cyan as it turns
+      iridescence: 0.7,
+      iridescenceIOR: 1.8,
+      iridescenceThicknessMinimum: 200,
+      iridescenceThicknessMaximum: 600,
     })
     return {
       env,
       // a thin oily film on the chrome: the highlights run from violet to teal as it turns
       chrome,
-      orange: physical({ color: palette.orange, ...enamel }),
+      orange: physical({ color: OBJECT_RED, ...enamel }),
       blue: physical({ color: palette.blue, ...enamel }),
       dark: physical({ color: '#16130f', metalness: 0.4, roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.05, envMapIntensity: 1 }),
       enamel: physical({ color: palette.ink, metalness: 0, roughness: 0.26, clearcoat: 1, clearcoatRoughness: 0.06, envMapIntensity: 0.8 }),
