@@ -8,6 +8,9 @@ import { typo } from '@/lib/typo/czech'
 import { Slot3D } from '@/three/site/Slot3D'
 import shared from './home.module.css'
 import styles from './Reel.module.css'
+import { useChromeRim } from './ArchTitle'
+
+const PROCESS_SRC = '/brand/process.webp'
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
 const easeOut = (t: number) => 1 - (1 - t) ** 3
@@ -31,6 +34,9 @@ export function Reel() {
   const userPaused = useRef(false)
   const [playing, setPlaying] = useState(false)
   const [muted, setMuted] = useState(true)
+  const processRef = useRef<HTMLDivElement>(null)
+  const processRim = useRef<HTMLCanvasElement>(null)
+  useChromeRim(processRef, processRim, PROCESS_SRC, 1.6)
 
   // scroll → --e on the stage (0 = top just entering, 1 = frame settled in view)
   useEffect(() => {
@@ -115,7 +121,11 @@ export function Reel() {
 
       {/* the liquid chrome PROCESS title over the video (public/brand/process.webp) */}
       {/* eslint-disable-next-line @next/next/no-img-element -- a cut-out chrome title */}
-      <img className={styles.processTitle} src="/brand/process.webp" alt="" width={2000} height={429} loading="lazy" />
+      <div ref={processRef} className={styles.processTitle}>
+        <img className={styles.processImg} src={PROCESS_SRC} alt="" width={2000} height={429} loading="lazy" />
+        {/* the edges catching the cursor's light, like MADE BY FAJLAJP */}
+        <canvas ref={processRim} className={styles.processRim} aria-hidden="true" />
+      </div>
       <div ref={stage} className={styles.stage}>
         {FRAME_ART && (
           // eslint-disable-next-line @next/next/no-img-element -- a decorative cut-out frame round the screen

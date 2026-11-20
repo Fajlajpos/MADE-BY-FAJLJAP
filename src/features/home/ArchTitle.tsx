@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type RefObject } from 'react'
 import styles from './Hero.module.css'
 
 const SRC = '/brand/made-by-fajlajp.webp'
@@ -15,8 +15,35 @@ const SRC = '/brand/made-by-fajlajp.webp'
 export function ArchTitle() {
   const ref = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  useChromeRim(ref, canvasRef, SRC)
 
+  return (
+    <div ref={ref} className={styles.archScene}>
+      <div className={styles.archFloat}>
+        <div className={styles.archTilt}>
+          <Image src={SRC} alt="" width={2400} height={693} priority unoptimized className={styles.archImg} />
+          {/* a white flash running across now and then */}
+          <span className={styles.archGlint} aria-hidden="true" />
+          {/* the edges catching the cursor's light */}
+          <canvas ref={canvasRef} className={styles.archRim} aria-hidden="true" />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * The cursor-lamp rim on a cut-out chrome image: `canvas` lies exactly over the image `src`,
+ * pointer moves are read on `rootRef`. Used by the MADE BY FAJLAJP title and the PROCESS title.
+ */
+export function useChromeRim(
+  rootRef: RefObject<HTMLElement | null>,
+  canvasRef: RefObject<HTMLCanvasElement | null>,
+  SRC: string,
+  gain = 1,
+) {
   useEffect(() => {
+    const ref = rootRef
     const root = ref.current
     const canvas = canvasRef.current
     if (!root || !canvas) return
@@ -36,6 +63,7 @@ export function ArchTitle() {
       uniform vec2 cursor;   // 0..1 over the title
       uniform float aspect;  // width / height
       uniform float on;      // 0..1 fade
+      uniform float gain;    // 1 = the MADE BY FAJLAJP look, higher = brighter, wider, thicker
       void main() {
         vec4 t = texture2D(map, uv);
         float edge = t.b;
@@ -47,10 +75,10 @@ export function ArchTitle() {
         // only the edges that face the light, and a little of the others
         float facing = pow(max(dot(n, dir), 0.0), 1.6) * 0.9 + 0.1;
         // falloff around the cursor (in title heights)
-        float fall = exp(-dist * dist / 0.09);
-        float rim = pow(edge, 3.0);          // the thin bright core of the edge
-        float glow = edge * 0.08;            // a hint of halo
-        float i = min(1.0, (rim + glow) * facing * fall * on * 2.6);
+        float fall = exp(-dist * dist / (0.09 * gain));
+        float rim = pow(edge, 3.0 / gain);   // the thin bright core of the edge
+        float glow = edge * 0.08 * gain;     // a hint of halo
+        float i = min(1.0, (rim + glow) * facing * fall * on * 2.6 * gain);
         gl_FragColor = vec4(vec3(1.0, 0.97, 0.93) * i, i);
       }`
     const sh = (type: number, src: string) => {
@@ -73,6 +101,7 @@ export function ArchTitle() {
     const uCursor = gl.getUniformLocation(prog, 'cursor')
     const uAspect = gl.getUniformLocation(prog, 'aspect')
     const uOn = gl.getUniformLocation(prog, 'on')
+    gl.uniform1f(gl.getUniformLocation(prog, 'gain'), gain)
     gl.enable(gl.BLEND)
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
 
@@ -190,19 +219,5 @@ export function ArchTitle() {
       root.removeEventListener('pointermove', onMove)
       root.removeEventListener('pointerleave', onLeave)
     }
-  }, [])
-
-  return (
-    <div ref={ref} className={styles.archScene}>
-      <div className={styles.archFloat}>
-        <div className={styles.archTilt}>
-          <Image src={SRC} alt="" width={2400} height={693} priority unoptimized className={styles.archImg} />
-          {/* a white flash running across now and then */}
-          <span className={styles.archGlint} aria-hidden="true" />
-          {/* the edges catching the cursor's light */}
-          <canvas ref={canvasRef} className={styles.archRim} aria-hidden="true" />
-        </div>
-      </div>
-    </div>
-  )
+  }, [rootRef, canvasRef, SRC, gain])
 }
