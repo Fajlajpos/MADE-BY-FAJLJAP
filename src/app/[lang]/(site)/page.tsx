@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { About } from '@/features/home/About'
 import { Contact } from '@/features/home/Contact'
-import { Depth } from '@/features/home/Depth'
 import { Hero } from '@/features/home/Hero'
 import { Pricing } from '@/features/home/Pricing'
 import { Process } from '@/features/home/Process'
@@ -24,7 +23,6 @@ export default function Home() {
       <Hero />
       <Reel />
       <Services />
-      <Depth />
       <Process />
       <Work />
       <About />
