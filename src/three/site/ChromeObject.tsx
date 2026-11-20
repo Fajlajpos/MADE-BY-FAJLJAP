@@ -7,7 +7,11 @@ import type { ServiceObject } from '@/content/home'
 import { useChromeKit, type ChromeKit } from '../chrome/materials'
 import {
   BrowserShape,
+  AppIconShape,
+  BagShape,
   CameraShape,
+  CursorBigShape,
+  DropShape,
   FrameShape,
   CanShape,
   GlassesShape,
@@ -35,7 +39,7 @@ import { CasePile, type CaseSpec, type PileRef } from '../objects/cases'
  *   liquid → a drop of liquid chrome that swells toward the lamp (for <Drift/> between sections)
  *   cases → the FAQ as a pile of game cases (opens the one whose question is open)
  */
-export type ObjectKind = ServiceObject | 'mug' | 'plane' | 'camera' | 'frame' | 'frame1' | 'frame2' | 'frame3' | 'glasses' | 'can' | 'keys' | 'headphones' | 'controller' | 'play' | 'tag' | 'wordmark' | 'liquid' | 'cases'
+export type ObjectKind = ServiceObject | 'mug' | 'plane' | 'camera' | 'cursor' | 'bag' | 'drop' | 'appicon' | 'frame' | 'frame1' | 'frame2' | 'frame3' | 'glasses' | 'can' | 'keys' | 'headphones' | 'controller' | 'play' | 'tag' | 'wordmark' | 'liquid' | 'cases'
 
 /** The FAQ pile's state and cases, for the cases object (set by Slot3DView). */
 export const InkContext = createContext<{ still: boolean; pile?: PileRef; cases?: CaseSpec[] }>({ still: false })
@@ -92,6 +96,14 @@ export function ChromeObject({ kind }: { kind: ObjectKind }) {
       return <HeadphonesShape set={chrome} />
     case 'controller':
       return <ControllerShape set={chrome} />
+    case 'cursor':
+      return <CursorBigShape set={chrome} />
+    case 'bag':
+      return <BagShape set={chrome} />
+    case 'drop':
+      return <DropShape set={chrome} />
+    case 'appicon':
+      return <AppIconShape set={chrome} />
     case 'frame':
     case 'frame1':
     case 'frame2':

@@ -132,3 +132,22 @@
   background-clip: text;
   color: transparent;
 }
+
+/* a big fingerprint behind the section: this part is me */
+.section {
+  position: relative;
+}
+
+.section::after {
+  content: '';
+  position: absolute;
+  top: 6rem;
+  left: calc(-1 * var(--margin) - 10rem);
+  z-index: -1;
+  width: 44rem;
+  aspect-ratio: 200 / 240;
+  pointer-events: none;
+  background: url('/brand/fingerprint.svg') center / contain no-repeat;
+  opacity: 0.09;
+  transform: rotate(-16deg);
+}

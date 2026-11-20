@@ -12,6 +12,9 @@ import styles from './Services.module.css'
  * Your chrome art for each service (a cut-out PNG/WebP in /public/brand, transparent background).
  * Empty: the service's 3D chrome object stands in its place until you add one.
  */
+/** The 3D piece each service shows here (its own, not the hero's). */
+const PIECE = { weby: 'cursor', 'e-shopy': 'bag', redesign: 'drop', aplikace: 'appicon' } as const
+
 const ART: Record<Service['id'], string> = {
   weby: '',
   'e-shopy': '',
@@ -58,7 +61,7 @@ export async function Services() {
                   // eslint-disable-next-line @next/next/no-img-element -- a cut-out render, sized by the slot
                   <img src={ART[item.id]} alt="" className={styles.artImg} loading="lazy" />
                 ) : (
-                  <Slot3D object={item.object} className={styles.object} scale={1.35} label={item.title} />
+                  <Slot3D object={PIECE[item.id]} className={styles.object} scale={1.3} label={item.title} />
                 )}
               </div>
               <div className={styles.meta}>
@@ -70,12 +73,14 @@ export async function Services() {
               <h3 id={`sluzba-${item.id}-title`} className={styles.title}>
                 {item.title}
               </h3>
+              <div className={styles.more}>
               <p className={styles.body}>{typo(item.body)}</p>
               <ul className={styles.points} role="list">
                 {item.points.map((point) => (
                   <li key={point}>{typo(point)}</li>
                 ))}
               </ul>
+              </div>
             </article>
           </li>
         ))}

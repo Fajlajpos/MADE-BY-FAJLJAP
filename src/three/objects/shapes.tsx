@@ -6,6 +6,7 @@ import { useEffect, useMemo } from 'react'
 import {
   BufferGeometry,
   CatmullRomCurve3,
+  LatheGeometry,
   DoubleSide,
   ExtrudeGeometry,
   Float32BufferAttribute,
@@ -350,6 +351,80 @@ export function KeysShape({ set }: Props) {
   )
 }
 
+/* ── The services' pieces in Co dělám: a cursor, a bag, a drop, an app icon ── */
+
+/** Weby: a big chrome cursor arrow, deeply bevelled so it reads as poured metal. */
+export function CursorBigShape({ set }: Props) {
+  const geometry = useMemo(() => {
+    const s = new Shape()
+    const pts: [number, number][] = [[0, 0], [0, -1.15], [0.3, -0.86], [0.52, -1.32], [0.72, -1.22], [0.5, -0.78], [0.9, -0.78]]
+    pts.forEach(([x, y], i) => (i ? s.lineTo(x, y) : s.moveTo(x, y)))
+    s.closePath()
+    const g = new ExtrudeGeometry(s, { depth: 0.12, bevelEnabled: true, bevelSize: 0.09, bevelThickness: 0.12, bevelSegments: 10, curveSegments: 24 })
+    g.center()
+    return g
+  }, [])
+  return (
+    <group rotation={[0, 0, 0.2]}>
+      <mesh geometry={geometry} material={set.body} />
+    </group>
+  )
+}
+
+/** E-shopy: a shopping bag, soft and rounded, with two tube handles and a red tag. */
+export function BagShape({ set }: Props) {
+  return (
+    <group position={[0, -0.12, 0]}>
+      <RoundedBox args={[0.95, 0.85, 0.42]} radius={0.16} smoothness={8} material={set.body} />
+      {[-0.2, 0.2].map((x) => (
+        <mesh key={x} position={[x, 0.42, 0]} material={set.body}>
+          <torusGeometry args={[0.13, 0.035, 16, 40, Math.PI]} />
+        </mesh>
+      ))}
+      <RoundedBox args={[0.22, 0.14, 0.03]} radius={0.04} position={[0.28, -0.18, 0.22]} rotation={[0, 0, -0.2]} material={set.accent} />
+    </group>
+  )
+}
+
+/** Redesign: a drop of liquid chrome, with a smaller drop falling away from it. */
+export function DropShape({ set }: Props) {
+  const geometry = useMemo(() => {
+    // a lathe profile: round at the bottom, drawn out into a point at the top
+    const pts: Vector2[] = []
+    for (let i = 0; i <= 40; i++) {
+      const t = i / 40
+      const y = -0.55 + t * 1.25
+      const r = t < 0.5 ? Math.sin(Math.acos(1 - t * 2)) * 0.5 : 0.5 * Math.pow(1 - (t - 0.5) / 0.5, 1.6)
+      pts.push(new Vector2(Math.max(0.0001, r), y))
+    }
+    return new LatheGeometry(pts, 64)
+  }, [])
+  return (
+    <group rotation={[0, 0, -0.15]}>
+      <mesh geometry={geometry} material={set.body} />
+      <mesh position={[0.42, -0.62, 0.1]} material={set.body}>
+        <sphereGeometry args={[0.12, 32, 24]} />
+      </mesh>
+    </group>
+  )
+}
+
+/** Aplikace: an app icon, a chrome squircle with a glass face and a red notification bubble. */
+export function AppIconShape({ set }: Props) {
+  return (
+    <group rotation={[0.1, 0, 0]}>
+      <RoundedBox args={[1, 1, 0.24]} radius={0.12} smoothness={10} material={set.body} />
+      <RoundedBox args={[0.74, 0.74, 0.04]} radius={0.16} smoothness={8} position={[0, 0, 0.12]} material={set.inset} />
+      <mesh position={[0, 0, 0.16]} material={set.body}>
+        <torusGeometry args={[0.18, 0.06, 20, 48]} />
+      </mesh>
+      <mesh position={[0.46, 0.46, 0.14]} material={set.accent}>
+        <sphereGeometry args={[0.13, 32, 24]} />
+      </mesh>
+    </group>
+  )
+}
+
 /* ── A card frame: a liquid chrome tube round a tall rounded rectangle ─ */
 
 /**
@@ -405,7 +480,9 @@ export function FrameShape({ set, look = 0 }: Props & { look?: number }) {
         const size = L.size * (0.6 + 0.4 * Math.abs(Math.sin(k * 3.7 + L.seed)))
         s += size * Math.exp(-(d * d) / (2 * L.width * L.width))
       }
-      v.multiplyScalar(Math.max(0.55, s)).add(c)
+      const grow = Math.max(0.55, s)
+      const out = new Vector3(c.x, c.y, 0).normalize().multiplyScalar(base * (grow - 1) * 0.9)
+      v.multiplyScalar(grow).add(c).add(out)
       pos.setXYZ(i, v.x, v.y, v.z)
     }
     // keep the tube's own (radial) normals: recomputing them would crease the seam where it closes

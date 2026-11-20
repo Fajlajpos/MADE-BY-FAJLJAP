@@ -9,7 +9,7 @@ import type { Tier } from '../quality'
 import { ChromeObject, KitProvider, type ObjectKind } from './ChromeObject'
 
 /** Every object a slot on the page can show; their shaders are compiled up front. */
-const KINDS: ObjectKind[] = ['browser', 'parcel', 'phone', 'pen', 'plane', 'camera', 'play', 'tag', 'mug', 'wordmark']
+const KINDS: ObjectKind[] = ['browser', 'parcel', 'phone', 'pen', 'plane', 'camera', 'cursor', 'bag', 'drop', 'appicon', 'play', 'tag', 'mug', 'wordmark']
 
 /**
  * One transparent canvas fixed over the page (under the header, never catching the pointer).
