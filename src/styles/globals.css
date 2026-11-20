@@ -297,3 +297,9 @@ body::after {
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
   mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
 }
+
+/* the dots evenly across the whole width, so they show round wide content too (the wallet) */
+body::after {
+  -webkit-mask-image: none;
+  mask-image: none;
+}

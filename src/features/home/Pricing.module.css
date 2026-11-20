@@ -163,3 +163,147 @@
   background-clip: text;
   color: transparent;
 }
+
+/* the banknote: all frames stacked, one shown */
+.note {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1376 / 768;
+  margin-top: var(--space-4);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.note:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.noteFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  visibility: hidden;
+  filter: drop-shadow(0 18px 24px rgb(0 0 0 / 0.6));
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.noteFrame[data-on] {
+  visibility: visible;
+}
+
+
+/* no cards, no glow: just the banknotes, the name and price small above each */
+.item,
+.item:hover {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  transform: none;
+}
+
+.item::before,
+.item::after {
+  display: none;
+}
+
+.item .itemBody {
+  display: none;
+}
+
+.item .what,
+.item .price {
+  display: inline;
+}
+
+.itemTitle {
+  font-size: var(--fs-body);
+}
+
+.price {
+  margin-top: 0;
+  font-size: var(--fs-small);
+}
+
+.price .amount {
+  font-size: 1.4rem;
+}
+
+/* ── matched to the rest: a centred head, the banknotes laid out like on a desk ── */
+.top {
+  display: grid;
+  grid-template-columns: 1fr !important;
+  justify-items: center;
+  text-align: center;
+}
+
+.intro {
+  grid-column: 1 / -1 !important;
+  display: grid;
+  justify-items: center;
+}
+
+.items {
+  gap: var(--space-8) var(--space-7);
+}
+
+/* the label: the service in chrome, the price beside it */
+.itemTitle {
+  font-size: clamp(1.4rem, 1.1rem + 0.8vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.what {
+  margin-right: var(--space-3);
+}
+
+/* a gentle hover: the note lifts a little off the page and its shadow spreads */
+.noteFrame {
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    filter var(--dur-base) var(--ease-out);
+}
+
+.note:hover .noteFrame {
+  transform: translateY(-6px);
+  filter: drop-shadow(0 26px 30px rgb(0 0 0 / 0.7));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .note:hover .noteFrame {
+    transform: none;
+  }
+}
+
+/* tilt toward the cursor (PriceNote sets --rx / --ry) */
+.note {
+  perspective: 900px;
+}
+
+.note .noteFrame {
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+}
+
+.note:hover .noteFrame {
+  transform: translateY(-6px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .note .noteFrame,
+  .note:hover .noteFrame {
+    transform: none;
+  }
+}

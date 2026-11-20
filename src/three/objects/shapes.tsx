@@ -435,13 +435,13 @@ export function AppIconShape({ set }: Props) {
 /** The four looks of the frame (one per service): slow bulges, big swells, quick ripples, drops. */
 const FRAME_LOOKS = [
   // smooth tube with a few big drops
-  { a: 0.12, f1: 3, f2: 2, b: 0.04, f3: 9, base: 0.05, blobs: 5, size: 2.2, width: 0.007, seed: 1 },
+  { a: 0.12, f1: 3, f2: 2, b: 0.04, f3: 9, base: 0.05, blobs: 5, size: 1.4, width: 0.007, seed: 1 },
   // many small knots all round
-  { a: 0.1, f1: 5, f2: 3, b: 0.06, f3: 15, base: 0.045, blobs: 14, size: 1.5, width: 0.005, seed: 7 },
+  { a: 0.1, f1: 5, f2: 3, b: 0.06, f3: 15, base: 0.045, blobs: 14, size: 1.0, width: 0.005, seed: 7 },
   // quick ripples and two huge swells
-  { a: 0.22, f1: 11, f2: 9, b: 0.18, f3: 27, base: 0.045, blobs: 3, size: 3.2, width: 0.01, seed: 3 },
+  { a: 0.22, f1: 11, f2: 9, b: 0.18, f3: 27, base: 0.045, blobs: 3, size: 1.9, width: 0.01, seed: 3 },
   // lumpy, uneven, drips everywhere
-  { a: 0.45, f1: 7, f2: 4, b: 0.1, f3: 13, base: 0.05, blobs: 9, size: 2.6, width: 0.008, seed: 11 },
+  { a: 0.45, f1: 7, f2: 4, b: 0.1, f3: 13, base: 0.05, blobs: 9, size: 1.6, width: 0.008, seed: 11 },
 ]
 
 export function FrameShape({ set, look = 0 }: Props & { look?: number }) {

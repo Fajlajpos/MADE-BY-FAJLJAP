@@ -133,21 +133,58 @@
   color: transparent;
 }
 
-/* a big fingerprint behind the section: this part is me */
-.section {
-  position: relative;
+
+.wallet {
+  display: block;
+  width: min(100%, 70rem);
+  margin-inline: auto;
+  height: auto;
+  filter: drop-shadow(0 30px 40px rgb(0 0 0 / 0.7));
 }
 
-.section::after {
+.walletWrap {
+  position: relative;
+  width: min(100%, 70rem);
+  margin-inline: auto;
+}
+
+.walletWrap .wallet {
+  width: 100%;
+}
+
+/* the tag: a dark bubble with a little arrow pointing down at my head, like on Instagram */
+.igTag {
+  position: absolute;
+  left: 21%;
+  top: 58.5%;
+  translate: -50% -100%;
+  padding: 0.45rem 0.8rem;
+  border-radius: 8px;
+  background: rgb(20 20 24 / 0.85);
+  color: #fff;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.igTag::after {
   content: '';
   position: absolute;
-  top: 6rem;
-  left: calc(-1 * var(--margin) - 10rem);
-  z-index: -1;
-  width: 44rem;
-  aspect-ratio: 200 / 240;
-  pointer-events: none;
-  background: url('/brand/fingerprint.svg') center / contain no-repeat;
-  opacity: 0.09;
-  transform: rotate(-16deg);
+  left: 50%;
+  top: 100%;
+  translate: -50% 0;
+  border: 7px solid transparent;
+  border-top-color: rgb(20 20 24 / 0.85);
 }
+
+.igTag:hover {
+  background: rgb(40 40 48 / 0.95);
+}
+
+.igTag:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+

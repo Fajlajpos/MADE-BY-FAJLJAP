@@ -3,8 +3,8 @@ import { Arrow } from '@/components/ui/Arrow'
 import { content } from '@/content/server'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
-import { Slot3D } from '@/three/site/Slot3D'
 import { FaqCases } from './FaqCases'
+import { PriceNote } from './PriceNote'
 import shared from './home.module.css'
 import styles from './Pricing.module.css'
 
@@ -43,12 +43,11 @@ export async function Pricing() {
             {typo(pricing.lead)}
           </p>
         </div>
-        <Slot3D object="tag" className={styles.tag} scale={1.15} />
       </div>
 
       <ul className={styles.items} role="list">
         {pricing.items.map((item, i) => (
-          <li key={item.title} className={`${styles.item} glow-card`} data-reveal="" style={{ '--reveal-i': i } as CSSProperties}>
+          <li key={item.title} className={styles.item} data-reveal="" style={{ '--reveal-i': i } as CSSProperties}>
             <div className={styles.what}>
               <h3 className={styles.itemTitle}>{typo(item.title)}</h3>
               <p className={styles.itemBody}>{typo(item.body)}</p>
@@ -56,6 +55,8 @@ export async function Pricing() {
             <p className={styles.price}>
               <Price value={item.from} />
             </p>
+            {/* the price as a banknote with my face (only the ones made so far: E-shop) */}
+            {i === 0 && <PriceNote id="eshop" label={`${typo(item.title)} ${item.from}: zmačkat bankovku`} />}
           </li>
         ))}
       </ul>

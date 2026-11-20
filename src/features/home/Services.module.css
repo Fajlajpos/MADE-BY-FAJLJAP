@@ -432,3 +432,8 @@
   position: relative;
 }
 
+
+/* room round the cards for the frames' drips, so nothing is cut off */
+.grid {
+  padding-block: 3.5rem;
+}

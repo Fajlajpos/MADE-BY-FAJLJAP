@@ -1,8 +1,4 @@
-import type { CSSProperties } from 'react'
-import { VoiceNote } from '@/components/media/VoiceNote'
-import { PhotoPrint } from '@/components/print/PhotoPrint'
 import { content } from '@/content/server'
-import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import shared from './home.module.css'
 import styles from './About.module.css'
@@ -16,57 +12,18 @@ export async function About() {
   const { about } = home
   return (
     <section id="o-mne" className={`${shared.section} ${styles.section}`} aria-labelledby="o-mne-title">
-      <p className={shared.label} data-reveal="">
-        <b>{about.index}</b> {about.label}
-      </p>
-
-      <div className={styles.layout}>
-        <figure className={styles.figure} data-reveal="">
-          <div className={styles.frame}>
-            <PhotoPrint
-              slot={about.portraitSlot}
-              stamp={about.print.stamp}
-              note={typo(about.caption)}
-              back={about.print.back}
-              tag={{ label: '@fajlajpos', href: 'https://www.instagram.com/fajlajpos/', at: [44, 41] }}
-              sizes="(min-width: 1024px) 40vw, 92vw"
-            />
-          </div>
-          <figcaption className="visually-hidden">{typo(about.caption)}</figcaption>
-        </figure>
-
-        <div className={styles.copy}>
-          <h2 id="o-mne-title" className={`${shared.h2} ${styles.title}`} data-reveal="">
-            <Words text={about.heading} />
-          </h2>
-
-          <div className={styles.body}>
-            {about.body.map((p, i) => (
-              <p key={p.slice(0, 24)} className={i === 0 ? styles.first : styles.text} data-reveal="" style={{ '--reveal-i': i + 1 } as CSSProperties}>
-                {typo(p)}
-              </p>
-            ))}
-          </div>
-
-          <div data-reveal="" style={{ '--reveal-i': 2 } as CSSProperties}>
-            <VoiceNote
-              src={about.voice.src || undefined}
-              title={about.voice.title}
-              sub={about.voice.sub}
-              soon={about.voice.soon}
-              transcript={about.voice.transcript}
-            />
-          </div>
-
-          <dl className={styles.facts} data-reveal="" style={{ '--reveal-i': 2 } as CSSProperties}>
-            {about.facts.map((f) => (
-              <div key={f.label} className={`${styles.fact} glow-card`}>
-                <dt>{f.label}</dt>
-                <dd>{typo(f.value)}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+      {/* for now the whole section is my wallet, open (public/photos/wallet-v3.webp); the texts come back with the redesign */}
+      <h2 id="o-mne-title" className="visually-hidden">
+        {about.heading}
+      </h2>
+      <div className={styles.walletWrap}>
+        {/* eslint-disable-next-line @next/next/no-img-element -- a cut-out photo */}
+        <img className={styles.wallet} src="/photos/wallet-v3.webp" alt={typo(about.caption)} width={1903} height={1158} loading="lazy" />
+        {/* an Instagram-style tag over my head on the photo */}
+        <a className={styles.igTag} href="https://www.instagram.com/fajlajpos/" target="_blank" rel="noopener noreferrer">
+          @fajlajpos
+          <span className="visually-hidden"> na Instagramu (otevře se v novém okně)</span>
+        </a>
       </div>
     </section>
   )
