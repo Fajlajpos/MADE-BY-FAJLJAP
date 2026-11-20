@@ -20,9 +20,9 @@ const ART: Record<Service['id'], string> = {
 }
 
 /**
- * 02 Co dělám — the four services as glossy tiles side by side (Y2K liquid chrome): on top the
- * service's chrome art (or its 3D object until the art exists), then its number and name in
- * chrome, what it is and what you get. Each keeps its id (#sluzba-weby …): other parts link to them.
+ * 02 Co dělám — the four services as tiles side by side, each a dark card in a rendered
+ * liquid-chrome frame: the service's object on top, then its number and name in chrome, what it
+ * is and what you get. No glow. Each keeps its id (#sluzba-weby …): other parts link to them.
  */
 export async function Services() {
   const { home } = await content()
@@ -46,12 +46,13 @@ export async function Services() {
           <li
             key={item.id}
             id={`sluzba-${item.id}`}
-            className={`${styles.tile} glow-card`}
+            className={styles.tile}
             data-reveal=""
             style={{ '--reveal-i': i } as CSSProperties}
           >
+            {/* eslint-disable-next-line @next/next/no-img-element -- the rendered chrome frame round the card */}
+            <img className={styles.frameImg} src={`/brand/card-frame-${i % 4}.webp`} alt="" aria-hidden="true" loading="lazy" />
             <article aria-labelledby={`sluzba-${item.id}-title`} className={styles.inner}>
-              {/* the art slot: your chrome piece, or the 3D object until it exists */}
               <div className={styles.art}>
                 {ART[item.id] ? (
                   // eslint-disable-next-line @next/next/no-img-element -- a cut-out render, sized by the slot

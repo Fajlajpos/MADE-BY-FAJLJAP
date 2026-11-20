@@ -350,6 +350,83 @@ export function KeysShape({ set }: Props) {
   )
 }
 
+/* ── A card frame: a liquid chrome tube round a tall rounded rectangle ─ */
+
+/**
+ * The edge for the service cards: a closed tube following a tall rounded rectangle (about the
+ * cards' shape), its thickness swelling and pinching along the way like poured chrome. Rendered
+ * once to public/brand/card-frame.webp and used as the cards' border image.
+ */
+/** The four looks of the frame (one per service): slow bulges, big swells, quick ripples, drops. */
+const FRAME_LOOKS = [
+  // smooth tube with a few big drops
+  { a: 0.12, f1: 3, f2: 2, b: 0.04, f3: 9, base: 0.05, blobs: 5, size: 2.2, width: 0.007, seed: 1 },
+  // many small knots all round
+  { a: 0.1, f1: 5, f2: 3, b: 0.06, f3: 15, base: 0.045, blobs: 14, size: 1.5, width: 0.005, seed: 7 },
+  // quick ripples and two huge swells
+  { a: 0.22, f1: 11, f2: 9, b: 0.18, f3: 27, base: 0.045, blobs: 3, size: 3.2, width: 0.01, seed: 3 },
+  // lumpy, uneven, drips everywhere
+  { a: 0.45, f1: 7, f2: 4, b: 0.1, f3: 13, base: 0.05, blobs: 9, size: 2.6, width: 0.008, seed: 11 },
+]
+
+export function FrameShape({ set, look = 0 }: Props & { look?: number }) {
+  const L = FRAME_LOOKS[look % FRAME_LOOKS.length]!
+  const geometry = useMemo(() => {
+    const w = 1.0, h = 2.2, r = 0.22
+    const pts: Vector3[] = []
+    const corner = (cx: number, cy: number, a0: number) => {
+      for (let k = 0; k <= 6; k++) {
+        const a = a0 + (k / 6) * (Math.PI / 2)
+        pts.push(new Vector3(cx + Math.cos(a) * r, cy + Math.sin(a) * r, 0))
+      }
+    }
+    corner(w / 2 - r, h / 2 - r, 0)
+    corner(-w / 2 + r, h / 2 - r, Math.PI / 2)
+    corner(-w / 2 + r, -h / 2 + r, Math.PI)
+    corner(w / 2 - r, -h / 2 + r, (3 * Math.PI) / 2)
+    const curve = new CatmullRomCurve3(pts, true, 'centripetal')
+    const tubular = 1100, radial = 56, base = L.base
+    const g = new TubeGeometry(curve, tubular, base, radial, true)
+    // swell and pinch along the length: a few slow bulges plus smaller ripples
+    const pos = g.getAttribute('position')
+    const v = new Vector3(), c = new Vector3()
+    for (let i = 0; i < pos.count; i++) {
+      const u = Math.floor(i / (radial + 1)) / tubular
+      curve.getPointAt(u % 1, c)
+      v.fromBufferAttribute(pos, i).sub(c)
+      const t = u * Math.PI * 2
+      let s = 1 + L.a * Math.sin(t * L.f1 + 0.7 + look) * Math.sin(t * L.f2 + 1.9) + L.b * Math.sin(t * L.f3 + look * 2)
+      // the offshoots: round swells at places along the tube (fixed per look)
+      for (let k = 0; k < L.blobs; k++) {
+        const at = (Math.sin((k + 1) * 12.9898 * L.seed) * 43758.5453) % 1
+        const c0 = at < 0 ? at + 1 : at
+        let d = Math.abs(u - c0)
+        d = Math.min(d, 1 - d)
+        const size = L.size * (0.6 + 0.4 * Math.abs(Math.sin(k * 3.7 + L.seed)))
+        s += size * Math.exp(-(d * d) / (2 * L.width * L.width))
+      }
+      v.multiplyScalar(Math.max(0.55, s)).add(c)
+      pos.setXYZ(i, v.x, v.y, v.z)
+    }
+    // keep the tube's own (radial) normals: recomputing them would crease the seam where it closes
+    return g
+  }, [L, look])
+  // liquid chrome like the title: a hard mirror, deep blacks and bright highlights, no oily film
+  const material = useMemo(() => {
+    const m = (set.body as MeshPhysicalMaterial).clone()
+    m.color.set('#ffffff')
+    m.metalness = 1
+    m.roughness = 0.015
+    m.envMapIntensity = 2.4
+    m.clearcoat = 1
+    m.clearcoatRoughness = 0.01
+    m.iridescence = 0
+    return m
+  }, [set.body])
+  useEffect(() => () => material.dispose(), [material])
+  return <mesh geometry={geometry} material={material} />
+}
+
 /* ── E-shopy: a parcel with tape and a label ────────────────────────── */
 
 /** `lines`: the printed bars on the label (off when a real label texture is on it). */

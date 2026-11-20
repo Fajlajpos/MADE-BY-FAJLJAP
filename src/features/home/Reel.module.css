@@ -203,25 +203,20 @@
   }
 }
 
-/* Y2K: the screen sits in a rounded chrome bezel, glowing holographic round it */
+/* the screen: plain, no glow; the liquid chrome frame (FRAME_ART) wraps it */
 .frame {
-  border: 10px solid transparent;
-  background:
-    linear-gradient(var(--bg-raised), var(--bg-raised)) padding-box,
-    linear-gradient(150deg, #ffffff 0%, #9ea1a9 16%, #2a2b30 34%, #eceef1 52%, #c9b8ff 64%, #4a4c52 78%, #dfe1e6 100%) border-box;
-  box-shadow:
-    0 30px 60px -30px rgb(0 0 0 / 0.9),
-    var(--card-glow);
+  box-shadow: none;
 }
 
 /* your own chrome frame render over the screen (Reel.tsx › FRAME_ART), when there is one */
 .frameArt {
   position: absolute;
-  inset: -6% -4%;
+  left: -4.5%;
+  top: -7.5%;
   z-index: 3;
-  width: 108%;
+  width: 109%;
   max-width: none;
-  height: 112%;
+  height: 115%;
   object-fit: fill;
   pointer-events: none;
 }

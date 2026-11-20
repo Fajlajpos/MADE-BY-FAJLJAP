@@ -114,7 +114,9 @@ export function createPageEnvironment(
   // the big card in front: light grey at the top, gone by the bottom
   card(22, 14, [0, 2, 9], new Color('#f2f2f2').multiplyScalar(1.3), new Color('#0e0e10'))
   // the lit desk under the objects, bouncing a little warm light back up into their bellies
-  card(14, 10, [0, -7, 3], new Color('#151517'), new Color('#151517'))
+  card(14, 10, [0, -7, 3], new Color('#5a5a62'), new Color('#5a5a62'))
+  // a white strip below too, so the undersides (the drips) catch light instead of going black
+  strip(new Color('#ffffff'), 2.6, 10, 1.2, [0, -6, 4])
   // white strips only: the chrome reads as liquid silver, like the title
   strip(new Color('#ffffff'), 4.5, 1.2, 10, [-7, 0.5, 3.5]) // a tall strip on the left
   strip(new Color('#ffffff'), 3.5, 1.2, 10, [7, 0, 3]) // and on the right

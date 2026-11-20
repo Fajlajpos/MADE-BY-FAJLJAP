@@ -30,7 +30,7 @@ export default function ObjectGallery({ kinds }: { kinds: ObjectKind[] }) {
           key={kind}
           object={kind}
           tone="dusk"
-          style={{ width: kind === 'wordmark' ? 'min(92vw, 900px)' : 360, aspectRatio: kind === 'wordmark' ? '3 / 1' : '1 / 1' }}
+          style={{ width: kind === 'wordmark' ? 'min(92vw, 900px)' : kind.startsWith('frame') ? 480 : 360, aspectRatio: kind === 'wordmark' ? '3 / 1' : kind.startsWith('frame') ? '1 / 2' : '1 / 1' }}
         />
       ))}
     </div>
