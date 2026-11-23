@@ -56,7 +56,7 @@ export async function Pricing() {
               <Price value={item.from} />
             </p>
             {/* the price as a banknote with my face (only the ones made so far: E-shop) */}
-            {i === 0 && <PriceNote id="eshop" label={`${typo(item.title)} ${item.from}: zmačkat bankovku`} />}
+            {i < 2 && <PriceNote id={i === 0 ? 'web' : 'eshop'} label={`${typo(item.title)} ${item.from}: zmačkat bankovku`} />}
           </li>
         ))}
       </ul>

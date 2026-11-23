@@ -62,8 +62,8 @@ export function PriceNote({ id, frames = 5, label }: { id: string; frames?: numb
           key={i}
           src={`/prices/${id}-${i + 1}.webp`}
           alt=""
-          width={1376}
-          height={768}
+          width={1300}
+          height={724}
           className={styles.noteFrame}
           data-on={i + 1 === frame || undefined}
           loading="lazy"
