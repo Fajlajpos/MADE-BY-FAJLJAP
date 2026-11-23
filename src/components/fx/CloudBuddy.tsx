@@ -31,20 +31,40 @@ export function CloudBuddy() {
       const edge = 16
       // the start: exactly over the hero slot
       stops = [{ y: 0, x: r.left, top: r.top + sy, w: r.width }]
-      // not every section: it shows up beside some headings and slips off the edge in between
+      // a loose flight down the page, not a pattern: sometimes big beside a heading, sometimes it
+      // crosses the screen to the other side, sometimes it slips off the edge and comes back later
       const heads = [...document.querySelectorAll<HTMLElement>('main > section:not(:first-child) h2')]
-      const visits = heads.filter((_, i) => i % 2 === 1)
-      visits.forEach((h, i) => {
-        const hy = h.getBoundingClientRect().top + sy
-        const right = i % 2 === 0
-        const prev = stops[stops.length - 1]!
-        // out of sight off the edge it will come in from
-        stops.push({ y: (prev.y + hy - vh * 0.3) / 2, x: right ? vw + 60 : -big - 60, top: vh * 0.4, w: small })
-        // in, big, beside the heading
-        stops.push({ y: hy - vh * 0.3, x: right ? vw - big - edge : edge, top: vh * 0.3 - big * 0.35, w: big })
-        // and away off the same edge
-        stops.push({ y: hy + vh * 0.25, x: right ? vw + 60 : -big - 60, top: vh * 0.45, w: small })
-      })
+      const hy = (n: number) => (heads[n] ? heads[n]!.getBoundingClientRect().top + sy : sy + vh * (n + 1))
+      const off = (right: boolean) => (right ? vw + 60 : -big - 60)
+      const huge = Math.min(380, vw * 0.3)
+      const plan: [number, (y: number) => Stop][] = [
+        // 1st heading: comes in big on the right
+        [hy(0) - vh * 0.3, (y) => ({ y, x: vw - big - edge, top: vh * 0.28 - big * 0.35, w: big })],
+        // drifts across, small, to the left
+        [hy(0) + vh * 0.5, (y) => ({ y, x: edge, top: vh * 0.6, w: small })],
+        // off the left edge
+        [hy(1) - vh * 0.2, (y) => ({ y, x: off(false), top: vh * 0.5, w: small })],
+        // 3rd heading: back in from the right, really big
+        [hy(2) - vh * 0.35, (y) => ({ y, x: vw - huge - edge, top: vh * 0.25 - huge * 0.3, w: huge })],
+        // a lazy swing over to the left, middle size
+        [hy(2) + vh * 0.6, (y) => ({ y, x: edge + 20, top: vh * 0.5, w: (big + small) / 2 })],
+        // gone again
+        [hy(3) - vh * 0.1, (y) => ({ y, x: off(false), top: vh * 0.4, w: small })],
+        // 5th heading: on the left, big
+        [hy(4) - vh * 0.3, (y) => ({ y, x: edge, top: vh * 0.3 - big * 0.35, w: big })],
+        // crosses all the way to the right, shrinking
+        [hy(4) + vh * 0.7, (y) => ({ y, x: vw - small - edge, top: vh * 0.65, w: small })],
+        // last heading: grows on the right
+        [hy(heads.length - 1) - vh * 0.3, (y) => ({ y, x: vw - big - edge, top: vh * 0.3 - big * 0.35, w: big })],
+        // and away
+        [hy(heads.length - 1) + vh * 0.5, (y) => ({ y, x: off(true), top: vh * 0.45, w: small })],
+      ]
+      let last = 0
+      for (const [y, make] of plan) {
+        if (y <= last) continue
+        stops.push(make(y))
+        last = y
+      }
     }
 
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t
