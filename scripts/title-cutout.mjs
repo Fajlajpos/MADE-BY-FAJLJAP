@@ -64,7 +64,8 @@ for (let i = 0; i < N; i++) {
   let area = 0, m = 0, m2 = 0
   for (let j = 0; j < N; j++) if (region[j]) { seen[j] = 1; area++; m += lum[j]; m2 += lum[j] * lum[j] }
   const mean = m / area, sd = Math.sqrt(Math.max(0, m2 / area - mean * mean))
-  if (area > 250 && Math.abs(mean - BG) < 10 && sd < 6) for (let j = 0; j < N; j++) if (region[j]) bg[j] = 1
+  // a real hole (inside A, B, P, R …) is big; small white patches are highlights on the metal
+  if (area > N * 0.0025 && Math.abs(mean - BG) < 10 && sd < 6) for (let j = 0; j < N; j++) if (region[j]) bg[j] = 1
 }
 
 // alpha: metal 1, backdrop 0; the edge ring (next to the backdrop) by how much darker it is

@@ -1,10 +1,10 @@
 import type { CSSProperties } from 'react'
 import { Arrow } from '@/components/ui/Arrow'
 import { content } from '@/content/server'
-import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import { FaqCases } from './FaqCases'
 import { PriceNote } from './PriceNote'
+import { ChromeTitle } from './ArchTitle'
 import shared from './home.module.css'
 import styles from './Pricing.module.css'
 
@@ -25,6 +25,15 @@ function Price({ value }: { value: string }) {
  * (job left, price large right), the small print, then the common questions as a pile of game
  * cases (FaqCases), with the same pile in 3D beside them.
  */
+/**
+ * Your banknotes, in the order of the price list (Web, E-shop, Redesign, Úpravy): the id of the
+ * frames in /public/prices/<id>-1…5.webp. Empty: a dashed slot until the note exists.
+ */
+const NOTES = ['web', 'eshop', '', '']
+
+/** Your photo or texture under the notes (e.g. '/photos/desk.webp'). Empty: the plain page. */
+const DESK_ART = ''
+
 export async function Pricing() {
   const { home, ui } = await content()
   const { pricing } = home
@@ -36,30 +45,42 @@ export async function Pricing() {
 
       <div className={styles.top}>
         <div className={styles.intro}>
-          <h2 id="cenik-title" className={`${shared.h2} ${styles.title}`} data-reveal="">
-            <Words text={pricing.heading} />
+          <h2 id="cenik-title" className="visually-hidden">
+            {pricing.heading}
           </h2>
+          {/* the liquid chrome PRICES title (public/brand/prices-v3.webp), lit by the cursor like the hero's */}
+          <div className={styles.titleArt} aria-hidden="true">
+            <ChromeTitle src="/brand/prices-v3.webp" width={2000} height={528} />
+          </div>
           <p className={shared.lead} data-reveal="" style={{ '--reveal-i': 1 } as CSSProperties}>
             {typo(pricing.lead)}
           </p>
         </div>
       </div>
 
-      <ul className={styles.items} role="list">
-        {pricing.items.map((item, i) => (
-          <li key={item.title} className={styles.item} data-reveal="" style={{ '--reveal-i': i } as CSSProperties}>
-            <div className={styles.what}>
-              <h3 className={styles.itemTitle}>{typo(item.title)}</h3>
+      {/* the desk the notes lie on: your own photo/texture goes in DESK_ART (empty: plain page) */}
+      <div className={styles.desk} style={DESK_ART ? ({ '--desk-art': `url(${DESK_ART})` } as CSSProperties) : undefined}>
+        <ul className={styles.items} role="list">
+          {pricing.items.map((item, i) => (
+            <li key={item.title} className={styles.item} data-reveal="" style={{ '--reveal-i': i } as CSSProperties}>
+              <div className={styles.label}>
+                <h3 className={styles.itemTitle}>{typo(item.title)}</h3>
+                <p className={styles.price}>
+                  <Price value={item.from} />
+                </p>
+              </div>
+              {NOTES[i] ? (
+                <PriceNote id={NOTES[i]} label={`${typo(item.title)} ${item.from}: zmačkat bankovku`} />
+              ) : (
+                <div className={styles.noteSlot} aria-hidden="true">
+                  bankovka sem
+                </div>
+              )}
               <p className={styles.itemBody}>{typo(item.body)}</p>
-            </div>
-            <p className={styles.price}>
-              <Price value={item.from} />
-            </p>
-            {/* the price as a banknote with my face (only the ones made so far: E-shop) */}
-            {i < 2 && <PriceNote id={i === 0 ? 'web' : 'eshop'} label={`${typo(item.title)} ${item.from}: zmačkat bankovku`} />}
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
       <p className={styles.note}>{typo(pricing.note)}</p>
 
       <FaqCases

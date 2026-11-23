@@ -307,3 +307,143 @@
     transform: none;
   }
 }
+
+
+
+
+/* tangible paper: a tight contact shadow plus a soft one further out */
+.noteFrame {
+  filter:
+    drop-shadow(0 2px 2px rgb(0 0 0 / 0.55))
+    drop-shadow(0 18px 28px rgb(0 0 0 / 0.55));
+}
+
+.note:hover .noteFrame {
+  filter:
+    drop-shadow(0 3px 3px rgb(0 0 0 / 0.5))
+    drop-shadow(0 30px 38px rgb(0 0 0 / 0.6));
+}
+
+/* light on the paper, following the cursor, only on the note's own shape */
+.noteSheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  background: radial-gradient(40% 55% at var(--mx, 30%) var(--my, 20%), rgb(255 250 235 / 0.28), rgb(255 250 235 / 0) 70%);
+  mix-blend-mode: soft-light;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  opacity: 0.5;
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+}
+
+.note:hover .noteSheen {
+  opacity: 1;
+  transform: translateY(-6px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+}
+
+.noteSheen[data-gone] {
+  opacity: 0 !important;
+}
+
+/* ── the base: the notes laid out on a desk, the label above each, a line of what it is below ── */
+.desk {
+  position: relative;
+  margin-top: var(--space-8);
+  padding: var(--space-7) 0;
+  border-radius: var(--r-l);
+  background: var(--desk-art, none) center / cover no-repeat;
+}
+
+.items {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8) var(--space-6);
+}
+
+.item {
+  display: grid !important;
+  align-content: start;
+  gap: var(--space-4);
+}
+
+.label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.item .itemBody {
+  display: block;
+  max-width: 30ch;
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+
+/* where a note is still missing */
+.noteSlot {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1300 / 724;
+  margin-top: var(--space-4);
+  border: 1.5px dashed rgb(255 255 255 / 0.18);
+  border-radius: 10px;
+  color: var(--fg-subtle);
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 700px) {
+  .items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .items {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* bigger notes: two to a row on a wide screen (never four), one on a phone */
+@media (min-width: 1200px) {
+  .items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-9) var(--space-8);
+  }
+}
+
+.label .itemTitle {
+  font-size: clamp(1.8rem, 1.2rem + 1.4vw, 2.6rem);
+}
+
+.label .amount {
+  font-size: 2rem;
+}
+
+/* ── not a table: all notes the same size, two columns, the right one stepped down so the
+   notes zig-zag down the page like they were laid out one by one; nothing overlaps ── */
+@media (min-width: 1200px) {
+  .items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-9) var(--space-9);
+  }
+
+  .item:nth-child(even) {
+    margin-top: 12rem;
+  }
+}
+
+.titleArt {
+  width: min(100%, 38rem);
+  margin-inline: auto;
+}

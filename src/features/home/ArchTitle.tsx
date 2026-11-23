@@ -221,3 +221,23 @@ export function useChromeRim(
     }
   }, [rootRef, canvasRef, SRC, gain])
 }
+
+/**
+ * Any other cut-out chrome title (PRICES …) with the same cursor-lit edges and the gentle float
+ * as the hero's, without the hero's arch flash.
+ */
+export function ChromeTitle({ src, width, height }: { src: string; width: number; height: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  useChromeRim(ref, canvasRef, src)
+  return (
+    <div ref={ref} className={styles.archScene}>
+      <div className={styles.archFloat}>
+        <div className={styles.archTilt}>
+          <Image src={src} alt="" width={width} height={height} unoptimized className={styles.archImg} />
+          <canvas ref={canvasRef} className={styles.archRim} aria-hidden="true" />
+        </div>
+      </div>
+    </div>
+  )
+}

@@ -50,6 +50,8 @@ export function PriceNote({ id, frames = 5, label }: { id: string; frames?: numb
         const y = (e.clientY - r.top) / r.height - 0.5
         e.currentTarget.style.setProperty('--ry', `${(x * 14).toFixed(2)}deg`)
         e.currentTarget.style.setProperty('--rx', `${(-y * 14).toFixed(2)}deg`)
+        e.currentTarget.style.setProperty('--mx', `${((x + 0.5) * 100).toFixed(1)}%`)
+        e.currentTarget.style.setProperty('--my', `${((y + 0.5) * 100).toFixed(1)}%`)
       }}
       onPointerLeave={(e) => {
         e.currentTarget.style.setProperty('--ry', '0deg')
@@ -69,6 +71,12 @@ export function PriceNote({ id, frames = 5, label }: { id: string; frames?: numb
           loading="lazy"
         />
       ))}
+      <span
+        className={styles.noteSheen}
+        style={{ WebkitMaskImage: `url(/prices/${id}-1.webp)`, maskImage: `url(/prices/${id}-1.webp)` }}
+        data-gone={frame > 1 || undefined}
+        aria-hidden="true"
+      />
     </button>
   )
 }
