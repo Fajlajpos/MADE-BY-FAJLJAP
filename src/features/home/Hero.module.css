@@ -355,3 +355,37 @@
     translate: 0 20px;
   }
 }
+
+/* me on the cloud: a bigger slot shaped like the photo, gently floating in place */
+.photo {
+  width: min(92%, 40rem);
+  aspect-ratio: 1800 / 1425;
+  animation: cloudFloat 6s ease-in-out infinite;
+}
+
+@keyframes cloudFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(0.6deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo {
+    animation: none;
+  }
+}
+
+
+/* higher up under the title */
+.photo {
+  margin-top: clamp(-7rem, -7vw, -3rem);
+}
+
+/* while the flying copy (CloudBuddy) is up, the hero's own photo makes room for it */
+:global(html[data-cloud-flying]) .photo > * {
+  visibility: hidden;
+}

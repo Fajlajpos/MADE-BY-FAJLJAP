@@ -60,7 +60,7 @@ export const categoryLabels = {
 /** Image descriptions in English, by media slot. */
 export const altText: Record<string, string> = {
   'home.reel': 'FAJLAJP at work on a website, a cut from the shoot',
-  'home.sofa': 'FAJLAJP lying on a sofa with a laptop',
+  'home.sofa': 'FAJLAJP sitting on a cloud with a laptop',
   'home.about': 'FAJLAJP lying on the bonnet of a blue Škoda Octavia in a snowy forest, a bottle in hand',
   'desk.photo': 'A photo on the desk',
   'project.seda-zona': 'Grey Zone Studio, website',

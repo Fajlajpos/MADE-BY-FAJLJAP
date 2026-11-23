@@ -32,7 +32,7 @@ export async function Hero() {
             <ArchTitle />
           </h1>
 
-          <div className={styles.photo}>
+          <div className={styles.photo} data-cloud-slot="">
             {sofa.src ? (
               <Image src={sofa.src} alt={sofa.alt} fill priority sizes="(min-width: 1024px) 50vw, 90vw" className={styles.photoImg} />
             ) : (

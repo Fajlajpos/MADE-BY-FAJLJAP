@@ -1,3 +1,4 @@
+import { CloudBuddy } from '@/components/fx/CloudBuddy'
 import { ConsoleHello } from '@/components/fx/ConsoleHello'
 import { Interactions } from '@/components/fx/Interactions'
 import { Reveal } from '@/components/fx/Reveal'
@@ -19,6 +20,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         {children}
       </main>
       <Footer />
+      <CloudBuddy />
       <Reveal />
       <Interactions />
       <ConsoleHello />

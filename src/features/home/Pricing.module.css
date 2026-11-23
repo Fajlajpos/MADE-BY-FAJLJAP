@@ -447,3 +447,51 @@
   width: min(100%, 38rem);
   margin-inline: auto;
 }
+
+/* simply side by side, all the same size: one row of four on a wide screen, two on a tablet */
+@media (min-width: 1200px) {
+  .items {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+
+  .item:nth-child(even) {
+    margin-top: 0;
+  }
+
+  .label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+  }
+
+  .label .itemTitle {
+    font-size: clamp(1.3rem, 0.9rem + 0.7vw, 1.7rem);
+  }
+
+  .label .amount {
+    font-size: 1.4rem;
+  }
+}
+
+/* two to a row, big */
+@media (min-width: 1200px) {
+  .items {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-9) var(--space-8);
+  }
+
+  .label {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .label .itemTitle {
+    font-size: clamp(1.8rem, 1.2rem + 1.4vw, 2.6rem);
+  }
+
+  .label .amount {
+    font-size: 2rem;
+  }
+}

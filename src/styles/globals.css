@@ -303,3 +303,13 @@ body::after {
   -webkit-mask-image: none;
   mask-image: none;
 }
+
+@keyframes cloudFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
