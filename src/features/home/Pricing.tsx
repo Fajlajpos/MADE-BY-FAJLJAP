@@ -31,6 +31,9 @@ function Price({ value }: { value: string }) {
  */
 const NOTES = ['web', 'eshop', '', '']
 
+/** The inquiry form's option each note picks (index into contact.form.services: Web, E-shop, Redesign webu, Úprava webu). */
+const SERVICE_OF = [0, 1, 2, 3]
+
 /** Your photo or texture under the notes (e.g. '/photos/desk.webp'). Empty: the plain page. */
 const DESK_ART = ''
 
@@ -70,7 +73,7 @@ export async function Pricing() {
                 </p>
               </div>
               {NOTES[i] ? (
-                <PriceNote id={NOTES[i]} label={`${typo(item.title)} ${item.from}: zmačkat bankovku`} />
+                <PriceNote id={NOTES[i]} service={SERVICE_OF[i]} label={`${typo(item.title)} ${item.from}: zmačkat bankovku a napsat poptávku`} />
               ) : (
                 <div className={styles.noteSlot} aria-hidden="true">
                   bankovka sem

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useActionState, useEffect, useId, useRef, useState } from 'react'
 import { Arrow } from '@/components/ui/Arrow'
 import { useContent } from '@/content/client'
+import { PICK_SERVICE } from './PriceNote'
 import { typo } from '@/lib/typo/czech'
 import {
   emptyInquiry,
@@ -37,6 +38,18 @@ export function ContactForm({ onSent, onAgain }: { onSent?: () => void; onAgain?
   })
   const [step, setStep] = useState(0)
   const [values, setValues] = useState<Inquiry>(emptyInquiry)
+
+  // a banknote in the price list was crumpled: tick that service; the form stays on its first step
+  // (name first), and the service is already ticked when they get to it
+  useEffect(() => {
+    const onPick = (e: Event) => {
+      const label = form.services[(e as CustomEvent<number>).detail]
+      if (!label) return
+      setValues((v) => (v.services.includes(label) ? v : { ...v, services: [...v.services, label] }))
+    }
+    window.addEventListener(PICK_SERVICE, onPick)
+    return () => window.removeEventListener(PICK_SERVICE, onPick)
+  }, [form.services])
   const [errors, setErrors] = useState<InquiryErrors>({})
   const formRef = useRef<HTMLFormElement>(null)
   const openedAt = useRef(0)

@@ -10,12 +10,26 @@ const FRAME_MS = 110
  * ball). A click crumples it frame by frame; another click smooths it out again. All frames are
  * stacked and only one shows, so nothing reloads mid-animation. Reduced motion: it jumps.
  */
-export function PriceNote({ id, frames = 5, label }: { id: string; frames?: number; label: string }) {
+/** Sends the visitor to the inquiry form with this service picked (ContactForm listens for it). */
+export const PICK_SERVICE = 'fajlajp:pick-service'
+
+export function PriceNote({ id, frames = 5, label, service }: { id: string; frames?: number; label: string; service?: number }) {
   const [frame, setFrame] = useState(1)
   const [crumpled, setCrumpled] = useState(false)
   const timer = useRef<number>(0)
 
   useEffect(() => () => window.clearInterval(timer.current), [])
+
+  // crumpled all the way: on to the form, the service ticked, and the note smooths out again
+  const toContact = () => {
+    if (service === undefined) return
+    window.dispatchEvent(new CustomEvent(PICK_SERVICE, { detail: service }))
+    document.getElementById('kontakt')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    window.setTimeout(() => {
+      setFrame(1)
+      setCrumpled(false)
+    }, 900)
+  }
 
   const toggle = () => {
     window.clearInterval(timer.current)
@@ -23,13 +37,17 @@ export function PriceNote({ id, frames = 5, label }: { id: string; frames?: numb
     setCrumpled(!crumpled)
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setFrame(target)
+      if (target === frames) toContact()
       return
     }
     const step = target > frame ? 1 : -1
     timer.current = window.setInterval(() => {
       setFrame((f) => {
         const next = f + step
-        if (next === target) window.clearInterval(timer.current)
+        if (next === target) {
+          window.clearInterval(timer.current)
+          if (target === frames) window.setTimeout(toContact, 350)
+        }
         return next
       })
     }, FRAME_MS)

@@ -389,3 +389,8 @@
 :global(html[data-cloud-flying]) .photo > * {
   visibility: hidden;
 }
+
+/* a little smaller in the hero */
+.photo {
+  width: min(80%, 32rem);
+}

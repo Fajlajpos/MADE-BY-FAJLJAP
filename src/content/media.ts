@@ -13,7 +13,7 @@ export const mediaSlots = {
   // the cinematic reel after the hero (landscape 16:9): set `video` (+ `src` as its poster)
   'home.reel': { alt: 'FAJLAJP při práci na webu, střih z natáčení', placeholder: 'dusk' },
   // the hero: me lying on the sofa with a laptop, shot from the side, cut out (transparent PNG/WebP)
-  'home.sofa': { src: '/photos/cloud-me-v4.webp', alt: 'FAJLAJP sedí na mraku s notebookem', placeholder: 'dusk' },
+  'home.sofa': { src: '/photos/cloud-me-v5.webp', alt: 'FAJLAJP sedí na mraku s notebookem', placeholder: 'dusk' },
   'home.about': {
     src: '/photos/o-mne.webp',
     alt: 'FAJLAJP leží na kapotě modré Škody Octavia v zasněženém lese, v ruce flašku',

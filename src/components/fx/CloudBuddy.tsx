@@ -117,7 +117,7 @@ export function CloudBuddy() {
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- the hero photo, flying */}
       <img
-        src="/photos/cloud-me-v4.webp"
+        src="/photos/cloud-me-v5.webp"
         alt=""
         style={{
           display: 'block',
