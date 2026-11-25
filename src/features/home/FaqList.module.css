@@ -1,0 +1,340 @@
+/* Na co se lidi ptají — a small console: chrome question buttons + a black answer screen (FaqList.tsx). */
+
+.faq {
+  margin-top: var(--space-9);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.console {
+  display: grid;
+  gap: var(--space-4);
+}
+
+/* ── the questions: glossy chrome buttons ─────────────────────── */
+
+.tabs {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+}
+
+.tab {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 56px;
+  padding: var(--space-3) var(--space-5) var(--space-3) var(--space-3);
+  border: 0;
+  border-radius: var(--r-m);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.01)),
+    rgb(18 18 22 / 0.9);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.18),
+    inset 0 -1px 0 rgb(0 0 0 / 0.5),
+    inset 0 0 0 1px rgb(255 255 255 / 0.06);
+  font: inherit;
+  text-align: left;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition:
+    background var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    translate var(--dur-fast) var(--ease-out);
+}
+
+.tab:hover {
+  color: var(--fg);
+  translate: 4px 0;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.3),
+    inset 0 -1px 0 rgb(0 0 0 / 0.5),
+    inset 0 0 0 1px rgb(255 255 255 / 0.18);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.tabNum {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.5);
+  box-shadow:
+    inset 0 1px 3px rgb(0 0 0 / 0.8),
+    0 1px 0 rgb(255 255 255 / 0.08);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-subtle);
+}
+
+.tabText {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* the open question: the button turns to polished chrome */
+.tab[aria-selected='true'] {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.5) 0%, rgb(255 255 255 / 0) 50%),
+    var(--chrome);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 rgb(0 0 0 / 0.3),
+    0 10px 24px -14px rgb(255 255 255 / 0.5);
+  color: var(--c-black);
+  translate: 0 0;
+}
+
+.tab[aria-selected='true'] .tabNum {
+  background: var(--c-black);
+  color: var(--fg);
+}
+
+/* ── the answer screen ───────────────────────────────────────── */
+
+.screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 22rem;
+  padding: var(--space-5);
+  border-radius: var(--r-l);
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(80% 60% at 100% 100%, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0) 70%),
+    #050507;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.1),
+    inset 0 8px 24px rgb(0 0 0 / 0.9),
+    0 30px 60px -30px rgb(0 0 0 / 0.9);
+}
+
+/* the huge chrome number behind the answer */
+.bigNum {
+  position: absolute;
+  right: -0.04em;
+  bottom: -0.2em;
+  z-index: -1;
+  font-size: clamp(9rem, 6rem + 14vw, 20rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 55%, rgb(5 5 7 / 0.9) 100%),
+    var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0.22;
+  pointer-events: none;
+  animation: num-in 600ms var(--ease-out);
+}
+
+.panel {
+  max-width: 40rem;
+  animation: rise-in var(--dur-base) var(--ease-out);
+}
+
+.meta {
+  margin: 0 0 var(--space-4);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-subtle);
+}
+
+.meta b {
+  color: var(--fg);
+}
+
+/* the question in the titles' chrome */
+.question {
+  margin: 0 0 var(--space-5);
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: var(--tracking-h);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 55%, rgb(200 184 255 / 0.45) 100%),
+    var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* the answer: a transparent full copy (read by screen readers, keeps the height), the typed one on top */
+.answer {
+  display: grid;
+  margin: 0;
+  font-size: var(--fs-lead);
+  line-height: 1.4;
+  color: var(--fg-muted);
+}
+
+.ghost,
+.typed {
+  grid-area: 1 / 1;
+}
+
+.ghost {
+  color: transparent;
+  user-select: none;
+}
+
+.typed {
+  pointer-events: none;
+}
+
+.caret {
+  display: inline-block;
+  width: 0.45em;
+  height: 1em;
+  margin-left: 0.08em;
+  vertical-align: -0.12em;
+  background: var(--fg);
+  animation: blink 1s steps(1) infinite;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding-top: var(--space-6);
+}
+
+.navBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0 1.1rem;
+  border: 0;
+  border-radius: var(--r-control);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.02)),
+    rgb(20 20 26 / 0.9);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.3),
+    inset 0 -1px 0 rgb(0 0 0 / 0.5),
+    inset 0 0 0 1px rgb(255 255 255 / 0.08);
+  font: inherit;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--fg);
+  cursor: pointer;
+  transition:
+    box-shadow var(--dur-fast) var(--ease-out),
+    translate var(--dur-fast) var(--ease-out);
+}
+
+.navBtn:hover {
+  translate: 0 -1px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.45),
+    inset 0 -1px 0 rgb(0 0 0 / 0.5),
+    inset 0 0 0 1px rgb(255 255 255 / 0.25);
+}
+
+.navBtn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.navBtn svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.navNext {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.5) 0%, rgb(255 255 255 / 0) 50%),
+    var(--chrome);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 rgb(0 0 0 / 0.3);
+  color: var(--c-black);
+}
+
+.navNext:hover {
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 rgb(0 0 0 / 0.3),
+    0 8px 20px -10px rgb(255 255 255 / 0.6);
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+
+@keyframes num-in {
+  from {
+    opacity: 0;
+    translate: 0 0.15em;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .bigNum,
+  .caret {
+    animation: none;
+  }
+
+  .tab:hover {
+    translate: none;
+  }
+}
+
+/* phone and tablet: the screen first, the questions under it as its menu */
+@media (max-width: 1023px) {
+  .screen {
+    order: -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .console {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-5);
+  }
+
+  .screen {
+    min-height: 100%;
+    padding: var(--space-7);
+  }
+}

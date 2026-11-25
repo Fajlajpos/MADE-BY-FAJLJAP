@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react'
 import { Arrow } from '@/components/ui/Arrow'
 import { content } from '@/content/server'
 import { typo } from '@/lib/typo/czech'
-import { FaqCases } from './FaqCases'
+import { FaqList } from './FaqList'
 import { PriceNote } from './PriceNote'
 import { ChromeTitle } from './ArchTitle'
 import shared from './home.module.css'
@@ -22,8 +22,8 @@ function Price({ value }: { value: string }) {
 
 /**
  * Kolik to stojí — heading and lead beside the chrome price tag, the price list as ruled rows
- * (job left, price large right), the small print, then the common questions as a pile of game
- * cases (FaqCases), with the same pile in 3D beside them.
+ * (job left, price large right), the small print, then the common questions as a plain list you
+ * open one question at a time (FaqList).
  */
 /**
  * Your banknotes, in the order of the price list (Web, E-shop, Redesign, Úpravy): the id of the
@@ -86,7 +86,7 @@ export async function Pricing() {
       </div>
       <p className={styles.note}>{typo(pricing.note)}</p>
 
-      <FaqCases
+      <FaqList
         head={
           <>
             <h3 className={styles.faqTitle}>{typo(pricing.faqLabel)}</h3>
