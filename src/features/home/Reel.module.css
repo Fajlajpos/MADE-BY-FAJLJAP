@@ -58,7 +58,6 @@
   container-type: inline-size;
   transform: scale(calc(var(--s0) + (1 - var(--s0)) * var(--e)));
   transform-origin: 50% 50%;
-  will-change: transform;
 }
 
 /* a hairline inside the edge, so the dark plate reads as an object on the black page */
@@ -231,6 +230,13 @@
   z-index: 4;
   animation: processFloat 5s ease-in-out infinite alternate;
   filter: drop-shadow(0 12px 24px rgb(0 0 0 / 0.6));
+}
+
+/* phones: a filtered, animated layer is drawn at a lower resolution there — keep the title sharp */
+@media (max-width: 767px), (pointer: coarse) {
+  .processTitle {
+    filter: none;
+  }
 }
 
 .processImg {

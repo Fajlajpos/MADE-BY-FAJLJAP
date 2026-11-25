@@ -26,7 +26,7 @@ export default function HeroCanvas({
   return (
     <div className={className}>
       <Canvas
-        dpr={tier === 'high' ? [1, 1.5] : 1}
+        dpr={[1, 2]}
         frameloop={still ? 'demand' : running ? 'always' : 'never'}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance', toneMapping: ACESFilmicToneMapping }}
         camera={{ position: [0, 0, 9], fov: 34, near: 0.1, far: 60 }}

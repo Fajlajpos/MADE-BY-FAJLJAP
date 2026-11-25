@@ -9,9 +9,16 @@
   margin-inline: auto;
   /* one metal for everything inside: polished silver with a hard dark horizon */
   --metal: linear-gradient(180deg, #ffffff 0%, #dcdee3 42%, #7d8089 50%, #c4c6cc 70%, #f2f3f5 100%);
+  /* the title bar's chrome runs on round the sides and the bottom, so the whole window is one metal case */
+  border: 7px solid transparent;
+  border-top-width: 0;
   border-radius: var(--r-m);
-  background: var(--surface);
-  box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.9);
+  background:
+    var(--surface) padding-box,
+    var(--chrome) border-box;
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.75),
+    0 30px 60px -20px rgb(0 0 0 / 0.9);
   /* no halo: a dark inner line inside the chrome and a deep drop under it */
   box-shadow:
     inset 0 0 0 1px rgb(0 0 0 / 0.7),
@@ -53,6 +60,7 @@
   gap: var(--space-3);
   min-height: 3rem;
   padding: 0 var(--space-3) 0 var(--space-5);
+  margin: 0 -7px;
   border-radius: var(--r-m) var(--r-m) 0 0;
   /* the titles' chrome: the same metal, the same lilac ground */
   background:
@@ -574,7 +582,7 @@
   margin: 0;
   padding: var(--space-2) var(--space-4);
   border-top: 1px solid rgb(0 0 0 / 0.7);
-  border-radius: 0 0 var(--r-m) var(--r-m);
+  border-radius: 0 0 calc(var(--r-m) - 7px) calc(var(--r-m) - 7px);
   background: rgb(0 0 0 / 0.3);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
   font-size: var(--fs-label);

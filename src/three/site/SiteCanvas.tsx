@@ -32,10 +32,12 @@ export default function SiteCanvas({ tier }: { tier: Exclude<Tier, 'none'> }) {
     <Canvas
       aria-hidden="true"
       frameloop={live ? 'always' : 'never'}
-      dpr={tier === 'high' ? [1, 1.25] : 1}
+      // phones have 2–3× screens: at 1 the chrome looked pixelated there
+      dpr={tier === 'high' ? [1, 1.75] : [1, 2]}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance', toneMapping: ACESFilmicToneMapping }}
       // a soft warm halo around every object, following its shape (the canvas is transparent)
-      style={{ position: 'fixed', inset: 0, zIndex: 50, pointerEvents: 'none', filter: 'drop-shadow(0 0 30px rgb(255 255 255 / 0.18)) drop-shadow(0 0 70px rgb(255 255 255 / 0.12))' }}
+      // (only on desktop: phone browsers render a filtered full-screen canvas at a lower resolution)
+      style={{ position: 'fixed', inset: 0, zIndex: 50, pointerEvents: 'none', filter: tier === 'high' ? 'drop-shadow(0 0 30px rgb(255 255 255 / 0.18)) drop-shadow(0 0 70px rgb(255 255 255 / 0.12))' : undefined }}
       eventPrefix="client"
     >
       <KitProvider>

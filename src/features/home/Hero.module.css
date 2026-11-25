@@ -204,6 +204,12 @@
   filter: drop-shadow(0 18px 30px rgb(0 0 0 / 0.6));
 }
 
+@media (max-width: 767px), (pointer: coarse) {
+  .archImg {
+    filter: none;
+  }
+}
+
 .archSvg {
   display: block;
   width: 100%;

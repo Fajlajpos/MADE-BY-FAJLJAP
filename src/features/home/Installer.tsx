@@ -206,7 +206,7 @@ export function Installer({ steps, copy, finishHref }: Props) {
 
         <div className={styles.footer}>
             <p className={styles.pct} aria-hidden="true">
-              <span key={pct}>{pct}</span>%
+              <CountUp to={pct} />%
             </p>
           <button
             type="button"
@@ -248,3 +248,28 @@ export function Installer({ steps, copy, finishHref }: Props) {
   )
 }
 
+
+/** The percentage running up (or down) to its new value, like an installer's counter. */
+function CountUp({ to }: { to: number }) {
+  const [shown, setShown] = useState(to)
+  const from = useRef(to)
+  useEffect(() => {
+    const start = from.current
+    if (start === to || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      from.current = to
+      setShown(to)
+      return
+    }
+    const t0 = performance.now()
+    const dur = 900
+    let raf = requestAnimationFrame(function tick(now) {
+      const k = Math.min(1, (now - t0) / dur)
+      const v = Math.round(start + (to - start) * (1 - (1 - k) ** 3))
+      from.current = v
+      setShown(v)
+      if (k < 1) raf = requestAnimationFrame(tick)
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [to])
+  return <span>{shown}</span>
+}
