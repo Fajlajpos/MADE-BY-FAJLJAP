@@ -33,7 +33,7 @@ export default function SiteCanvas({ tier }: { tier: Exclude<Tier, 'none'> }) {
       aria-hidden="true"
       frameloop={live ? 'always' : 'never'}
       // phones have 2–3× screens: at 1 the chrome looked pixelated there
-      dpr={tier === 'high' ? [1, 1.75] : [1, 2]}
+      dpr={[1, 2]}
       gl={{ antialias: true, alpha: true, powerPreference: 'high-performance', toneMapping: ACESFilmicToneMapping }}
       // a soft warm halo around every object, following its shape (the canvas is transparent)
       // (only on desktop: phone browsers render a filtered full-screen canvas at a lower resolution)

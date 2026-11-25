@@ -59,8 +59,8 @@
   top: 0;
   bottom: 0;
   pointer-events: none;
-  -webkit-mask: url('/brand/logo-fajlajp-liquid.webp') center / contain no-repeat;
-  mask: url('/brand/logo-fajlajp-liquid.webp') center / contain no-repeat;
+  -webkit-mask: url('/brand/logo-fajlajp-liquid-nav.webp') center / contain no-repeat;
+  mask: url('/brand/logo-fajlajp-liquid-nav.webp') center / contain no-repeat;
   background: linear-gradient(
     105deg,
     rgb(255 255 255 / 0) 0%,

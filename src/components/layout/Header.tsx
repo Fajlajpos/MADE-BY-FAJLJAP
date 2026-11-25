@@ -20,12 +20,12 @@ export async function Header() {
     <HeaderShell className={styles.header}>
       <div className={styles.bar}>
         <Link href={rootOf(lang)} className={styles.brand} aria-label={`${site.brand} – ${ui.homeLabel}`}>
-          {/* the liquid chrome logotype (public/brand, the FAJLAJP of the hero title, scripts/title-cutout.mjs) */}
+          {/* the liquid chrome logotype, pre-shrunk to 3× its size on screen so it stays crisp (public/brand, the FAJLAJP of the hero title, scripts/title-cutout.mjs) */}
           <Image
-            src="/brand/logo-fajlajp-liquid.webp"
+            src="/brand/logo-fajlajp-liquid-nav.webp"
             alt=""
-            width={768}
-            height={288}
+            width={352}
+            height={132}
             priority
             unoptimized
             className={styles.logo}
