@@ -19,3 +19,5 @@ Thumbs.db
 
 # local backups of earlier design directions
 .backup/
+
+.vercel

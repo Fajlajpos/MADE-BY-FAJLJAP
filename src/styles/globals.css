@@ -302,6 +302,50 @@ body::after {
 body::after {
   -webkit-mask-image: none;
   mask-image: none;
+  z-index: -2;
+  opacity: 0.55;
+}
+
+/* Depth: a vignette fixed to the screen, over the dots but under the content. Clear in the
+   middle, the dots dimming through a long soft fall-off, pure black at the edges — like looking
+   into a lit tunnel. The dots scroll under it, so it reads as depth, not a printed pattern. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 75% 70% at 50% 45%,
+      transparent 0%,
+      transparent 30%,
+      rgb(0 0 0 / 0.45) 58%,
+      rgb(0 0 0 / 0.85) 80%,
+      #000 100%
+    ),
+    linear-gradient(90deg, #000 0%, transparent 12%, transparent 88%, #000 100%);
+}
+
+/* phone: a tall narrow screen — the clear middle runs down the screen, the sides go black
+   sooner so the dots do not crowd the text */
+@media (max-width: 767px) {
+  body::before {
+    background:
+      radial-gradient(
+        ellipse 95% 65% at 50% 45%,
+        transparent 0%,
+        transparent 25%,
+        rgb(0 0 0 / 0.5) 60%,
+        rgb(0 0 0 / 0.88) 85%,
+        #000 100%
+      ),
+      linear-gradient(90deg, #000 0%, transparent 18%, transparent 82%, #000 100%);
+  }
+
+  body::after {
+    background-size: 11px 11px;
+  }
 }
 
 @keyframes cloudFloat {
