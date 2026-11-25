@@ -66,9 +66,26 @@ export function CloudBuddy() {
             : { y, x: vw - small - edge, top: vh * 0.3, w: small }
         }],
       ]
+      // 03 Jak to probíhá: it lands in the installer's chrome panel and sits there (moving with
+      // the page) for a good stretch of scroll, so you find it there wherever you stop
+      const dock = document.querySelector<HTMLElement>('[data-cloud-dock]')
+      const dr = dock && dock.offsetWidth > 0 ? dock.getBoundingClientRect() : null
+      let hold: [number, number] | null = null
+      if (dr) {
+        const dTop = dr.top + sy
+        const img = el.querySelector('img')
+        const aspect = img?.naturalWidth ? img.naturalHeight / img.naturalWidth : 0.82
+        const w = Math.min(dr.width * 0.8, (dr.height * 1.08) / aspect)
+        const seat = { x: dr.left + (dr.width - w) / 2, top: dTop + dr.height - w * aspect - 4, w, page: true }
+        hold = [dTop - vh * 0.8, dTop - vh * 0.02]
+        plan.push([hold[0], (y) => ({ y, ...seat })], [hold[1], (y) => ({ y, ...seat })])
+      }
+      // flight stops too close to the panel would yank it out early: drop them
+      const near = (y: number) => hold !== null && y > hold[0] - vh * 0.35 && y < hold[1] + vh * 0.35 && y !== hold[0] && y !== hold[1]
+      plan.sort((a, b) => a[0] - b[0])
       let last = 0
       for (const [y, make] of plan) {
-        if (y <= last) continue
+        if (y <= last || near(y)) continue
         stops.push(make(y))
         last = y
       }

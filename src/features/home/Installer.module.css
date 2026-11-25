@@ -1,0 +1,643 @@
+/* 03 Jak to probíhá — the steps as an old-school setup wizard in liquid chrome (Installer.tsx). */
+
+/* ── the window ──────────────────────────────────────────────── */
+
+.win {
+  position: relative;
+  width: 100%;
+  max-width: 70rem;
+  margin-inline: auto;
+  /* one metal for everything inside: polished silver with a hard dark horizon */
+  --metal: linear-gradient(180deg, #ffffff 0%, #dcdee3 42%, #7d8089 50%, #c4c6cc 70%, #f2f3f5 100%);
+  border-radius: var(--r-m);
+  background: var(--surface);
+  box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.9);
+  /* no halo: a dark inner line inside the chrome and a deep drop under it */
+  box-shadow:
+    inset 0 0 0 1px rgb(0 0 0 / 0.7),
+    inset 0 2px 0 rgb(255 255 255 / 0.06),
+    0 40px 70px -40px rgb(0 0 0 / 0.95);
+  isolation: isolate;
+  transform-origin: 50% 20%;
+}
+
+/* it opens like an old app: a quick zoom from a little smaller */
+.win[data-reveal] {
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    translate var(--dur-slow) var(--ease-out),
+    scale var(--dur-slow) var(--ease-out);
+}
+
+:global(.js) .win[data-reveal]:not([data-in]) {
+  scale: 0.94;
+}
+
+/* your own chrome frame render (Installer.tsx › FRAME_ART) */
+.frameArt {
+  position: absolute;
+  inset: -5%;
+  z-index: 2;
+  width: 110%;
+  height: 110%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+/* ── title bar ───────────────────────────────────────────────── */
+
+.titlebar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 3rem;
+  padding: 0 var(--space-3) 0 var(--space-5);
+  border-radius: var(--r-m) var(--r-m) 0 0;
+  /* the titles' chrome: the same metal, the same lilac ground */
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 55%, rgb(255 255 255 / 0.55) 100%),
+    var(--chrome);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 rgb(0 0 0 / 0.35);
+}
+
+/* a hairline of holographic sheen under the title bar */
+.titlebar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: rgb(0 0 0 / 0.8);
+}
+
+.titleIcon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--metal);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.7),
+    0 0 10px rgb(255 255 255 / 0.5);
+}
+
+.titleText {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: var(--c-black);
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.7);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* minimise / maximise / close: only the look of an old window, they do nothing */
+.winButtons {
+  display: flex;
+  gap: 6px;
+}
+
+.winButtons > span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 22px;
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.22), rgb(255 255 255 / 0) 55%),
+    #1a1a20;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.3),
+    0 1px 0 rgb(255 255 255 / 0.8);
+}
+
+/* close: the one coloured button, holographic */
+.winButtons > span:last-child {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.6), rgb(255 255 255 / 0) 55%),
+    var(--metal);
+}
+
+.winButtons > span:last-child svg {
+  stroke: var(--c-black);
+}
+
+.winButtons svg {
+  width: 10px;
+  height: 10px;
+  fill: none;
+  stroke: var(--fg-muted);
+  stroke-width: 1.4;
+}
+
+/* ── body: picture panel + the step ──────────────────────────── */
+
+.body {
+  display: grid;
+}
+
+.side {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  min-height: 7.5rem;
+  margin: var(--space-4) var(--space-4) 0;
+  padding: var(--space-4);
+  border-radius: var(--r-s);
+  overflow: hidden;
+  /* a black screen set into the window, a hairline of light on its rim */
+  background:
+    radial-gradient(90% 70% at 50% 110%, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0) 70%),
+    #050507;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.1),
+    inset 0 6px 18px rgb(0 0 0 / 0.9),
+    0 1px 0 rgb(255 255 255 / 0.08);
+}
+
+
+/* one diagonal glare across the metal */
+.side::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: linear-gradient(115deg, rgb(255 255 255 / 0) 30%, rgb(255 255 255 / 0.06) 38%, rgb(255 255 255 / 0) 46%);
+  pointer-events: none;
+}
+
+.sideArt {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: fade-in var(--dur-base) var(--ease-out);
+}
+
+.sideNum {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-5);
+  z-index: 2;
+  font-size: clamp(2.2rem, 1.6rem + 2vw, 3.6rem);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 55%, rgb(255 255 255 / 0.55) 100%),
+    var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rise-in var(--dur-base) var(--ease-out);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--space-5) var(--space-5) var(--space-4);
+}
+
+.stepOf {
+  margin: 0 0 var(--space-3);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg);
+}
+
+.panel {
+  animation: rise-in var(--dur-base) var(--ease-out);
+}
+
+.headRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-4);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: var(--tracking-h);
+}
+
+.time {
+  flex: none;
+  margin: 0;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.02)),
+    rgb(20 20 26 / 0.9);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.35),
+    inset 0 -1px 0 rgb(0 0 0 / 0.5),
+    inset 0 0 0 1px rgb(255 255 255 / 0.22),
+    0 4px 14px -6px rgb(255 255 255 / 0.4);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+
+.text {
+  max-width: 34rem;
+  margin: var(--space-4) 0 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--fg-muted);
+}
+
+/* the setup-wizard checkbox: a real one, checked by default */
+.check {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  margin-top: var(--space-3);
+  font-size: var(--fs-small);
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.check input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.box {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0.02)),
+    var(--bg-high);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.25),
+    inset 0 0 0 1px var(--line-strong);
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.box svg {
+  width: 13px;
+  height: 13px;
+  fill: none;
+  stroke: var(--c-black);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  scale: 0.6;
+  transition:
+    opacity var(--dur-fast) var(--ease-out),
+    scale var(--dur-fast) var(--ease-out);
+}
+
+.check input:checked + .box {
+  background: var(--metal);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.7),
+    0 0 12px rgb(255 255 255 / 0.45);
+}
+
+.check input:checked + .box svg {
+  opacity: 1;
+  scale: 1;
+}
+
+.check:hover .box {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.35),
+    inset 0 0 0 1px var(--fg);
+}
+
+.check input:focus-visible + .box {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* "Kopíruju soubory…" */
+.status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: auto 0 0;
+  padding-top: var(--space-5);
+  font-size: var(--fs-small);
+  color: var(--fg-subtle);
+}
+
+.status > span:last-child {
+  animation: fade-in var(--dur-base) var(--ease-out);
+}
+
+.spinner {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #fff, #8d9098, rgb(255 255 255 / 0));
+  mask: radial-gradient(circle, transparent 4px, #000 4.5px);
+  animation: spin 900ms linear infinite;
+}
+
+/* ── the progress bar, segments as long as the steps take ─────── */
+
+.barWrap {
+  padding: 0 var(--space-4);
+}
+
+.bar {
+  display: flex;
+  gap: 4px;
+  height: 24px;
+  padding: 4px;
+  border-radius: 10px;
+  background: rgb(0 0 0 / 0.55);
+  box-shadow:
+    inset 0 2px 4px rgb(0 0 0 / 0.6),
+    inset 0 0 0 1px rgb(255 255 255 / 0.06),
+    0 1px 0 rgb(255 255 255 / 0.08);
+}
+
+.seg {
+  position: relative;
+  flex-basis: 0;
+  min-width: 0;
+  border-radius: 5px;
+  background: rgb(255 255 255 / 0.05);
+  overflow: hidden;
+}
+
+/* the fill: holographic blocks, like an old installer bar */
+.seg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.55) 0%, rgb(255 255 255 / 0) 55%),
+    var(--metal);
+  mask: repeating-linear-gradient(90deg, #000 0 10px, transparent 10px 13px);
+  /* cut, not scaled, so the blocks keep their size while it fills */
+  clip-path: inset(0 calc((1 - var(--fill, 0)) * 100%) 0 0);
+  transition: clip-path 600ms var(--ease-out);
+}
+
+
+.marks {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+  padding: 0 4px;
+  list-style: none;
+}
+
+.marks > li {
+  flex-basis: 0;
+  min-width: 0;
+}
+
+.mark {
+  display: grid;
+  justify-items: start;
+  gap: 0.1rem;
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-2) 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: var(--fs-label);
+  line-height: 1.25;
+  text-align: left;
+  color: var(--fg-subtle);
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.mark b {
+  font-weight: 500;
+  color: var(--fg-muted);
+}
+
+.mark:hover,
+.mark[aria-current] {
+  color: var(--fg);
+}
+
+.mark[aria-current] b {
+  color: var(--fg);
+}
+
+/* ── footer: Back / Next / Finish ────────────────────────────── */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0 1.25rem;
+  border: 0;
+  border-radius: var(--r-control);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.02)),
+    rgb(20 20 26 / 0.9);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.3),
+    inset 0 -1px 0 rgb(0 0 0 / 0.5),
+    inset 0 0 0 1px rgb(255 255 255 / 0.08);
+  font: inherit;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--fg);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    box-shadow var(--dur-fast) var(--ease-out),
+    translate var(--dur-fast) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.btn:hover:not(:disabled) {
+  translate: 0 -1px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.4),
+    inset 0 -1px 0 rgb(0 0 0 / 0.5),
+    inset 0 0 0 1px rgb(255 255 255 / 0.4),
+    0 6px 18px -8px rgb(255 255 255 / 0.6);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* Next / Finish: the holographic button */
+.primary {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.55) 0%, rgb(255 255 255 / 0) 55%),
+    var(--metal);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.8),
+    inset 0 -1px 0 rgb(0 0 0 / 0.2),
+    0 6px 20px -8px rgb(255 255 255 / 0.7);
+  color: var(--c-black);
+}
+
+.primary:hover:not(:disabled) {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.9),
+    inset 0 -1px 0 rgb(0 0 0 / 0.2),
+    0 10px 28px -8px rgb(255 255 255 / 0.9);
+}
+
+.hint {
+  font-weight: 400;
+  color: rgb(8 8 10 / 0.75);
+}
+
+/* the big readout: how far the whole job is, in chrome */
+.pct {
+  margin: 0 auto 0 var(--space-2);
+  font-size: clamp(2.2rem, 1.6rem + 2vw, 3.4rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  font-variant-numeric: tabular-nums;
+  background: var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.pct > span {
+  display: inline-block;
+  animation: rise-in var(--dur-base) var(--ease-out);
+}
+
+/* the strip along the bottom edge, like every old program had */
+.statusbar {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  border-top: 1px solid rgb(0 0 0 / 0.7);
+  border-radius: 0 0 var(--r-m) var(--r-m);
+  background: rgb(0 0 0 / 0.3);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
+  font-size: var(--fs-label);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-subtle);
+}
+
+/* ── motion ──────────────────────────────────────────────────── */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    rotate: 1turn;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+
+  .panel,
+  .sideNum,
+  .sideArt,
+  .status > span:last-child {
+    animation: none;
+  }
+
+  :global(.js) .win[data-reveal]:not([data-in]) {
+    scale: none;
+  }
+}
+
+/* ── tablet and up: the picture panel on the left ────────────── */
+@media (min-width: 768px) {
+  .body {
+    grid-template-columns: minmax(11rem, 30%) minmax(0, 1fr);
+    min-height: 20rem;
+  }
+
+  .side {
+    margin: var(--space-6) 0 var(--space-6) var(--space-6);
+    align-items: flex-end;
+    justify-content: flex-start;
+  }
+
+  .main {
+    padding: var(--space-6) var(--space-6) var(--space-4);
+  }
+
+  .barWrap {
+    padding: 0 var(--space-4);
+  }
+}

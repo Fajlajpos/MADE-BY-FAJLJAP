@@ -110,12 +110,44 @@ export const home = {
     heading: 'Jak to u mě chodí',
     lead: 'Nejsem agentura, takže tě nikdo nepřehazuje mezi lidma. Celou dobu si píšeš se mnou, i když se něco zasekne.',
     steps: [
-      { title: 'Napíšeš mi', time: 'do 2 dnů', body: 'Stačí pár vět o tom, co potřebuješ. Ozvu se do dvou dnů, většinou dřív.' },
-      { title: 'Zavoláme si', time: 'do týdne', body: 'Probereme, co to má umět a do kdy to chceš. Pak ti pošlu cenu a termín písemně a toho se oba držíme.' },
+      {
+        title: 'Napíšeš mi',
+        time: 'do 2 dnů',
+        body: 'Stačí pár vět o tom, co potřebuješ. Ozvu se do dvou dnů, většinou dřív.',
+        status: ['Čtu tvoji zprávu…', 'Přemejšlím, jak na to…', 'Píšu ti odpověď…'],
+        check: 'Klidně mi napiš i v noci. Stejně jsem vzhůru.',
+      },
+      {
+        title: 'Zavoláme si',
+        time: 'do týdne',
+        body: 'Probereme, co to má umět a do kdy to chceš. Pak ti pošlu cenu a termín písemně a toho se oba držíme.',
+        status: ['Vytáčím číslo…', 'Zapisuju si, co to má umět…', 'Počítám cenu a termín…'],
+      },
       // OVĚŘIT: obvyklá délka návrhu a stavby
-      { title: 'Návrh a stavba', time: '3–8 týdnů', body: 'Nejdřív ti ukážu návrh a doladíme ho spolu. Pak stavím a každej týden ti pošlu odkaz, kde vidíš, jak jsem daleko.' },
-      { title: 'Spuštění', time: 'pak průběžně', body: 'Web pustím ven a ukážu ti, jak si ho upravovat. Když se pak něco rozbije nebo budeš chtít něco přidat, prostě mi napíšeš.' },
+      {
+        title: 'Návrh a stavba',
+        time: '3–8 týdnů',
+        body: 'Nejdřív ti ukážu návrh a doladíme ho spolu. Pak stavím a každej týden ti pošlu odkaz, kde vidíš, jak jsem daleko.',
+        status: ['Kreslím návrh…', 'Ladím barvy…', 'Kopíruju soubory…', 'Opravuju chybu, kterou jsem udělal…', 'Posílám ti odkaz…'],
+      },
+      {
+        title: 'Spuštění',
+        time: 'pak průběžně',
+        body: 'Web pustím ven a ukážu ti, jak si ho upravovat. Když se pak něco rozbije nebo budeš chtít něco přidat, prostě mi napíšeš.',
+        status: ['Pouštím web ven…', 'Ukazuju ti, jak ho upravovat…', 'Hlídám, jestli všechno jede…'],
+        check: 'Po dokončení spustit web',
+      },
     ],
+    /** The steps as an old-school setup wizard (Process.tsx › Installer). `{n}` / `{total}` are filled in. */
+    installer: {
+      window: 'Instalace webu – FAJLAJP',
+      stepOf: 'Krok {n} ze {total}',
+      bar: 'Průběh instalace',
+      back: 'Zpět',
+      next: 'Další',
+      finish: 'Dokončit',
+      finishHint: 'a napsat mi',
+    },
   },
 
   work: {

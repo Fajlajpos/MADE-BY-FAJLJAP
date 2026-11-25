@@ -90,11 +90,42 @@ export const home: typeof cs = {
     heading: 'How it goes with me',
     lead: "I'm not an agency, so nobody passes you around between people. You're talking to me the whole time, even when something gets stuck.",
     steps: [
-      { title: 'You write to me', time: 'within 2 days', body: 'A few sentences about what you need is enough. I get back to you within two days, usually sooner.' },
-      { title: 'We have a call', time: 'within a week', body: "We go through what it should do and when you need it. Then I send you the price and the date in writing, and we both stick to it." },
-      { title: 'Design and build', time: '3–8 weeks', body: "First I show you the design and we fine-tune it together. Then I build, and every week I send you a link so you can see how far I've got." },
-      { title: 'Launch', time: 'and then ongoing', body: "I put the site live and show you how to edit it. If something breaks later or you want to add something, just write to me." },
+      {
+        title: 'You write to me',
+        time: 'within 2 days',
+        body: 'A few sentences about what you need is enough. I get back to you within two days, usually sooner.',
+        status: ['Reading your message…', 'Thinking how to do it…', 'Writing back…'],
+        check: "Feel free to write at night. I'm up anyway.",
+      },
+      {
+        title: 'We have a call',
+        time: 'within a week',
+        body: 'We go through what it should do and when you need it. Then I send you the price and the date in writing, and we both stick to it.',
+        status: ['Dialling…', 'Noting down what it should do…', 'Working out the price and date…'],
+      },
+      {
+        title: 'Design and build',
+        time: '3–8 weeks',
+        body: "First I show you the design and we fine-tune it together. Then I build, and every week I send you a link so you can see how far I've got.",
+        status: ['Drawing the design…', 'Tuning the colours…', 'Copying files…', 'Fixing a bug I made…', 'Sending you the link…'],
+      },
+      {
+        title: 'Launch',
+        time: 'and then ongoing',
+        body: 'I put the site live and show you how to edit it. If something breaks later or you want to add something, just write to me.',
+        status: ['Putting the site live…', 'Showing you how to edit it…', 'Checking everything runs…'],
+        check: 'Launch the website when finished',
+      },
     ],
+    installer: {
+      window: 'Website Setup – FAJLAJP',
+      stepOf: 'Step {n} of {total}',
+      bar: 'Setup progress',
+      back: 'Back',
+      next: 'Next',
+      finish: 'Finish',
+      finishHint: 'and write to me',
+    },
   },
 
   work: {
