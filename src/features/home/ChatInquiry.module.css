@@ -1,0 +1,435 @@
+/* The inquiry as an Instagram DM (phones only). */
+
+.chat {
+  --bubble-me: #262629;
+  --bubble-you: linear-gradient(160deg, #a033ff 0%, #5b51ff 45%, #2f8cff 100%);
+  --line: rgb(255 255 255 / 0.1);
+  --muted: #a8a8ae;
+
+  display: flex;
+  flex-direction: column;
+  height: min(78svh, 40rem);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background:
+    radial-gradient(120% 50% at 50% 0%, rgb(120 80 255 / 0.08), transparent 70%),
+    #000;
+}
+
+/* the header: avatar with the "active" dot, name */
+.head {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: rgb(0 0 0 / 0.6);
+}
+
+.avatar {
+  position: relative;
+  flex: none;
+}
+
+.avatar img {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background: #2ed158;
+}
+
+.who {
+  display: grid;
+  line-height: 1.25;
+}
+
+.who b {
+  font-size: 1rem;
+}
+
+.who small {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+/* the log */
+.log {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  padding: 1.25rem 0.75rem 1rem;
+}
+
+.intro {
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.intro img {
+  width: 88px;
+  height: 88px;
+  margin-bottom: 0.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.intro b {
+  font-size: 1.1rem;
+}
+
+.intro small {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.day {
+  align-self: center;
+  margin: 0.25rem 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.row[data-from='you'] {
+  justify-content: flex-end;
+}
+
+.row:has(.msg[data-tail]) {
+  margin-bottom: 0.6rem;
+}
+
+/* my small avatar, shown only beside the last bubble of a run */
+.mini {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.mini[data-show] {
+  background: url('/photos/profilovka.webp') center / cover;
+}
+
+.msg {
+  max-width: 75%;
+  padding: 0.6rem 0.9rem;
+  border-radius: 22px;
+  font-size: 0.95rem;
+  line-height: 1.38;
+  overflow-wrap: anywhere;
+  animation: pop 0.25s var(--ease-out);
+}
+
+.row[data-from='me'] .msg {
+  background: var(--bubble-me);
+  border-bottom-left-radius: 6px;
+}
+
+.row[data-from='me'] .msg[data-tail] {
+  border-bottom-left-radius: 22px;
+}
+
+.row[data-from='you'] .msg {
+  background: var(--bubble-you);
+  background-attachment: fixed;
+  color: #fff;
+  border-bottom-right-radius: 6px;
+}
+
+.row[data-from='you'] .msg[data-tail] {
+  border-bottom-right-radius: 22px;
+}
+
+.seen {
+  flex-basis: 100%;
+  margin-top: 2px;
+  text-align: right;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+}
+
+.dots {
+  display: inline-flex;
+  gap: 4px;
+  padding: 0.25rem 0;
+}
+
+.dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #8e8e93;
+  animation: bounce 1.1s infinite;
+}
+
+.dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.dots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes bounce {
+  30% {
+    opacity: 0.4;
+    transform: translateY(-3px);
+  }
+}
+
+/* the choices: highlighted buttons stacked under my message, like quick replies */
+.options {
+  display: grid;
+  gap: 0.45rem;
+  width: min(80%, 17rem);
+  flex: none;
+  margin: -0.2rem 0 0.75rem calc(28px + 0.5rem);
+  animation: pop 0.3s var(--ease-out) 0.1s backwards;
+}
+
+.option {
+  min-height: 46px;
+  padding: 0.65rem 1rem;
+  border: 1.5px solid transparent;
+  border-radius: 16px;
+  background:
+    linear-gradient(#141416, #141416) padding-box,
+    linear-gradient(135deg, #c39bff, #5b51ff, #6ee7ff) border-box;
+  color: #fff;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.15s var(--ease-out), background 0.2s;
+}
+
+.option:hover,
+.option[data-picked] {
+  background:
+    var(--bubble-you) padding-box,
+    linear-gradient(135deg, #c39bff, #5b51ff, #6ee7ff) border-box;
+}
+
+.option:active {
+  transform: scale(0.97);
+}
+
+/* the details: a normal little form, as a card from me */
+.card {
+  display: grid;
+  gap: 0.85rem;
+  width: calc(100% - 28px - 0.5rem);
+  margin: -0.2rem 0 0.75rem calc(28px + 0.5rem);
+  padding: 1rem;
+  flex: none;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #121214;
+  animation: pop 0.3s var(--ease-out) 0.1s backwards;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.field label span {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.field input {
+  min-height: 46px;
+  padding: 0 0.9rem;
+  border: 1px solid rgb(255 255 255 / 0.16);
+  border-radius: 12px;
+  background: #1c1c1f;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.field input::placeholder {
+  color: #77777d;
+}
+
+.field input:focus-visible {
+  border-color: #5b51ff;
+  outline: 2px solid rgb(91 81 255 / 0.45);
+  outline-offset: 1px;
+}
+
+.field input[aria-invalid='true'] {
+  border-color: #ff6b6b;
+}
+
+.consent {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.consent input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  accent-color: #5b51ff;
+}
+
+.consent a {
+  color: #fff;
+}
+
+.trap {
+  position: absolute;
+  left: -9999px;
+}
+
+.submit {
+  min-height: 48px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--bubble-you);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s var(--ease-out), filter 0.2s;
+}
+
+.submit:hover {
+  filter: brightness(1.1);
+}
+
+.submit:active {
+  transform: scale(0.98);
+}
+
+.error {
+  font-size: 0.78rem;
+  color: #ff8a8a;
+}
+
+/* the message bar, stuck to the bottom of the screen */
+.reply {
+  flex: none;
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.6rem 0.75rem 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.input {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  padding: 0.3rem 0.3rem 0.3rem 1rem;
+  border-radius: 24px;
+  background: #1c1c1f;
+}
+
+.input textarea {
+  flex: 1;
+  min-height: 40px;
+  max-height: 7.5rem;
+  padding: 0.55rem 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  font: inherit;
+  font-size: 16px;
+  resize: none;
+  outline: none;
+  field-sizing: content;
+}
+
+.sendBtn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: #5b51ff;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.sendBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.sendBtn svg {
+  width: 18px;
+  height: 18px;
+  fill: #fff;
+}
+
+.option:focus-visible,
+.submit:focus-visible,
+.sendBtn:focus-visible,
+.consent input:focus-visible,
+.input:focus-within {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .msg,
+  .options,
+  .card,
+  .dots i {
+    animation: none;
+  }
+}

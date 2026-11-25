@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from 'react'
 
-type Stop = { y: number; x: number; top: number; w: number }
+/** `page`: top is in page coordinates (scrolls with the page), else on screen. */
+type Stop = { y: number; x: number; top: number; w: number; page?: boolean }
 
 /**
  * The hero photo (me on the cloud) taking off: at the top of the page it sits exactly over its
@@ -30,7 +31,7 @@ export function CloudBuddy() {
       const small = Math.min(150, vw * 0.13)
       const edge = 16
       // the start: exactly over the hero slot
-      stops = [{ y: 0, x: r.left, top: r.top + sy, w: r.width }]
+      stops = [{ y: 0, x: r.left, top: r.top + sy, w: r.width, page: true }]
       // a loose flight down the page, not a pattern: sometimes big beside a heading, sometimes it
       // crosses the screen to the other side, sometimes it slips off the edge and comes back later
       const heads = [...document.querySelectorAll<HTMLElement>('main > section:not(:first-child) h2')]
@@ -54,10 +55,16 @@ export function CloudBuddy() {
         [hy(4) - vh * 0.3, (y) => ({ y, x: edge, top: vh * 0.3 - big * 0.35, w: big })],
         // crosses all the way to the right, shrinking
         [hy(4) + vh * 0.7, (y) => ({ y, x: vw - small - edge, top: vh * 0.65, w: small })],
-        // last heading: grows on the right
-        [hy(heads.length - 1) - vh * 0.3, (y) => ({ y, x: vw - big - edge, top: vh * 0.3 - big * 0.35, w: big })],
-        // and away
-        [hy(heads.length - 1) + vh * 0.5, (y) => ({ y, x: off(true), top: vh * 0.45, w: small })],
+        // the contact: it lands on the phone and stays there
+        [hy(heads.length - 1) + vh * 0.2, (y) => {
+          // the visible one: the phone frame on desktop, the chat on a phone
+          const ph = [...document.querySelectorAll<HTMLElement>('[data-phone]')].find((e) => e.offsetWidth > 0)
+          const pr = ph?.getBoundingClientRect()
+          const pw = Math.min(260, vw * 0.2)
+          return pr
+            ? { y, x: pr.left + pr.width / 2 - pw / 2, top: pr.top + sy - pw * 0.55, w: pw, page: true }
+            : { y, x: vw - small - edge, top: vh * 0.3, w: small }
+        }],
       ]
       let last = 0
       for (const [y, make] of plan) {
@@ -79,9 +86,10 @@ export function CloudBuddy() {
       const b = stops[Math.min(i + 1, stops.length - 1)]!
       const t = b === a ? 0 : ease(Math.min(1, Math.max(0, (y - a.y) / (b.y - a.y))))
       // the first stop is in page coordinates (it scrolls with the hero); the others are on screen
-      const aTop = i === 0 ? a.top - y : a.top
+      const aTop = a.page ? a.top - y : a.top
+      const bTop = b.page ? b.top - y : b.top
       const x = lerp(a.x, b.x, t)
-      const top = lerp(aTop, b.top, t)
+      const top = lerp(aTop, bTop, t)
       const w = lerp(a.w, b.w, t)
       el.style.width = `${w.toFixed(1)}px`
       el.style.transform = `translate3d(${x.toFixed(1)}px, ${top.toFixed(1)}px, 0)`
