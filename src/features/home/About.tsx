@@ -6,6 +6,7 @@ import shared from './home.module.css'
 import styles from './About.module.css'
 import { IpodVoice } from './IpodVoice'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- the typed note is off for now, kept for later
 /** The typed note beside the ID card. OVĚŘIT: přepiš si to vlastními slovy. */
 const NOTE = {
   head: 'Pár řádků o mně',
@@ -72,14 +73,6 @@ export async function About() {
           />
         </div>
 
-        {/* a sheet of paper typed on a typewriter */}
-        <div className={styles.paper} data-reveal="">
-          <p className={styles.paperHead}>{NOTE.head}</p>
-          {NOTE.lines.map((l, i) => (
-            <p key={i}>{typo(l)}</p>
-          ))}
-          <p className={styles.paperSign}>{NOTE.sign}</p>
-        </div>
       </div>
     </section>
   )

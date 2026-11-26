@@ -1,11 +1,13 @@
 'use client'
 
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
+import dynamic from 'next/dynamic'
 import { useContent } from '@/content/client'
+import { detectTier } from '@/three/quality'
 import styles from './IpodVoice.module.css'
 
-/** Your headphones render to lie by the iPod (a cut-out in /public/photos). Empty: nothing there yet. */
-const HEADPHONES_ART = ''
+/** Earphones plugged into the iPod (drawn cable + the two buds cut out of his photo). */
+const HEADPHONES_ART = true
 
 type Props = {
   /** The recording (e.g. '/audio/hlas.m4a'). Empty: the iPod waits for it. */
@@ -161,12 +163,8 @@ export function IpodVoice({ src, title, sub, soon, cover }: Props) {
 
   return (
     <div className={styles.stage} onPointerMove={onMove} onPointerLeave={onLeave}>
-      {HEADPHONES_ART && (
-        // eslint-disable-next-line @next/next/no-img-element -- his headphones render beside the iPod
-        <img className={styles.headphones} src={HEADPHONES_ART} alt="" aria-hidden="true" loading="lazy" />
-      )}
-
       <div ref={root} className={styles.ipod} data-playing={playing || undefined}>
+        {HEADPHONES_ART && <Earphones />}
         {/* eslint-disable-next-line @next/next/no-img-element -- a cut-out photo of the player */}
         <img className={styles.body} src="/photos/ipod.webp" alt="" width={1198} height={1874} loading="lazy" />
 
@@ -235,5 +233,48 @@ export function IpodVoice({ src, title, sub, soon, cover }: Props) {
         />
       )}
     </div>
+  )
+}
+
+/*
+ * The earphones: the cable is a 3D tube (EarphoneCable3D, loaded only when the device does 3D);
+ * without 3D a plain drawn line takes its place. The two buds are cut out of his photo.
+ */
+const Cable3D = dynamic(() => import('./EarphoneCable3D'), { ssr: false })
+
+/** The flat stand-in: the same route, one plain white line, no shadow. */
+const FALLBACK = [
+  'M59.4 158 C59.4 206 122 216 161 197 C197 180 197 141 175 122',
+  'M175 122 C168 95 199 72 205 50 C209 35 212 23 212.8 13.2',
+  'M175 122 C186 99 206 75 222 56 C232 44 240 30 248 27.3',
+]
+
+function Earphones() {
+  const [three, setThree] = useState<boolean | null>(null)
+  useEffect(() => {
+    // after mount: whether this device draws 3D at all
+    const t = window.setTimeout(() => setThree(detectTier() !== 'none'), 0)
+    return () => window.clearTimeout(t)
+  }, [])
+  return (
+    <>
+      {three ? (
+        <Cable3D />
+      ) : (
+        three === false && (
+          <svg className={styles.cable} viewBox="0 0 100 156.43" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            {FALLBACK.map((d) => (
+              <path key={d} d={d} className={styles.wireBody} style={{ strokeWidth: 2.2 }} />
+            ))}
+          </svg>
+        )
+      )}
+
+      {/* the two buds, cut out of his photo, at a real size, each on the end of its branch */}
+      {/* eslint-disable-next-line @next/next/no-img-element -- earbud cut-out */}
+      <img className={`${styles.bud} ${styles.bud1}`} src="/photos/earbud-1.webp" alt="" aria-hidden="true" width={600} height={498} loading="lazy" />
+      {/* eslint-disable-next-line @next/next/no-img-element -- earbud cut-out */}
+      <img className={`${styles.bud} ${styles.bud2}`} src="/photos/earbud-2.webp" alt="" aria-hidden="true" width={630} height={420} loading="lazy" />
+    </>
   )
 }

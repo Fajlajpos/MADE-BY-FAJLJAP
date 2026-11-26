@@ -202,9 +202,9 @@
 }
 
 /* ── what else is in the wallet: the ID card + polaroids ── */
+/* the iPod on the left, its earphones spread out to the right (where the typed note was) */
 .player {
-  display: grid;
-  place-items: center;
+  width: 100%;
   padding-block: var(--space-6);
 }
 
@@ -336,7 +336,7 @@
 
 @media (min-width: 1024px) {
   .contents {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 }
 
