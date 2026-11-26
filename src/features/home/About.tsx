@@ -4,9 +4,7 @@ import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import shared from './home.module.css'
 import styles from './About.module.css'
-
-/** Your own ID card render (a cut-out .webp in /public/photos, e.g. '/photos/id-card.webp'). Empty: the CSS card. */
-const CARD_ART = ''
+import { IpodVoice } from './IpodVoice'
 
 /** The typed note beside the ID card. OVĚŘIT: přepiš si to vlastními slovy. */
 const NOTE = {
@@ -22,8 +20,8 @@ const NOTE = {
 
 /**
  * O mně — everything comes out of my wallet: the head (label, heading, two paragraphs), the open
- * wallet with the @fajlajpos tag, then what else is in it: my "ID card" with the facts, and a few
- * polaroids lying next to it.
+ * wallet with the @fajlajpos tag, then what else is in it: my old iPod with a voice note on it,
+ * and a typed note beside it.
  */
 export async function About() {
   const { home } = await content()
@@ -62,32 +60,17 @@ export async function About() {
       </figure>
 
       <div className={styles.contents}>
-        {/* the ID card out of the wallet: your own render if there is one, else the CSS card */}
-        {CARD_ART ? (
-          <figure className={styles.cardArt} data-reveal="">
-            {/* eslint-disable-next-line @next/next/no-img-element -- my own ID card render */}
-            <img src={CARD_ART} alt="" width={1586} height={1000} loading="lazy" />
-            <figcaption className="visually-hidden">
-              {about.facts.map((f) => `${f.label}: ${f.value}`).join(', ')}
-            </figcaption>
-          </figure>
-        ) : (
-        <article className={styles.card} data-reveal="" aria-label="Moje karta">
-          <div className={styles.cardTop}>
-            <span className={styles.cardKind}>Průkaz · FAJLAJP</span>
-            <span className={styles.chip} aria-hidden="true" />
-          </div>
-          <dl className={styles.fields}>
-            {about.facts.map((f) => (
-              <div key={f.label} className={styles.field}>
-                <dt>{f.label}</dt>
-                <dd>{f.value}</dd>
-              </div>
-            ))}
-          </dl>
-          <p className={styles.cardFoot}>{typo(about.caption)}</p>
-        </article>
-        )}
+        {/* my old iPod out of the wallet, with my voice note on it (put the file in /public/audio
+            and set content › about.voice.src) */}
+        <div className={styles.player} data-reveal="">
+          <IpodVoice
+            src={about.voice.src}
+            title={about.voice.title}
+            sub={typo(about.voice.sub)}
+            soon={typo(about.voice.soon)}
+            cover="/photos/ipod-cover.webp"
+          />
+        </div>
 
         {/* a sheet of paper typed on a typewriter */}
         <div className={styles.paper} data-reveal="">

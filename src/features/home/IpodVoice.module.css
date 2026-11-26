@@ -1,0 +1,329 @@
+/* My voice note on a liquid-chrome iPod (IpodVoice.tsx). Positions are shares of the render (1198 × 1874). */
+
+.stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  perspective: 1200px;
+}
+
+.ipod {
+  --mx: 0;
+  --my: 0;
+  position: relative;
+  width: clamp(14rem, 10rem + 12vw, 20rem);
+  aspect-ratio: 1198 / 1874;
+  container-type: inline-size;
+  /* the render already stands turned aside; it only leans a little toward the pointer */
+  transform:
+    rotateY(calc(var(--mx) * 14deg))
+    rotateX(calc(var(--my) * -10deg));
+  transform-style: preserve-3d;
+  transition: transform 500ms var(--ease-out);
+  filter:
+    drop-shadow(0 2px 1px rgb(0 0 0 / 0.6))
+    drop-shadow(-20px 46px 40px rgb(0 0 0 / 0.8));
+  animation: hover-float 6s ease-in-out infinite;
+}
+
+.body {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ── the Now Playing screen ──────────────────────────────────── */
+
+.screen {
+  /* laid out at 460 × 400, then warped onto the display glass by IpodVoice.tsx (matrix3d) */
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 460px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  container-type: inline-size;
+  transform-origin: 0 0;
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+  /* the glass's top-left corner sits deeper under the bezel and is rounder */
+  border-radius: 16px 6px 6px 6px;
+  /* dark, but let the render's own glass reflections show through */
+  background: radial-gradient(120% 90% at 50% 0%, rgb(29 31 38 / 0.82) 0%, rgb(8 9 12 / 0.78) 70%);
+  color: var(--fg);
+  font-size: 16px;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.38cqw;
+  padding: 1.43cqw 3.57cqw;
+  background: linear-gradient(180deg, #f4f5f7 0%, #c9ccd3 55%, #a7aab2 100%);
+  color: #141418;
+  font-size: 4.76cqw;
+  font-weight: 600;
+}
+
+.bar svg {
+  width: 4.04cqw;
+  height: 4.04cqw;
+  fill: currentColor;
+}
+
+.battery {
+  position: relative;
+  width: 8.34cqw;
+  height: 4.04cqw;
+  border-radius: 0.72cqw;
+  background: linear-gradient(90deg, #3a3d44 0 70%, transparent 70%);
+  box-shadow: inset 0 0 0 0.42cqw #3a3d44;
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: 4.76cqw;
+  flex: 1;
+  padding: 3.57cqw 4.76cqw 1.19cqw;
+}
+
+.cover {
+  flex: none;
+  width: 35.74cqw;
+  height: 35.74cqw;
+  object-fit: cover;
+  border-radius: 1.19cqw;
+  box-shadow:
+    0 0 0 0.36cqw rgb(255 255 255 / 0.15),
+    0 2.38cqw 4.76cqw rgb(0 0 0 / 0.6);
+}
+
+.info {
+  min-width: 0;
+}
+
+.song,
+.artist,
+.album {
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.song {
+  font-size: 6.68cqw;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.artist {
+  margin-top: 0.96cqw;
+  font-size: 5.24cqw;
+  color: var(--fg-muted);
+}
+
+.album {
+  margin-top: 0.96cqw;
+  font-size: 4.29cqw;
+  white-space: normal;
+  line-height: 1.25;
+  color: var(--fg-subtle);
+}
+
+.progress {
+  padding: 0 4.76cqw 3.57cqw;
+}
+
+.rail {
+  position: relative;
+  display: block;
+  height: 3.1cqw;
+  border-radius: 2.38cqw;
+  overflow: hidden;
+  background: #2a2c33;
+  box-shadow: inset 0 0.47cqw 0.96cqw rgb(0 0 0 / 0.7);
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #ffffff 0%, #d4d6dc 45%, #8d9098 55%, #e6e7ea 100%);
+  transform: scaleX(var(--p, 0));
+  transform-origin: 0 50%;
+}
+
+.times {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.43cqw;
+  font-size: 4.04cqw;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-muted);
+}
+
+/* the chrome bezel's shadow falling onto the top of the screen, so the edge sits under the metal */
+.screen::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  height: 7cqw;
+  background: linear-gradient(180deg, rgb(0 0 0 / 0.75), rgb(0 0 0 / 0));
+  pointer-events: none;
+}
+
+/* glass: a soft diagonal glare over the display, moving a touch with the tilt */
+.glare {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      calc(125deg + var(--mx) * 20deg),
+      rgb(255 255 255 / 0.12) 0%,
+      rgb(255 255 255 / 0.04) 45%,
+      rgb(255 255 255 / 0) 46%
+    );
+  pointer-events: none;
+}
+
+/* ── the click wheel: invisible keys over the photo's wheel ─────── */
+
+.wheel {
+  position: absolute;
+  left: 59.4%;
+  top: 69.5%;
+  width: 47.6%;
+  height: 33.6%;
+  translate: -50% -50%;
+  border-radius: 50%;
+}
+
+.key,
+.center {
+  position: absolute;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.key:disabled,
+.center:disabled {
+  cursor: not-allowed;
+}
+
+/* four slices of the ring */
+.menu {
+  left: 25%;
+  top: 0;
+  width: 50%;
+  height: 30%;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+.playKey {
+  left: 25%;
+  bottom: 0;
+  width: 50%;
+  height: 30%;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+}
+
+.prev {
+  left: 0;
+  top: 25%;
+  width: 30%;
+  height: 50%;
+  border-radius: 100% 0 0 100% / 50% 0 0 50%;
+}
+
+.next {
+  right: 0;
+  top: 25%;
+  width: 30%;
+  height: 50%;
+  border-radius: 0 100% 100% 0 / 0 50% 50% 0;
+}
+
+.center {
+  left: 50%;
+  top: 50%;
+  width: 35%;
+  height: 32%;
+  translate: -50% -50%;
+  border-radius: 50%;
+}
+
+.key:hover:not(:disabled),
+.center:hover:not(:disabled) {
+  background: rgb(0 0 0 / 0.06);
+}
+
+.key:active:not(:disabled),
+.center:active:not(:disabled) {
+  background: rgb(0 0 0 / 0.14);
+}
+
+.key:focus-visible,
+.center:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* the centre button glints while it plays */
+.ipod[data-playing] .center {
+  box-shadow: inset 0 0 0 1cqw rgb(255 255 255 / 0.18);
+}
+
+/* ── light on the metal ──────────────────────────────────────── */
+
+.sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* only on the player, never the black around it */
+  -webkit-mask: url('/photos/ipod.webp') center / 100% 100% no-repeat;
+  mask: url('/photos/ipod.webp') center / 100% 100% no-repeat;
+  background:
+    /* a long diagonal reflection that slides with the tilt */
+    linear-gradient(
+      115deg,
+      rgb(255 255 255 / 0) calc(30% + var(--mx) * 30%),
+      rgb(255 255 255 / 0.28) calc(40% + var(--mx) * 30%),
+      rgb(255 255 255 / 0) calc(52% + var(--mx) * 30%)
+    ),
+    /* lit from above, darker toward the bottom edge */
+    linear-gradient(180deg, rgb(255 255 255 / 0.14) 0%, rgb(255 255 255 / 0) 35%, rgb(0 0 0 / 0) 70%, rgb(0 0 0 / 0.22) 100%);
+  mix-blend-mode: overlay;
+}
+
+/* the headphones, when there is a render */
+.headphones {
+  position: absolute;
+  right: -30%;
+  bottom: -10%;
+  width: 70%;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 20px 30px rgb(0 0 0 / 0.7));
+}
+
+@keyframes hover-float {
+  50% {
+    translate: 0 -8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ipod {
+    transition: none;
+    animation: none;
+  }
+}
