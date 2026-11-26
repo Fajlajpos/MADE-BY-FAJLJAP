@@ -76,37 +76,57 @@ export function IpodVoice({ src, title, sub, soon, cover }: Props) {
   const [dur, setDur] = useState(30)
   const ready = Boolean(src)
 
-  // while playing, the progress follows the audio
+  const nowRef = useRef(0)
+
+  // while playing, the progress follows the audio — or, until there is a recording, a clock
+  // runs the timeline on its own, so the player already plays, pauses and skips
   useEffect(() => {
     if (!playing) return
     let raf = 0
-    const tick = () => {
+    let last = performance.now()
+    const tick = (t: number) => {
       const a = audio.current
       if (a) setNow(a.currentTime)
+      else {
+        const next = nowRef.current + (t - last) / 1000
+        last = t
+        if (next >= dur) {
+          nowRef.current = 0
+          setNow(0)
+          setPlaying(false)
+          return
+        }
+        nowRef.current = next
+        setNow(next)
+      }
       raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
-  }, [playing])
+  }, [playing, dur])
 
+  const seekTo = (to: number) => {
+    const v = Math.max(0, Math.min(dur, to))
+    const a = audio.current
+    if (a) a.currentTime = v
+    nowRef.current = v
+    setNow(v)
+  }
   const toggle = () => {
     const a = audio.current
-    if (!a) return
+    if (!a) {
+      setPlaying((p) => !p)
+      return
+    }
     if (a.paused) void a.play()
     else a.pause()
   }
-  const jump = (by: number) => {
-    const a = audio.current
-    if (!a) return
-    a.currentTime = Math.max(0, Math.min(a.duration || dur, a.currentTime + by))
-    setNow(a.currentTime)
-  }
+  const jump = (by: number) => seekTo((audio.current?.currentTime ?? nowRef.current) + by)
   const restart = () => {
+    seekTo(0)
     const a = audio.current
-    if (!a) return
-    a.currentTime = 0
-    setNow(0)
-    void a.play()
+    if (a) void a.play()
+    else setPlaying(true)
   }
 
   // a small 3D tilt toward the pointer (not on touch, not under reduced motion)
@@ -183,15 +203,15 @@ export function IpodVoice({ src, title, sub, soon, cover }: Props) {
 
         {/* the click wheel */}
         <div className={styles.wheel}>
-          <button type="button" className={`${styles.key} ${styles.menu}`} onClick={restart} disabled={!ready} aria-label={t.restart} />
-          <button type="button" className={`${styles.key} ${styles.prev}`} onClick={() => jump(-5)} disabled={!ready} aria-label={t.back} />
-          <button type="button" className={`${styles.key} ${styles.next}`} onClick={() => jump(5)} disabled={!ready} aria-label={t.forward} />
-          <button type="button" className={`${styles.key} ${styles.playKey}`} onClick={toggle} disabled={!ready} tabIndex={-1} aria-hidden="true" />
+          <button type="button" className={`${styles.key} ${styles.menu}`} onClick={restart} aria-label={t.restart} />
+          <button type="button" className={`${styles.key} ${styles.prev}`} onClick={() => jump(-5)} aria-label={t.back} />
+          <button type="button" className={`${styles.key} ${styles.next}`} onClick={() => jump(5)} aria-label={t.forward} />
+          <button type="button" className={`${styles.key} ${styles.playKey}`} onClick={toggle} tabIndex={-1} aria-hidden="true" />
           <button
             type="button"
             className={styles.center}
             onClick={toggle}
-            disabled={!ready}
+           
             aria-label={playing ? t.pause : `${t.play} ${title}`}
           />
         </div>
