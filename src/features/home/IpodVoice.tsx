@@ -201,6 +201,8 @@ export function IpodVoice({ src, title, sub, soon, cover }: Props) {
 
         {/* the click wheel */}
         <div className={styles.wheel}>
+          {/* the wheel itself, cut from the picture, so a press on its edge can rock it */}
+          <span className={styles.disc} aria-hidden="true" />
           <button type="button" className={`${styles.key} ${styles.menu}`} onClick={restart} aria-label={t.restart} />
           <button type="button" className={`${styles.key} ${styles.prev}`} onClick={() => jump(-5)} aria-label={t.back} />
           <button type="button" className={`${styles.key} ${styles.next}`} onClick={() => jump(5)} aria-label={t.forward} />
@@ -209,7 +211,6 @@ export function IpodVoice({ src, title, sub, soon, cover }: Props) {
             type="button"
             className={styles.center}
             onClick={toggle}
-           
             aria-label={playing ? t.pause : `${t.play} ${title}`}
           />
         </div>
