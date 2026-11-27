@@ -24,7 +24,7 @@ export default function DepthCanvas({
   return (
     <div className={className}>
       <Canvas
-        dpr={[1, 2]}
+        dpr={tier === 'high' ? [1, 2] : [1, 1.5]}
         frameloop={still ? 'demand' : running ? 'always' : 'never'}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance', toneMapping: ACESFilmicToneMapping }}
         camera={{ position: [0, 0, 9], fov: 50, near: 0.1, far: 40 }}

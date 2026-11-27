@@ -258,7 +258,7 @@ function Earphones() {
   const [three, setThree] = useState<boolean | null>(null)
   useEffect(() => {
     // after mount: whether this device draws 3D at all
-    const t = window.setTimeout(() => setThree(detectTier() !== 'none'), 0)
+    const t = window.setTimeout(() => setThree(detectTier() === 'high'), 0)
     return () => window.clearTimeout(t)
   }, [])
   return (
