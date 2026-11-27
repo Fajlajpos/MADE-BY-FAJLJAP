@@ -1,0 +1,443 @@
+/* A track page: the "now playing" head, then what the track is made of (photos, a timeline,
+   progress bars, my day or facts), then previous / next like on the player. */
+
+.page {
+  display: grid;
+  gap: var(--space-8);
+  padding-bottom: var(--section-pad);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: var(--space-2);
+  min-height: 44px;
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.back:hover {
+  color: var(--fg);
+}
+
+.backIcon,
+.skipBack {
+  width: 1em;
+  height: 1em;
+  rotate: 180deg;
+}
+
+.head {
+  display: grid;
+  gap: var(--space-5);
+  max-width: 46rem;
+}
+
+.meta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  font-size: var(--fs-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--fg-subtle);
+}
+
+.title {
+  max-width: 14ch;
+}
+
+.story {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 38rem;
+}
+
+.first {
+  margin: 0;
+  font-size: var(--fs-lead);
+  line-height: 1.4;
+  color: var(--fg);
+}
+
+.text {
+  margin: 0;
+  color: var(--fg-muted);
+}
+
+/* the bars that play beside the track number */
+.eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 14px;
+}
+
+.eq i {
+  width: 3px;
+  height: 100%;
+  border-radius: 1px;
+  background: var(--chrome);
+  transform-origin: bottom;
+  animation: eq 900ms ease-in-out infinite alternate;
+}
+
+.eq i:nth-child(2) {
+  animation-delay: -300ms;
+}
+
+.eq i:nth-child(3) {
+  animation-delay: -600ms;
+}
+
+@keyframes eq {
+  from {
+    transform: scaleY(0.25);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* ── shared panel look: matte glass ── */
+.step,
+.slot,
+.bar,
+.fact,
+.skipLink {
+  border-radius: var(--r-l);
+  background:
+    radial-gradient(120% 70% at 20% 0%, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0) 60%),
+    rgb(255 255 255 / 0.025);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.18),
+    inset 0 0 0 1px rgb(255 255 255 / 0.07),
+    0 30px 50px -30px rgb(0 0 0 / 0.9);
+}
+
+/* ── photos: prints laid on the desk, each a little askew ── */
+.photos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.photo {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-4);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #f4f4f6, #dcdce2);
+  box-shadow: 0 24px 40px -16px rgb(0 0 0 / 0.85);
+  rotate: var(--tilt, 0deg);
+  transition:
+    rotate var(--dur-base) var(--ease-out),
+    translate var(--dur-base) var(--ease-out);
+}
+
+.photo:hover {
+  rotate: 0deg;
+  translate: 0 -4px;
+}
+
+.frame {
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #16161a;
+}
+
+.frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.empty {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: var(--space-4);
+  font-size: var(--fs-small);
+  text-align: center;
+  color: var(--fg-subtle);
+  background: repeating-linear-gradient(135deg, rgb(255 255 255 / 0.03) 0 10px, transparent 10px 20px);
+}
+
+.caption {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: #26262c;
+}
+
+/* ── timeline: a chrome line down the side, a year on each stop ── */
+.timeline,
+.day {
+  position: relative;
+  display: grid;
+  gap: var(--space-4);
+  max-width: 46rem;
+  margin: 0;
+  padding: 0 0 0 var(--space-6);
+  list-style: none;
+}
+
+.timeline::before,
+.day::before {
+  content: '';
+  position: absolute;
+  left: 0.45rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--chrome);
+}
+
+.step,
+.slot {
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-5);
+}
+
+.step::before,
+.slot::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--space-6) + 0.1rem);
+  top: 1.5rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: var(--chrome);
+  box-shadow: inset 0 1px 0 #fff, 0 0 0 4px var(--bg);
+}
+
+.year,
+.time {
+  font-size: clamp(1.6rem, 1.2rem + 1.2vw, 2.4rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  font-variant-numeric: tabular-nums;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 55%, rgb(200 184 255 / 0.5) 100%),
+    var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.stepText {
+  margin: 0;
+  color: var(--fg-muted);
+}
+
+/* my day: the time beside the line on wide screens */
+@media (min-width: 768px) {
+  .slot {
+    grid-template-columns: 7rem minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-5);
+  }
+}
+
+/* ── what I'm on: progress bars like the iPod's ── */
+.bars {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 46rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bar {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.barHead {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-weight: 500;
+}
+
+.barPct {
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-subtle);
+}
+
+.rail {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: rgb(255 255 255 / 0.08);
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.6);
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--chrome);
+  transform-origin: left;
+  transform: scaleX(var(--p, 0));
+  animation: grow 900ms var(--ease-out) both;
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* ── facts ── */
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.fact {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.fact dt {
+  font-size: var(--fs-small);
+  color: var(--fg-subtle);
+}
+
+.fact dd {
+  margin: 0;
+  font-size: clamp(1.1rem, 1rem + 0.4vw, 1.35rem);
+  font-weight: 500;
+  background: var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 0 1.4rem;
+  border-radius: var(--r-control);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.5) 0%, rgb(255 255 255 / 0) 50%),
+    var(--chrome);
+  box-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 rgb(0 0 0 / 0.3);
+  font-weight: 500;
+  color: var(--c-black);
+  text-decoration: none;
+  transition: translate var(--dur-fast) var(--ease-out);
+}
+
+.cta:hover {
+  translate: 0 -1px;
+}
+
+.ctaIcon,
+.skipIcon {
+  width: 1em;
+  height: 1em;
+}
+
+/* ── previous / next ── */
+.skip {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.skipLink {
+  display: grid;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-5);
+  color: inherit;
+  text-decoration: none;
+  transition: translate var(--dur-fast) var(--ease-out);
+}
+
+.skipLink:hover {
+  translate: 0 -2px;
+}
+
+.skipNext {
+  justify-items: end;
+  text-align: right;
+}
+
+.skipLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--fs-label);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-subtle);
+}
+
+.skipTitle {
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  letter-spacing: var(--tracking-h);
+}
+
+.skipLink:hover .skipTitle {
+  background: var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.back:focus-visible,
+.cta:focus-visible,
+.skipLink:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .photos {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .page[data-kind='outside'] .photos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .skip {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eq i,
+  .fill {
+    animation: none;
+  }
+
+  .photo:hover {
+    translate: none;
+  }
+}

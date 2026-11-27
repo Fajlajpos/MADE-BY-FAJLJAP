@@ -90,7 +90,7 @@ export async function About() {
             <ol className={styles.tracks} role="list">
               {about.now.tracks.map((t, i) => (
                 <li key={t.slug}>
-                  <Link href={`${page}#${t.slug}`} className={styles.track} data-on={i === 0 || undefined}>
+                  <Link href={`${page}/${t.slug}`} className={styles.track} data-on={i === 0 || undefined}>
                     <span className={styles.trNum} aria-hidden="true">
                       {i === 0 ? (
                         <span className={styles.eq}>

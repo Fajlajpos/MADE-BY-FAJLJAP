@@ -171,3 +171,53 @@
     padding: var(--space-7);
   }
 }
+
+/* the whole chapter panel is the link to the track's page */
+.chapter {
+  position: relative;
+  transition: translate var(--dur-fast) var(--ease-out);
+}
+
+.chapter:hover {
+  translate: 0 -2px;
+}
+
+.open {
+  color: inherit;
+  text-decoration: none;
+}
+
+.open::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.open:focus-visible {
+  outline: none;
+}
+
+.chapter:has(.open:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.chapter:hover .open {
+  background: var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.play {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-subtle);
+}

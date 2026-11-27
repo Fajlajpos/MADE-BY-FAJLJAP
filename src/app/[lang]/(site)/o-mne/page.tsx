@@ -21,6 +21,7 @@ export default async function AboutPage() {
   const { about } = home
   const t = about.now.page
   const root = rootOf(lang)
+  const base = `${lang === 'cs' ? '' : '/en'}/o-mne`
   return (
     <section className={`${shared.section} ${styles.page}`} aria-labelledby="o-mne-title">
       <header className={styles.head}>
@@ -49,13 +50,18 @@ export default async function AboutPage() {
               </span>
             </div>
             <div className={styles.body}>
-              <h2 className={styles.h}>{typo(track.title)}</h2>
+              {/* the whole panel opens the track's own page */}
+              <h2 className={styles.h}>
+                <Link href={`${base}/${track.slug}`} className={styles.open}>
+                  {typo(track.title)}
+                </Link>
+              </h2>
               <p className={styles.note}>{typo(track.note)}</p>
-              {track.story.map((p, k) => (
-                <p key={k} className={styles.text}>
-                  {typo(p)}
-                </p>
-              ))}
+              <p className={styles.text}>{typo(track.story[0] ?? '')}</p>
+              <span className={styles.play} aria-hidden="true">
+                {t.open}
+                <Arrow className={styles.ctaIcon} />
+              </span>
             </div>
           </li>
         ))}

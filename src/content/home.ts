@@ -182,6 +182,7 @@ export const home = {
       tracks: [
         {
           slug: 'kdo-jsem',
+          kind: 'photos',
           title: 'Kdo jsem',
           note: 'FAJLAJP. Weby dělám sám, bez agentury',
           len: 'intro',
@@ -189,45 +190,92 @@ export const home = {
             'Jsem FAJLAJP a dělám weby, e-shopy a appky. Sám, bez agentury a bez přeposílání mailů mezi pěti lidma.',
             'Všechno, co ode mě dostaneš, jsem udělal já. Takže vím, kde co je, a když se něco rozbije, vím, kam sáhnout.',
           ],
+          // OVĚŘIT: popisky fotek; prázdné src = místo na další fotku
+          photos: [
+            { src: '/photos/o-mne.webp', alt: 'Já', caption: 'Zima 2026' },
+            { src: '/photos/cloud-me-v5.webp', alt: 'Já na chromovém mráčku', caption: 'Když se web povede' },
+            { src: '/photos/ipod-cover.webp', alt: 'Les', caption: 'Kde mě napadají věci' },
+            { src: '', alt: '', caption: 'Sem přijde další fotka' },
+          ],
+          items: [
+            { k: 'Jméno', v: 'FAJLAJP' },
+            { k: 'Dělám', v: 'weby, e-shopy, appky' },
+            { k: 'Pracuju', v: 'sám, bez agentury' },
+            { k: 'Instagram', v: '@fajlajpos' },
+          ],
         },
         {
           slug: 'jak-jsem-zacal',
+          kind: 'timeline',
           title: 'Jak jsem začal',
           note: 'od prvního webu pro kámoše k zakázkám',
           len: 'flashback',
-          story: [
-            'Tady bude, jak jsem se k webům dostal. První stránka, první chyby, první člověk, kterej mi za web zaplatil.',
-            'Doplň vlastními slovy: kdy, proč a co tě na tom chytlo.',
+          story: ['Jak jsem se dostal k webům. Krok po kroku, i s chybama.'],
+          photos: [],
+          // OVĚŘIT: celá časová osa je vymyšlená, přepiš ji podle pravdy
+          items: [
+            { k: '20XX', v: 'První stránka. Ošklivá, ale moje.' },
+            { k: '20XX', v: 'První web pro kámoše. Zadarmo, za pizzu.' },
+            { k: '20XX', v: 'První člověk, kterej mi za web zaplatil.' },
+            { k: '2026', v: 'FAJLAJP. Weby, e-shopy a první appka.' },
           ],
         },
         {
           slug: 'na-cem-delam',
+          kind: 'now',
           title: 'Na čem dělám teď',
           note: 'svoje první appka a furt se učím',
           len: 'na repeat',
-          story: [
-            'Teď dělám svoji první appku. Je to něco jinýho než web a každej den se na ní něco naučím.',
-            'K tomu se učím 3D. Zatím z toho leze hlavně peněženka, ale to se změní.',
+          story: ['Co mám zrovna rozdělaný. Čísla jsou odhad, jak daleko s tím jsem.'],
+          photos: [],
+          // OVĚŘIT: projekty a procenta
+          items: [
+            { k: 'Moje první appka', v: '60' },
+            { k: 'Učím se 3D', v: '30' },
+            { k: 'Reklamy na sebe', v: '15' },
+            { k: 'Tenhle web', v: '90' },
           ],
         },
         {
           slug: 'jak-pracuju',
+          kind: 'day',
           title: 'Jak pracuju',
           note: 'večer u stolu, odpovídám do dvou dnů',
           len: 'každej den',
           story: [
             'Nejlíp mi to jde večer a v noci, když nikdo nevolá. Na zprávy ale odpovídám i přes den, většinou do dvou dnů.',
-            'Nejdřív si zavoláme, pak ti řeknu cenu a termín. Žádný „dle domluvy“.',
+            'Takhle zhruba vypadá můj den.',
+          ],
+          photos: [],
+          // OVĚŘIT: časy a co v nich děláš
+          items: [
+            { k: '09:00', v: 'Kafe a odpovídám na zprávy.' },
+            { k: '13:00', v: 'Hovory s klientama, návrhy.' },
+            { k: '17:00', v: 'Ven. Tady chodí nápady.' },
+            { k: '21:00', v: 'U stolu. Teď se dělá nejvíc práce.' },
+            { k: '02:00', v: 'Ještě jedna oprava a jdu spát.' },
           ],
         },
         {
           slug: 'mimo-weby',
+          kind: 'outside',
           title: 'Mimo weby',
           note: 'reklamy na sebe, 3D a @fajlajpos',
           len: 'bonus',
           story: [
             'Točím vtipný a trochu drzý reklamy sám na sebe. Najdeš je na Instagramu @fajlajpos.',
             'Doplň, co tě baví, když zrovna nesedíš u stolu.',
+          ],
+          // OVĚŘIT: fotky a věci mimo weby
+          photos: [
+            { src: '', alt: '', caption: 'Sem fotka z natáčení' },
+            { src: '', alt: '', caption: 'Sem 3D render' },
+            { src: '', alt: '', caption: 'Sem cokoliv dalšího' },
+          ],
+          items: [
+            { k: 'Reklamy', v: 'vtipný, trochu drzý' },
+            { k: '3D', v: 'zatím hlavně peněženka' },
+            { k: 'Hudba', v: 'doplň' },
           ],
         },
       ],
@@ -237,6 +285,12 @@ export const home = {
         lead: 'Pět kapitol o tom, kdo jsem, jak pracuju a co mě baví. Pusť si je popořadě, nebo přeskoč.',
         chapter: 'Skladba',
         back: 'Zpátky na hlavní stránku',
+        backList: 'Celej playlist',
+        prev: 'Předchozí skladba',
+        next: 'Další skladba',
+        open: 'Pustit skladbu',
+        empty: 'místo na fotku',
+        instagram: 'Sleduj mě na Instagramu',
         cta: 'Napiš mi',
       },
     },
