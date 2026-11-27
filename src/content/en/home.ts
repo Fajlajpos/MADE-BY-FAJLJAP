@@ -150,6 +150,72 @@ export const home: typeof cs = {
       { label: 'I make', value: 'websites and shops' },
       { label: 'I reply', value: 'within two days' },
     ],
+    now: {
+      label: 'Me in five tracks',
+      count: 'tracks',
+      playing: 'now playing',
+      more: 'The whole story',
+      tracks: [
+        {
+          slug: 'kdo-jsem',
+          title: 'Who I am',
+          note: 'FAJLAJP. I make websites alone, no agency',
+          len: 'intro',
+          story: [
+            "I'm FAJLAJP and I make websites, shops and apps. Alone, no agency, no emails forwarded between five people.",
+            'Everything you get from me, I made. So I know where everything is, and when something breaks, I know where to reach.',
+          ],
+        },
+        {
+          slug: 'jak-jsem-zacal',
+          title: 'How I started',
+          note: 'from a first site for a friend to real work',
+          len: 'flashback',
+          story: [
+            'How I got into websites goes here. The first page, the first bugs, the first person who paid me for one.',
+            'To fill in: when, why and what hooked you.',
+          ],
+        },
+        {
+          slug: 'na-cem-delam',
+          title: "What I'm on now",
+          note: 'my first app, still learning',
+          len: 'on repeat',
+          story: [
+            "Right now I'm making my first app. It's a different thing than a website and I learn something on it every day.",
+            "On top of that I'm learning 3D. So far mostly a wallet comes out of it, but that will change.",
+          ],
+        },
+        {
+          slug: 'jak-pracuju',
+          title: 'How I work',
+          note: 'evenings at the desk, replies within two days',
+          len: 'every day',
+          story: [
+            'I work best in the evening and at night, when nobody calls. I still answer during the day, usually within two days.',
+            "First we talk, then I tell you the price and the date. No 'to be agreed'.",
+          ],
+        },
+        {
+          slug: 'mimo-weby',
+          title: 'Outside websites',
+          note: 'ads about myself, 3D and @fajlajpos',
+          len: 'bonus',
+          story: [
+            'I shoot funny, slightly cheeky ads about myself. Find them on Instagram @fajlajpos.',
+            "To fill in: what you're into when you're not at the desk.",
+          ],
+        },
+      ],
+      page: {
+        title: 'About me',
+        heading: 'The whole story',
+        lead: 'Five chapters about who I am, how I work and what I like. Play them in order or skip ahead.',
+        chapter: 'Track',
+        back: 'Back to the homepage',
+        cta: 'Message me',
+      },
+    },
     portraitSlot: 'home.about',
     caption: "Me, winter 2026. I'm not always at the desk.",
     voice: {

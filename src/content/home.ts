@@ -173,6 +173,73 @@ export const home = {
       { label: 'Dělám', value: 'weby a e-shopy' },
       { label: 'Odpovídám', value: 'do dvou dnů' },
     ],
+    /** My playlist: five things about me beside the iPod; each opens its chapter on /o-mne. OVĚŘIT: všechno přepiš vlastními slovy. */
+    now: {
+      label: 'O mně v pěti skladbách',
+      count: 'skladeb',
+      playing: 'právě hraje',
+      more: 'Celej příběh',
+      tracks: [
+        {
+          slug: 'kdo-jsem',
+          title: 'Kdo jsem',
+          note: 'FAJLAJP. Weby dělám sám, bez agentury',
+          len: 'intro',
+          story: [
+            'Jsem FAJLAJP a dělám weby, e-shopy a appky. Sám, bez agentury a bez přeposílání mailů mezi pěti lidma.',
+            'Všechno, co ode mě dostaneš, jsem udělal já. Takže vím, kde co je, a když se něco rozbije, vím, kam sáhnout.',
+          ],
+        },
+        {
+          slug: 'jak-jsem-zacal',
+          title: 'Jak jsem začal',
+          note: 'od prvního webu pro kámoše k zakázkám',
+          len: 'flashback',
+          story: [
+            'Tady bude, jak jsem se k webům dostal. První stránka, první chyby, první člověk, kterej mi za web zaplatil.',
+            'Doplň vlastními slovy: kdy, proč a co tě na tom chytlo.',
+          ],
+        },
+        {
+          slug: 'na-cem-delam',
+          title: 'Na čem dělám teď',
+          note: 'svoje první appka a furt se učím',
+          len: 'na repeat',
+          story: [
+            'Teď dělám svoji první appku. Je to něco jinýho než web a každej den se na ní něco naučím.',
+            'K tomu se učím 3D. Zatím z toho leze hlavně peněženka, ale to se změní.',
+          ],
+        },
+        {
+          slug: 'jak-pracuju',
+          title: 'Jak pracuju',
+          note: 'večer u stolu, odpovídám do dvou dnů',
+          len: 'každej den',
+          story: [
+            'Nejlíp mi to jde večer a v noci, když nikdo nevolá. Na zprávy ale odpovídám i přes den, většinou do dvou dnů.',
+            'Nejdřív si zavoláme, pak ti řeknu cenu a termín. Žádný „dle domluvy“.',
+          ],
+        },
+        {
+          slug: 'mimo-weby',
+          title: 'Mimo weby',
+          note: 'reklamy na sebe, 3D a @fajlajpos',
+          len: 'bonus',
+          story: [
+            'Točím vtipný a trochu drzý reklamy sám na sebe. Najdeš je na Instagramu @fajlajpos.',
+            'Doplň, co tě baví, když zrovna nesedíš u stolu.',
+          ],
+        },
+      ],
+      page: {
+        title: 'O mně',
+        heading: 'Celej příběh',
+        lead: 'Pět kapitol o tom, kdo jsem, jak pracuju a co mě baví. Pusť si je popořadě, nebo přeskoč.',
+        chapter: 'Skladba',
+        back: 'Zpátky na hlavní stránku',
+        cta: 'Napiš mi',
+      },
+    },
     portraitSlot: 'home.about',
     // OVĚŘIT: popisek k fotce
     caption: 'Já, zima 2026. Ne vždycky sedím u stolu.',

@@ -47,11 +47,35 @@
 /* ── the cards: plain dark panels, side by side ─────────────── */
 
 .grid {
+  position: relative;
+  isolation: isolate;
   display: grid;
   gap: var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* light behind the glass, so the frost has something to blur: a slow holo + chrome glow */
+.grid::before {
+  content: '';
+  position: absolute;
+  inset: 10% 5%;
+  z-index: -1;
+  border-radius: 50%;
+  background:
+    radial-gradient(40% 60% at 25% 50%, rgb(200 184 255 / 0.22), transparent 70%),
+    radial-gradient(35% 55% at 75% 45%, rgb(160 220 255 / 0.18), transparent 70%),
+    radial-gradient(30% 50% at 50% 60%, rgb(255 255 255 / 0.1), transparent 70%);
+  filter: blur(40px);
+  animation: drift 18s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes drift {
+  to {
+    transform: translateX(6%) scale(1.08);
+  }
 }
 
 .card {
@@ -95,6 +119,43 @@
   border-radius: inherit;
   background: radial-gradient(60% 40% at 0% 0%, rgb(255 255 255 / 0.08), rgb(255 255 255 / 0) 70%);
   pointer-events: none;
+}
+
+/* a liquid-chrome hairline round the glass: bright where the light hits, fading at the sides */
+.inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from 210deg,
+    rgb(255 255 255 / 0.05),
+    rgb(255 255 255 / 0.7) 12%,
+    rgb(200 184 255 / 0.5) 22%,
+    rgb(255 255 255 / 0.06) 40%,
+    rgb(255 255 255 / 0.04) 60%,
+    rgb(160 220 255 / 0.45) 78%,
+    rgb(255 255 255 / 0.05)
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0.7;
+  transition: opacity var(--dur-base) var(--ease-out);
+  pointer-events: none;
+}
+
+.card:hover .inner::before {
+  opacity: 1;
+}
+
+/* the title turns to chrome under the pointer */
+.card:hover .title {
+  background: var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .card:hover .inner {
@@ -167,6 +228,10 @@
 @media (prefers-reduced-motion: reduce) {
   .card:hover .inner {
     translate: none;
+  }
+
+  .grid::before {
+    animation: none;
   }
 
 }

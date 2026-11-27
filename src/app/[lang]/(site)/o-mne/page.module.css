@@ -1,0 +1,173 @@
+/* O mně — the whole story: a chapter per playlist track. */
+
+.page {
+  padding-bottom: var(--section-pad);
+}
+
+.head {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-5);
+  max-width: 46rem;
+  margin-bottom: var(--space-8);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.back:hover {
+  color: var(--fg);
+}
+
+.backIcon {
+  width: 1em;
+  height: 1em;
+  rotate: 180deg;
+}
+
+.title {
+  max-width: 14ch;
+}
+
+.lead {
+  max-width: 36rem;
+  font-size: var(--fs-lead);
+  line-height: 1.4;
+  color: var(--fg-muted);
+}
+
+.chapters {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* each chapter: a matte glass panel, the big chrome number on the side */
+.chapter {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border-radius: var(--r-l);
+  background:
+    radial-gradient(120% 70% at 20% 0%, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0) 60%),
+    rgb(255 255 255 / 0.025);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.18),
+    inset 0 0 0 1px rgb(255 255 255 / 0.07),
+    0 30px 50px -30px rgb(0 0 0 / 0.9);
+  /* clear the fixed header when a track link jumps here */
+  scroll-margin-top: calc(var(--header-h, 4rem) + var(--space-5));
+}
+
+.chapter:target {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.3),
+    inset 0 0 0 1px rgb(255 255 255 / 0.18),
+    0 30px 50px -30px rgb(0 0 0 / 0.9);
+}
+
+.side {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+}
+
+.num {
+  font-size: clamp(2.4rem, 1.6rem + 2.4vw, 4rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  font-variant-numeric: tabular-nums;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 55%, rgb(200 184 255 / 0.5) 100%),
+    var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.meta {
+  font-size: var(--fs-label);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-subtle);
+}
+
+.body {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 40rem;
+}
+
+.h {
+  margin: 0;
+  font-size: var(--fs-h3);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: var(--tracking-h);
+}
+
+.note {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-small);
+  color: var(--fg-subtle);
+}
+
+.text {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--fg-muted);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  margin-top: var(--space-7);
+  padding: 0 1.4rem;
+  border-radius: var(--r-control);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.5) 0%, rgb(255 255 255 / 0) 50%),
+    var(--chrome);
+  box-shadow: inset 0 1px 0 #fff, inset 0 -1px 0 rgb(0 0 0 / 0.3);
+  font-weight: 500;
+  color: var(--c-black);
+  text-decoration: none;
+  transition: translate var(--dur-fast) var(--ease-out);
+}
+
+.cta:hover {
+  translate: 0 -1px;
+}
+
+.ctaIcon {
+  width: 1em;
+  height: 1em;
+}
+
+.back:focus-visible,
+.cta:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .chapter {
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: var(--space-7);
+    padding: var(--space-7);
+  }
+}
