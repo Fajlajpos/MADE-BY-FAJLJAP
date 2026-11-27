@@ -1,153 +1,224 @@
-/* 04 Práce — large images with short captions: one across, two side by side. */
+/* 04 Práce — a plain base: one row per project, the site in a simple dark browser window. */
 
 .head {
   display: grid;
-  gap: var(--space-6);
+  gap: var(--space-5);
   margin-bottom: var(--space-8);
 }
 
 .h2 {
-  max-width: 12ch;
+  max-width: 14ch;
 }
 
-/* ── the grid ────────────────────────────────────────────────── */
-
-.grid {
+.list {
   display: grid;
-  gap: var(--space-8);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.cell {
-  min-width: 0;
+.row {
+  padding-block: var(--space-7);
 }
 
 .project {
   display: grid;
   gap: var(--space-6);
-  /* room for the object sticking out over the top edge */
-  padding-top: var(--space-8);
+  align-items: center;
 }
 
-.media {
-  position: absolute;
-  inset: 0;
-}
+/* ── the text ────────────────────────────────────────────────── */
 
-/* ── caption ─────────────────────────────────────────────────── */
-
-.caption {
+.text {
   display: grid;
-  gap: var(--space-2);
+  justify-items: start;
+  gap: var(--space-3);
 }
 
-.titleRow {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-4);
+.num {
+  font-size: clamp(2.4rem, 1.6rem + 2.4vw, 4rem);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  font-variant-numeric: tabular-nums;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0) 55%, rgb(200 184 255 / 0.5) 100%),
+    var(--chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .title {
-  font-size: clamp(1.5rem, 1.2rem + 1vw, 2.2rem);
+  margin: var(--space-2) 0 0;
+  font-size: var(--fs-h3);
   font-weight: 500;
-  line-height: 1.1;
+  line-height: 1.05;
   letter-spacing: var(--tracking-h);
 }
 
-.year,
 .meta {
   margin: 0;
   font-size: var(--fs-label);
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
   color: var(--fg-subtle);
-}
-
-.year {
-  flex: none;
-  font-variant-numeric: tabular-nums;
 }
 
 .summary {
   max-width: 34rem;
-  margin-top: var(--space-2);
-  font-size: var(--fs-small);
+  margin: var(--space-2) 0 0;
+  font-size: var(--fs-body);
   line-height: var(--lh-body);
   color: var(--fg-muted);
 }
 
-/* ── wider: the first across, the other two side by side ─────── */
-@media (min-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: var(--gutter);
-    row-gap: var(--space-9);
-  }
-
-  .cell:first-child,
-  .cell[data-wide] {
-    grid-column: 1 / -1;
-  }
-
-  /* the third one sits a step lower: one quiet asymmetry */
-  .cell:nth-child(3) {
-    margin-top: var(--space-9);
-  }
-
-}
-
-@media (min-width: 1024px) {
-  .head {
-    margin-bottom: var(--space-9);
-  }
-
-  /* the wide project's caption: title and meta on the left, summary on the right */
-  .cell[data-wide] .caption {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--gutter);
-    align-items: start;
-  }
-
-  .cell[data-wide] .titleRow,
-  .cell[data-wide] .meta {
-    grid-column: 1 / 6;
-  }
-
-  .cell[data-wide] .summary {
-    grid-column: 7 / -1;
-    grid-row: 1 / span 2;
-    margin-top: 0.4rem;
-  }
-}
-
-
-/* the link to a live project */
+/* the way to it: a glossy chrome pill */
 .visit {
-  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
   margin-top: var(--space-3);
+  padding: 0 1.2rem;
+  border-radius: var(--r-control);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.5) 0%, rgb(255 255 255 / 0) 50%),
+    var(--chrome);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 rgb(0 0 0 / 0.3);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--c-black);
+  text-decoration: none;
+  transition:
+    translate var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.visit:hover {
+  translate: 0 -1px;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 rgb(0 0 0 / 0.3),
+    0 8px 20px -10px rgb(255 255 255 / 0.6);
+}
+
+.visit:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
 }
 
 .visitIcon {
-  rotate: -45deg;
+  width: 1em;
+  height: 1em;
 }
 
-@media (min-width: 1024px) {
-  .cell[data-wide] .visit {
-    grid-column: 7 / -1;
-    margin-top: 0;
+/* ── the browser window ──────────────────────────────────────── */
+
+.window {
+  overflow: hidden;
+  border-radius: var(--r-m);
+  background: var(--bg-raised);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.08),
+    0 30px 60px -30px rgb(0 0 0 / 0.9);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: 2.4rem;
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--line);
+  background: rgb(255 255 255 / 0.03);
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dots i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.18);
+}
+
+.address {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0.25rem 0.8rem;
+  border-radius: var(--r-control);
+  background: rgb(0 0 0 / 0.35);
+  font-size: var(--fs-label);
+  color: var(--fg-subtle);
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.screen {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.screen img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: scale 600ms var(--ease-out);
+}
+
+.project:hover .screen img {
+  scale: 1.03;
+}
+
+/* until there is a screenshot */
+.empty {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  font-size: var(--fs-h3);
+  color: var(--fg-subtle);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project:hover .screen img {
+    scale: none;
   }
 }
 
-/* a real project's card opens the live site (the visible link under it is the keyboard way) */
-.cardLink {
-  display: block;
-  color: inherit;
-  text-decoration: none;
+/* phone and tablet: the picture first */
+@media (max-width: 1023px) {
+  .window {
+    order: -1;
+  }
 }
 
-/* Y2K: room under each framed project, so the liquid frame clears its caption */
-.project {
-  row-gap: var(--space-8);
+/* wide: text 5 columns, window 7; every other row the other way round */
+@media (min-width: 1024px) {
+  .project {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-8);
+  }
+
+  .row[data-flip] .project {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+
+  .row[data-flip] .window {
+    order: -1;
+  }
+
+  .row {
+    padding-block: var(--space-8);
+  }
 }

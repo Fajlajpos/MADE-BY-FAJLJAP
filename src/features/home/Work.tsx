@@ -1,21 +1,16 @@
 import type { CSSProperties } from 'react'
-import { Media } from '@/components/media/Media'
 import { Arrow } from '@/components/ui/Arrow'
-import { Showcase, type Corner, type Hue } from '@/components/showcase/Showcase'
 import { content } from '@/content/server'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
 import shared from './home.module.css'
 import styles from './Work.module.css'
 
-const SIZES = ['(min-width: 768px) 92vw, 100vw', '(min-width: 768px) 46vw, 100vw']
-const HUES: Hue[] = ['cold', 'warm', 'violet', 'warm']
-const CORNERS: Corner[] = ['tr', 'tl', 'tr', 'tl']
-
 /**
- * 04 Práce — three projects on metal plates, the first across the full width, the other two
- * side by side. Until a project has its photo, the plate shows a drawn picture of it; its chrome
- * object sits on the corner either way.
+ * 04 Práce — a plain base for now: one wide row per project. On the left a big chrome number,
+ * the name, year and kind, a few lines about it and the way to it; on the right the site itself
+ * in a simple dark browser window (its address in the bar). Rows alternate sides on a wide
+ * screen; on a phone the picture comes first.
  */
 export async function Work() {
   const { home, getSlot, projects, categories: categoryLabels, ui } = await content()
@@ -37,96 +32,54 @@ export async function Work() {
         </h2>
       </header>
 
-      <ol className={styles.grid} role="list">
+      <ol className={styles.list} role="list">
         {featured.map((project, i) => {
           const media = getSlot(project.slot)
-          const hasPhoto = Boolean(media.src)
-          // the first and the last project run across the full width
-          const wide = i === 0 || (i === featured.length - 1 && featured.length % 2 === 0)
-          const shot =
-            project.url && media.src
-              ? { src: media.src, alt: media.alt, url: project.url, video: project.video, dark: project.window === 'dark' }
-              : undefined
+          const host = project.url?.replace(/^https?:\/\//, '').replace(/\/$/, '')
           return (
-            <li
-              key={project.slug}
-              className={styles.cell}
-              data-wide={wide || undefined}
-              data-reveal=""
-              style={{ '--reveal-i': i % 2 } as CSSProperties}
-            >
+            <li key={project.slug} className={styles.row} data-flip={i % 2 === 1 || undefined} data-reveal="">
               <article className={styles.project} aria-labelledby={`projekt-${project.slug}`}>
-                {project.url ? (
-                  <a
-                    className={styles.cardLink}
-                    href={project.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${ui.work.open} ${project.title} ${ui.newWindow}`}
-                    tabIndex={-1}
-                  >
-                    <Showcase
-                      mock={project.mock}
-                      object={project.object}
-                      hue={HUES[i % HUES.length]}
-                      corner={CORNERS[i % CORNERS.length]}
-                      wide={wide}
-                      frame={i}
-                      shot={shot}
-                      chip={shot ? (project.categories.includes('e-shop') ? ui.chips.liveShop : ui.chips.liveWeb) : undefined}
-                    >
-                      {hasPhoto && !shot ? (
-                        <Media
-                          slot={project.slot}
-                          className={styles.media}
-                          sizes={SIZES[wide ? 0 : 1]}
-                        />
-                      ) : undefined}
-                    </Showcase>
-                  </a>
-                ) : (
-                  <Showcase
-                    mock={project.mock}
-                    object={project.object}
-                    hue={HUES[i % HUES.length]}
-                    corner={CORNERS[i % CORNERS.length]}
-                    wide={wide}
-                    frame={i}
-                    shot={shot}
-                    chip={shot ? (project.categories.includes('e-shop') ? ui.chips.liveShop : ui.chips.liveWeb) : undefined}
-                  >
-                    {hasPhoto && !shot ? (
-                      <Media
-                        slot={project.slot}
-                        className={styles.media}
-                        sizes={SIZES[wide ? 0 : 1]}
-                      />
-                    ) : undefined}
-                  </Showcase>
-                )}
-                <div className={styles.caption}>
-                  <div className={styles.titleRow}>
-                    <h3 id={`projekt-${project.slug}`} className={styles.title}>
-                      {project.title}
-                    </h3>
-                    <p className={styles.year}>{project.year}</p>
-                  </div>
+                <div className={styles.text}>
+                  <span className={styles.num} aria-hidden="true">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <h3 id={`projekt-${project.slug}`} className={styles.title}>
+                    {project.title}
+                  </h3>
                   <p className={styles.meta}>
-                    {project.categories.map((c) => categoryLabels[c]).join(', ')}
+                    {project.year} · {project.categories.map((c) => categoryLabels[c]).join(', ')}
                   </p>
                   <p className={styles.summary}>{typo(project.summary)}</p>
                   {project.url && (
-                    <a
-                      className={`${shared.link} ${styles.visit}`}
-                      href={project.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {ui.work.open} {project.url.replace(/^https?:\/\//, '')}
-                      <Arrow className={`${shared.arrow} ${styles.visitIcon}`} />
-                      <span className="visually-hidden"> {ui.newWindow}</span>
+                    <a className={styles.visit} href={project.url} target="_blank" rel="noopener noreferrer">
+                      {ui.work.open}
+                      <Arrow className={styles.visitIcon} />
+                      <span className="visually-hidden">
+                        {' '}
+                        {host} {ui.newWindow}
+                      </span>
                     </a>
                   )}
+                </div>
+
+                {/* the site in a plain browser window */}
+                <div className={styles.window} aria-hidden={media.src ? undefined : true}>
+                  <div className={styles.bar}>
+                    <span className={styles.dots} aria-hidden="true">
+                      <i />
+                      <i />
+                      <i />
+                    </span>
+                    <span className={styles.address}>{host ?? project.title}</span>
+                  </div>
+                  <div className={styles.screen}>
+                    {media.src ? (
+                      // eslint-disable-next-line @next/next/no-img-element -- a screenshot of the site
+                      <img src={media.src} alt={media.alt} loading="lazy" decoding="async" />
+                    ) : (
+                      <span className={styles.empty}>{project.title}</span>
+                    )}
+                  </div>
                 </div>
               </article>
             </li>
