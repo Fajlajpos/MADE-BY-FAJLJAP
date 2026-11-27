@@ -7,6 +7,7 @@ import { typo } from '@/lib/typo/czech'
 import shared from './home.module.css'
 import styles from './About.module.css'
 import { IpodVoice } from './IpodVoice'
+import { Earpods } from './Earpods'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- the typed note is off for now, kept for later
 /** The typed note beside the ID card. OVĚŘIT: přepiš si to vlastními slovy. */
@@ -78,7 +79,7 @@ export async function About() {
           </div>
 
           {/* five things about me as the iPod's playlist; each opens its chapter on /o-mne */}
-          <nav className={styles.playlist} aria-labelledby="o-mne-playlist">
+          <nav className={styles.playlist} aria-labelledby="o-mne-playlist" data-earbuds="">
             <div className={styles.plHead}>
               <h3 id="o-mne-playlist" className={styles.plTitle}>
                 {about.now.label}
@@ -116,6 +117,9 @@ export async function About() {
               <Arrow className={styles.moreIcon} />
             </Link>
           </nav>
+
+          {/* the earphones: plugged into the iPod, the buds on the playlist's corners */}
+          <Earpods />
         </div>
       </div>
     </section>

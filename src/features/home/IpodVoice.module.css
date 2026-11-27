@@ -593,7 +593,7 @@
 /* the stage keeps room on the left for the note */
 @media (min-width: 1024px) {
   .stage {
-    padding-left: clamp(8.5rem, 4rem + 6vw, 10rem);
+    padding-left: clamp(7.5rem, 3rem + 4vw, 8.5rem);
   }
 }
 
@@ -617,6 +617,13 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hintArrow {
+    animation: none;
+  }
+}
+
+/* wide: the iPod lies still, plugged into the earphones' cable (Earpods) */
+@media (min-width: 1024px) {
+  .ipod {
     animation: none;
   }
 }

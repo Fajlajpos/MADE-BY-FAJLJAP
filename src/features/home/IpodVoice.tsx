@@ -7,7 +7,7 @@ import { detectTier } from '@/three/quality'
 import styles from './IpodVoice.module.css'
 
 /** Earphones plugged into the iPod (drawn cable + the two buds cut out of his photo). */
-const HEADPHONES_ART = true
+const HEADPHONES_ART = false
 
 type Props = {
   /** The recording (e.g. '/audio/hlas.m4a'). Empty: the iPod waits for it. */
@@ -163,7 +163,7 @@ export function IpodVoice({ src, title, sub, soon, cover }: Props) {
 
   return (
     <div className={styles.stage} onPointerMove={onMove} onPointerLeave={onLeave}>
-      <div ref={root} className={styles.ipod} data-playing={playing || undefined}>
+      <div ref={root} className={styles.ipod} data-ipod="" data-playing={playing || undefined}>
         {HEADPHONES_ART && <Earphones />}
         {/* eslint-disable-next-line @next/next/no-img-element -- a cut-out photo of the player */}
         <img className={styles.body} src="/photos/ipod.webp" alt="" width={1198} height={1874} loading="lazy" />

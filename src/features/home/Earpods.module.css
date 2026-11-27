@@ -1,0 +1,42 @@
+/* The earphones over the whole player: the cable, the two buds on the playlist's corners. */
+
+.root {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.canvas {
+  position: absolute !important;
+  inset: 0;
+  pointer-events: none !important;
+}
+
+/* the flat stand-in cable (no 3D) */
+.wire {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.wire path {
+  fill: none;
+  stroke: #e6e6e2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 3px 3px rgb(0 0 0 / 0.5));
+}
+
+.bud {
+  position: absolute;
+  max-width: none;
+  height: auto;
+  filter: drop-shadow(0 8px 12px rgb(0 0 0 / 0.6));
+}
+
+@media (max-width: 1023px) {
+  .root {
+    display: none;
+  }
+}

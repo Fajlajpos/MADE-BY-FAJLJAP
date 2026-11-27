@@ -204,6 +204,7 @@
 /* ── what else is in the wallet: the ID card + polaroids ── */
 /* the iPod on the left, its earphones spread out to the right (where the typed note was) */
 .player {
+  position: relative;
   display: grid;
   gap: var(--space-6);
   width: 100%;
@@ -390,6 +391,8 @@
   .player {
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
     gap: 0;
+    /* room above the playlist for the buds resting on its corners */
+    padding-top: clamp(3rem, 1rem + 3vw, 5rem);
   }
 
   .stageWrap {
@@ -412,7 +415,8 @@
     grid-area: 1 / 2 / 2 / 3;
     align-self: end;
     width: auto;
-    margin: 0 0 clamp(4rem, 2rem + 5vw, 8rem) var(--space-6);
+    /* room on both sides for the buds standing by its edges */
+    margin: 0 clamp(3rem, 1rem + 2vw, 4rem) clamp(5rem, 3rem + 5vw, 9rem) clamp(4.5rem, 1rem + 4vw, 6.5rem);
   }
 }
 
