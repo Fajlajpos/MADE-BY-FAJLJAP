@@ -1,31 +1,14 @@
 import type { CSSProperties } from 'react'
 import { Arrow } from '@/components/ui/Arrow'
-import type { Service } from '@/content/home'
 import { content } from '@/content/server'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
-import { Slot3D } from '@/three/site/Slot3D'
 import shared from './home.module.css'
 import styles from './Services.module.css'
 
 /**
- * Your chrome art for each service (a cut-out PNG/WebP in /public/brand, transparent background).
- * Empty: the service's 3D chrome object stands in its place until you add one.
- */
-/** The 3D piece each service shows here (its own, not the hero's). */
-const PIECE = { weby: 'cursor', 'e-shopy': 'bag', redesign: 'drop', aplikace: 'appicon' } as const
-
-const ART: Record<Service['id'], string> = {
-  weby: '',
-  'e-shopy': '',
-  redesign: '',
-  aplikace: '',
-}
-
-/**
- * 02 Co dělám — the four services as tiles side by side, each a dark card in a rendered
- * liquid-chrome frame: the service's object on top, then its number and name in chrome, what it
- * is and what you get. No glow. Each keeps its id (#sluzba-weby …): other parts link to them.
+ * 02 Co dělám — the four services as plain dark cards side by side (in the quiet style of 04 Práce):
+ * a chrome number, the name, what it is and what you get. Each keeps its id (#sluzba-weby …): other parts link to them.
  */
 export async function Services() {
   const { home } = await content()
@@ -49,22 +32,12 @@ export async function Services() {
           <li
             key={item.id}
             id={`sluzba-${item.id}`}
-            className={styles.tile}
+            className={styles.card}
             data-reveal=""
             style={{ '--reveal-i': i } as CSSProperties}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element -- the rendered chrome frame round the card */}
-            <img className={styles.frameImg} src={`/brand/card-frame-${i % 4}.webp`} alt="" aria-hidden="true" loading="lazy" />
             <article aria-labelledby={`sluzba-${item.id}-title`} className={styles.inner}>
-              <div className={styles.art}>
-                {ART[item.id] ? (
-                  // eslint-disable-next-line @next/next/no-img-element -- a cut-out render, sized by the slot
-                  <img src={ART[item.id]} alt="" className={styles.artImg} loading="lazy" />
-                ) : (
-                  <Slot3D object={PIECE[item.id]} className={styles.object} scale={1.3} label={item.title} />
-                )}
-              </div>
-              <div className={styles.meta}>
+              <div className={styles.top}>
                 <span className={styles.num} aria-hidden="true">
                   {item.index}
                 </span>
@@ -73,14 +46,12 @@ export async function Services() {
               <h3 id={`sluzba-${item.id}-title`} className={styles.title}>
                 {item.title}
               </h3>
-              <div className={styles.more}>
               <p className={styles.body}>{typo(item.body)}</p>
               <ul className={styles.points} role="list">
                 {item.points.map((point) => (
                   <li key={point}>{typo(point)}</li>
                 ))}
               </ul>
-              </div>
             </article>
           </li>
         ))}

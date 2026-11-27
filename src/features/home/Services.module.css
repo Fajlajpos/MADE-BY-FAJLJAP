@@ -1,164 +1,177 @@
-/* 02 Co dělám — four metal plates side by side: brushed steel, a polished chrome edge, screws. */
+/* 02 Co dělám — the rows borrow 04 Práce's styles (Work.module.css); here only what is its own. */
 
 .head {
   display: grid;
-  justify-items: center;
-  gap: var(--space-6);
-  margin-bottom: var(--space-9);
-  text-align: center;
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
 }
 
 .h2 {
   max-width: 16ch;
-  margin-inline: auto;
 }
 
 .lead {
-  max-width: 30rem;
-  margin-inline: auto;
+  max-width: 34rem;
   font-size: var(--fs-body);
   line-height: var(--lh-body);
 }
 
+/* what you get: short lines with a small chrome dot */
+.points {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.points li {
+  position: relative;
+  padding-left: 1.4rem;
+  font-size: var(--fs-small);
+  color: var(--fg);
+}
+
+.points li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--chrome);
+  box-shadow: inset 0 1px 0 #fff;
+}
+
+/* ── the cards: plain dark panels, side by side ─────────────── */
+
 .grid {
   display: grid;
-  gap: calc(var(--space-6) + 16px);
+  gap: var(--space-4);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* the card: a plain dark panel inside a rendered liquid-chrome frame (public/brand/card-frame.webp,
-   from the 3D FrameShape) laid over its edge as a border image, so the tube keeps its thickness
-   whatever the card's size */
-.tile {
-  position: relative;
-  border-radius: 40px;
-  scroll-margin-top: calc(var(--header-h) + var(--space-8));
-  transition: transform var(--dur-base) var(--ease-out);
+.card {
+  display: flex;
 }
 
-/* the rendered frame, stretched over the card's edge */
-.frameImg {
+.inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  padding: var(--space-6);
+  border-radius: var(--r-l);
+  /* matte liquid glass: smoky, frosted, the page blurred behind it */
+  background:
+    radial-gradient(120% 70% at 20% 0%, rgb(255 255 255 / 0.09), rgb(255 255 255 / 0) 60%),
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015));
+  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+  backdrop-filter: blur(22px) saturate(1.2);
+  /* the glass edge: brighter where the light hits the top, a soft lip at the bottom */
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.22),
+    inset 0 0 0 1px rgb(255 255 255 / 0.08),
+    inset 0 -1px 0 rgb(255 255 255 / 0.05),
+    inset 0 -24px 40px -30px rgb(255 255 255 / 0.08),
+    0 30px 50px -30px rgb(0 0 0 / 0.9);
+  transition:
+    translate var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+
+/* a soft liquid highlight bending along the top-left, like light inside thick glass */
+.inner::after {
+  content: '';
   position: absolute;
-  inset: -16px;
-  z-index: 2;
-  width: calc(100% + 32px);
-  max-width: none;
-  height: calc(100% + 32px);
-  object-fit: fill;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(60% 40% at 0% 0%, rgb(255 255 255 / 0.08), rgb(255 255 255 / 0) 70%);
   pointer-events: none;
 }
 
-.tile:hover {
-  transform: translateY(-6px);
+.card:hover .inner {
+  translate: 0 -3px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.32),
+    inset 0 0 0 1px rgb(255 255 255 / 0.14),
+    inset 0 -1px 0 rgb(255 255 255 / 0.08),
+    inset 0 -24px 40px -30px rgb(255 255 255 / 0.12),
+    0 30px 50px -30px rgb(0 0 0 / 0.9);
 }
 
-
-.inner {
-  display: grid;
-  align-content: start;
-  gap: var(--space-4);
-  height: 100%;
-  padding: calc(var(--space-6) + 18px);
-}
-
-/* the object's window: a recessed well in the plate */
-.art {
-  position: relative;
-  aspect-ratio: 1.15;
-  margin: calc(-1 * var(--space-2)) calc(-1 * var(--space-2)) var(--space-2);
-  border-radius: 24px;
-}
-
-.object,
-.artImg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.artImg {
-  object-fit: contain;
-}
-
-.meta {
+.top {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--space-3);
+  margin-bottom: var(--space-6);
 }
 
-/* the number, stamped into the metal */
 .num {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--fg-subtle);
+  display: inline-grid;
+  place-items: center;
+  min-width: 3.2rem;
+  height: 2.2rem;
+  padding: 0 0.8rem;
+  border-radius: var(--r-control);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.5) 0%, rgb(255 255 255 / 0) 50%),
+    var(--chrome);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    inset 0 -1px 0 rgb(0 0 0 / 0.3);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--c-black);
 }
 
 .tag {
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3);
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--r-control);
+  background: rgb(255 255 255 / 0.06);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.1);
   font-size: var(--fs-label);
   color: var(--fg-muted);
+  white-space: nowrap;
 }
 
 .title {
-  font-size: clamp(1.8rem, 1.3rem + 1.2vw, 2.4rem);
-  font-weight: 600;
-  font-stretch: 90%;
-  line-height: 1;
-  letter-spacing: var(--tracking-display);
-  background: var(--chrome);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  margin: 0;
+  font-size: clamp(1.5rem, 1.2rem + 0.9vw, 2rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: var(--tracking-h);
 }
 
 .body {
+  margin: 0;
   font-size: var(--fs-small);
   line-height: var(--lh-body);
   color: var(--fg-muted);
 }
 
 .points {
-  display: grid;
-  gap: var(--space-2);
-  margin: auto 0 0;
-  padding: var(--space-4) 0 0;
-  border-top: 1px solid rgb(255 255 255 / 0.1);
-  list-style: none;
-  font-size: var(--fs-small);
-  color: var(--fg);
+  margin-top: auto;
+  padding-top: var(--space-4) !important;
 }
 
-.points li {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
+@media (prefers-reduced-motion: reduce) {
+  .card:hover .inner {
+    translate: none;
+  }
+
 }
 
-/* a tiny chrome bead before each point */
-.points li::before {
-  content: '';
-  flex: none;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  translate: 0 -1px;
-  background: radial-gradient(circle at 35% 30%, #fff 0%, #c9ccd3 40%, #55585f 100%);
-}
-
-.cta {
-  display: flex;
-  justify-content: center;
-  margin-top: var(--space-9);
-}
-
-@media (min-width: 700px) {
+@media (min-width: 768px) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -170,270 +183,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .tile,
-  .tile:hover {
-    transition: none;
-    transform: none;
-  }
-}
-
-/* ── the inside of the card: centred, the object big, the points as small outlined tags ── */
-.inner {
-  justify-items: center;
-  text-align: center;
-  gap: var(--space-3);
-  padding: calc(var(--space-6) + 14px) calc(var(--space-5) + 14px) calc(var(--space-7) + 14px);
-}
-
-.art {
-  width: 100%;
-  margin: 0 0 var(--space-2);
-  aspect-ratio: 1.05;
-}
-
-.meta {
-  justify-content: center;
-}
-
-.num {
-  font-size: var(--fs-label);
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  color: var(--fg-subtle);
-}
-
-.title {
-  font-size: clamp(2rem, 1.4rem + 1.4vw, 2.7rem);
-  margin-bottom: var(--space-2);
-}
-
-.body {
-  max-width: 24ch;
-}
-
-.points {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-2);
-  padding-top: var(--space-4);
-  border-top: 0;
-}
-
-.points li {
-  padding: 0.35rem 0.75rem;
-  border-radius: 999px;
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
-  font-size: var(--fs-label);
-  color: var(--fg-muted);
-}
-
-.points li::before {
-  display: none;
-}
-
-/* ── the inside, matched to the liquid frame: fewer boxes, more chrome ── */
-.num {
-  font-size: 1.1rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  background: var(--chrome);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.title {
-  font-size: clamp(2.3rem, 1.5rem + 1.8vw, 3.1rem);
-  font-weight: 700;
-  letter-spacing: -0.04em;
-}
-
-.body {
-  font-size: 0.95rem;
-  line-height: 1.55;
-}
-
-/* what you get: plain lines with a drop of chrome, no outlined boxes */
-.points {
-  flex-direction: column;
-  align-items: center;
-  gap: 0.55rem;
-  margin-top: var(--space-2);
-}
-
-.points li {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0;
-  box-shadow: none;
-  font-size: var(--fs-small);
-  color: var(--fg);
-}
-
-.points li::before {
-  display: block;
-  content: '';
-  width: 8px;
-  height: 10px;
-  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-  background: radial-gradient(circle at 35% 30%, #ffffff 0%, #d4d6dc 35%, #4a4c53 100%);
-}
-
-/* room for the frame's drips: the content keeps clear of the tube */
-.inner {
-  padding: calc(var(--space-7) + 20px) calc(var(--space-6) + 26px) calc(var(--space-8) + 30px);
-}
-
-/* points: centred lines, the drop inline with the first word */
-.points li {
-  display: block;
-  text-align: center;
-}
-
-.points li::before {
-  display: inline-block;
-  margin-right: 0.5rem;
-  vertical-align: 0.05em;
-}
-
-.inner {
-  padding-inline: calc(var(--space-6) + 36px);
-}
-
-/* ── at rest only the piece, number and name; pointing at the card lifts the piece and opens the rest ── */
-.art {
-  transition: transform var(--dur-slow) var(--ease-out);
-}
-
-.tile:hover .art,
-.tile:focus-within .art {
-  transform: translateY(-8px) scale(1.08);
-}
-
-.more {
-  display: grid;
-  gap: var(--space-3);
-  justify-items: center;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .art,
-  .more {
-    transition: none;
-  }
-}
-
-
-/* all cards the same height, nothing opens or grows: the frames keep one shape */
-.grid {
-  align-items: stretch;
-}
-
-.tile {
-  isolation: isolate;
-}
-
-.tile:hover {
-  transform: none;
-}
-
-/* the matte inside: frosted dark glass with a fine grain, tucked under the tube */
-.tile::after {
-  content: '';
-  position: absolute;
-  inset: 14px;
-  z-index: -1;
-  border-radius: 44px;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .5 -.15'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 120px 120px,
-    linear-gradient(180deg, rgb(48 48 56 / 0.55) 0%, rgb(22 22 28 / 0.75) 100%);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-}
-
-/* each frame's tube sits at its own distance from the edge: tuck the matte inside each one */
-.tile::after {
-  inset: 30px 28px 30px;
-}
-
-.tile:nth-child(1)::after,
-.tile:nth-child(2)::after {
-  inset: 84px 30px 30px;
-}
-
-.tile:nth-child(3)::after,
-.tile:nth-child(4)::after {
-  inset: 34px 30px 32px;
-}
-
-/* liquid glass instead of the matte: almost clear, a soft blur of what is behind, a bright rim
-   along the top and a gentle sheen, so the inside reads as glass held by the chrome */
-.tile::after {
-  background:
-    radial-gradient(120% 60% at 30% 0%, rgb(255 255 255 / 0.1) 0%, rgb(255 255 255 / 0) 60%),
-    linear-gradient(160deg, rgb(255 255 255 / 0.06) 0%, rgb(255 255 255 / 0.015) 45%, rgb(200 184 255 / 0.04) 100%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  backdrop-filter: blur(18px) saturate(140%);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.28),
-    inset 0 -1px 0 rgb(255 255 255 / 0.06),
-    inset 0 0 0 1px rgb(255 255 255 / 0.06);
-}
-
-/* the glass follows the tube's own curve: rounder corners, its edge tucked under the tube */
-.tile::after {
-  border-radius: 64px / 70px;
-}
-
-.tile:nth-child(1)::after,
-.tile:nth-child(2)::after {
-  inset: 80px 24px 24px;
-}
-
-.tile:nth-child(3)::after,
-.tile:nth-child(4)::after {
-  inset: 28px 24px 26px;
-}
-
-/* fingerprints on the glass: faint ridges where someone touched it, a different spot on each card */
-.inner::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: url('/brand/fingerprint.svg') no-repeat;
-  background-size: 34% auto;
-  background-position: 82% 22%;
-  opacity: 0.16;
-  transform: rotate(-12deg);
-  mix-blend-mode: screen;
-}
-
-.tile:nth-child(2) .inner::before {
-  background-position: 18% 68%;
-  transform: rotate(20deg) scaleX(-1);
-}
-
-.tile:nth-child(3) .inner::before {
-  background-position: 76% 84%;
-  transform: rotate(-30deg);
-}
-
-.tile:nth-child(4) .inner::before {
-  background-position: 24% 30%;
-  transform: rotate(8deg) scaleX(-1);
-}
-
-.inner {
-  position: relative;
-}
-
-
-/* room round the cards for the frames' drips, so nothing is cut off */
-.grid {
-  padding-block: 3.5rem;
+.cta {
+  margin: var(--space-6) 0 0;
 }
