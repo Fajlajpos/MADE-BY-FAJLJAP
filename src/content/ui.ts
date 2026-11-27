@@ -45,7 +45,7 @@ const cs = {
   },
   console: 'Hledáš, jak je to udělané?',
   consoleWrite: 'Napiš mi',
-  voice: { pause: 'Pozastavit nahrávku', play: 'Přehrát:', left: 'zbývá', transcript: 'Přečíst, co tam říkám', restart: 'Pustit od začátku', back: 'O 5 vteřin zpět', forward: 'O 5 vteřin dopředu' },
+  voice: { pause: 'Pozastavit nahrávku', play: 'Přehrát:', left: 'zbývá', transcript: 'Přečíst, co tam říkám', restart: 'Pustit od začátku', back: 'O 5 vteřin zpět', forward: 'O 5 vteřin dopředu', hint: ['Klikni', 'a přehraj'], hintLabel: 'Můj hlas' },
   print: {
     flip: 'Otočit fotku a přečíst, co je na zadní straně',
     flipBack: 'Otočit fotku zpátky',
@@ -140,7 +140,7 @@ const en: Ui = {
   },
   console: 'Curious how it’s made?',
   consoleWrite: 'Write to me',
-  voice: { pause: 'Pause the recording', play: 'Play:', left: 'left', transcript: 'Read what I say', restart: 'Play from the start', back: 'Back 5 seconds', forward: 'Forward 5 seconds' },
+  voice: { pause: 'Pause the recording', play: 'Play:', left: 'left', transcript: 'Read what I say', restart: 'Play from the start', back: 'Back 5 seconds', forward: 'Forward 5 seconds', hint: ['Click', 'to play'], hintLabel: 'My voice' },
   print: {
     flip: 'Turn the photo over and read the back',
     flipBack: 'Turn the photo back',

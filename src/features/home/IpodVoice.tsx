@@ -219,6 +219,32 @@ export function IpodVoice({ src, title, sub, soon, cover }: Props) {
           />
         </div>
 
+        {/* beside the iPod (never on it): a small chrome note and a drawn arrow toward the wheel */}
+        <span className={styles.hint} aria-hidden="true">
+          <span className={styles.hintLabel}>
+            <svg viewBox="0 0 10 10">
+              <path d="M2.5 1.5v7l6-3.5z" />
+            </svg>
+            {t.hintLabel}
+          </span>
+          <span className={styles.hintText}>
+            {t.hint[0]}
+            <br />
+            {t.hint[1]}
+          </span>
+          <svg className={styles.hintArrow} viewBox="0 0 80 48" fill="none">
+            <defs>
+              <linearGradient id="hint-chrome" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stopColor="#8a8a94" />
+                <stop offset="0.5" stopColor="#ffffff" />
+                <stop offset="1" stopColor="#b9b9c4" />
+              </linearGradient>
+            </defs>
+            <path d="M4 6 C10 30 34 42 72 38" stroke="url(#hint-chrome)" />
+            <path d="M63 30 L73 38 L62 45" stroke="url(#hint-chrome)" />
+          </svg>
+        </span>
+
         {/* light on the metal, masked by the player's own outline */}
         <span className={styles.sheen} aria-hidden="true" />
       </div>
