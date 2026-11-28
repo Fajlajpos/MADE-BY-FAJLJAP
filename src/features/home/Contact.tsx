@@ -3,6 +3,7 @@ import { Arrow } from '@/components/ui/Arrow'
 import { content } from '@/content/server'
 import { Words } from '@/components/fx/Words'
 import { typo } from '@/lib/typo/czech'
+import { BarcodeLabel } from './BarcodeLabel'
 import { ContactStage } from './ContactStage'
 import { CopyEmail } from './CopyEmail'
 import shared from './home.module.css'
@@ -84,6 +85,9 @@ export async function Contact() {
               ))}
             </ol>
           </div>
+
+          {/* a torn price label with a real barcode: Lens reads it as my Instagram */}
+          <BarcodeLabel label={`@fajlajpos – Instagram ${ui.newWindow}`} />
         </div>
         <ContactStage />
       </div>

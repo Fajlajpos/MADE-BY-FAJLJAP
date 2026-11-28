@@ -1,0 +1,62 @@
+/* The torn price label (public/brand/label.webp, cut from a photo) with the barcode printed on it. */
+
+.label {
+  position: relative;
+  display: block;
+  justify-self: start;
+  width: min(100%, 25rem);
+  aspect-ratio: 2146 / 930;
+  margin-top: var(--space-3);
+  background: url('/brand/label.webp') center / 100% 100% no-repeat;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.6)) drop-shadow(0 12px 16px rgb(0 0 0 / 0.55));
+  rotate: -2.5deg;
+  color: #1b1b1d;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    rotate var(--dur-base) var(--ease-out),
+    translate var(--dur-base) var(--ease-out);
+}
+
+.label:hover {
+  rotate: 0deg;
+  translate: 0 -3px;
+}
+
+.label:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+}
+
+/* the bars sit where the old ones were printed; a little ink spread, like a thermal printer */
+.bars {
+  position: absolute;
+  left: 8%;
+  top: 16%;
+  width: 82%;
+  height: 52%;
+  stroke: currentColor;
+  shape-rendering: crispEdges;
+  mix-blend-mode: multiply;
+}
+
+.digits {
+  position: absolute;
+  left: 11%;
+  right: 13%;
+  top: 70%;
+  display: flex;
+  justify-content: center;
+  gap: 1.2em;
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-size: clamp(0.85rem, 0.7rem + 0.4vw, 1.05rem);
+  letter-spacing: 0.12em;
+  opacity: 0.85;
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .label:hover {
+    translate: none;
+  }
+}
