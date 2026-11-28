@@ -349,8 +349,16 @@ export const home = {
   contact: {
     index: '07',
     label: 'Kontakt',
-    heading: 'Napiš mi',
-    body: 'Stačí pár vět o tom, co děláš a co potřebuješ. Jestli víš termín nebo rozpočet, napiš ho taky. Odpovím do dvou dnů, většinou dřív a klidně i v noci.',
+    // OVĚŘIT: nadpis kontaktu
+    heading: 'Máš nápad? Tak mi napiš.',
+    // OVĚŘIT: texty kontaktu
+    body: 'Žádný formuláře na deset stran. Hoď mi pár vět o tom, co děláš a co tě štve na tom, co máš teď. Zbytek vymyslíme spolu, klidně u kafe.',
+    status: 'Beru nový projekty',
+    reply: 'odpovídám do dvou dnů, klidně i v noci',
+    channelsLabel: 'Kde mě najdeš',
+    channels: { mail: 'E-mail', mailNote: 'na delší věci', ig: 'Instagram', igNote: 'nejrychlejší, píšu tam furt' },
+    tipsLabel: 'Co mi napsat',
+    tips: ['Co děláš a pro koho', 'Co má web umět, nebo co nefunguje', 'Termín a rozpočet, jestli je víš'],
     copyLabel: 'Zkopírovat e-mail',
     copied: 'Zkopírováno',
     form: {

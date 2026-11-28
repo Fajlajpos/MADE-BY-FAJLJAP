@@ -306,8 +306,14 @@ export const home: typeof cs = {
   contact: {
     index: '07',
     label: 'Contact',
-    heading: 'Write to me',
-    body: "A few sentences about what you do and what you need is enough. If you know the deadline or budget, add that too. I reply within two days, usually sooner, and happily at night.",
+    heading: 'Got an idea? Then write to me.',
+    body: "No ten-page forms. Drop me a few lines about what you do and what bugs you about what you have now. We will figure out the rest together, over coffee if you like.",
+    status: 'Taking new projects',
+    reply: 'I reply within two days, even at night',
+    channelsLabel: 'Where to find me',
+    channels: { mail: 'E-mail', mailNote: 'for longer things', ig: 'Instagram', igNote: "fastest, I'm on it all the time" },
+    tipsLabel: 'What to tell me',
+    tips: ['What you do and for whom', "What the site should do, or what doesn't work", 'Deadline and budget, if you know them'],
     copyLabel: 'Copy e-mail',
     copied: 'Copied',
     form: {
