@@ -282,3 +282,20 @@
     justify-self: center;
   }
 }
+
+/* the torn-paper line on the footer's top edge: quiet, a little tilted */
+.tear {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  margin: 0 0 var(--space-7);
+  rotate: -0.6deg;
+  /* a touch darker, its fibres shaded more, a small tight shadow where it lifts off the page */
+  filter:
+    brightness(0.86)
+    contrast(1.15)
+    drop-shadow(0 1px 1px rgb(0 0 0 / 0.7))
+    drop-shadow(0 5px 6px rgb(0 0 0 / 0.45));
+  pointer-events: none;
+}

@@ -16,6 +16,9 @@ export async function Footer() {
   const { business } = site
   return (
     <footer className={styles.footer}>
+      {/* a thin torn-paper line along the top edge (public/textures, cut from a photo) */}
+      {/* eslint-disable-next-line @next/next/no-img-element -- decorative cut-out */}
+      <img className={styles.tear} src="/textures/rip-04.webp" alt="" aria-hidden="true" width={2937} height={219} loading="lazy" decoding="async" />
 
       <div className={styles.inner}>
         <div className={styles.lead}>

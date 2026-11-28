@@ -441,3 +441,27 @@
     translate: none;
   }
 }
+
+/* a piece of torn paper holding each print, cut from a torn strip (public/textures) */
+.photo {
+  position: relative;
+}
+
+.photo::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -1rem;
+  z-index: 1;
+  width: 50%;
+  height: 2.3rem;
+  translate: -50% 0;
+  rotate: calc(var(--tilt, 0deg) * -2);
+  background: url('/textures/rip-11.webp') 35% 50% / 520% 100% no-repeat;
+  filter: drop-shadow(0 2px 3px rgb(0 0 0 / 0.35));
+  pointer-events: none;
+}
+
+.photo:nth-child(2n)::before {
+  background-position: 70% 50%;
+}
