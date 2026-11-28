@@ -22,8 +22,6 @@ const easeOut = (t: number) => 1 - (1 - t) ** 3
  * With the film: muted autoplay only while on screen, a play button over the paused film, and
  * quiet controls for sound and pause. Reduced motion: full width from the start, no autoplay.
  */
-/** Your chrome frame or TV render to put round the video (a cut-out in /public/brand). Empty: the chrome bezel in CSS. */
-const FRAME_ART = ''
 
 export function Reel() {
   const { home, getSlot } = useContent()
@@ -79,6 +77,25 @@ export function Reel() {
     return () => io.disconnect()
   }, [])
 
+  // the viewfinder's timecode follows the film, frame by frame, without re-rendering
+  const timecode = useRef<HTMLSpanElement>(null)
+  useEffect(() => {
+    if (!playing) return
+    let raf = 0
+    const tick = () => {
+      const v = video.current
+      const el = timecode.current
+      if (v && el) {
+        const t = v.currentTime
+        const p = (n: number) => String(Math.floor(n)).padStart(2, '0')
+        el.textContent = `${p(t / 3600)}:${p((t / 60) % 60)}:${p(t % 60)}:${p((t % 1) * 25)}`
+      }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [playing])
+
   const togglePlay = () => {
     const v = video.current
     if (!v) return
@@ -126,46 +143,66 @@ export function Reel() {
         {/* the edges catching the cursor's light, like MADE BY FAJLAJP */}
         <canvas ref={processRim} className={styles.processRim} aria-hidden="true" />
       </div>
+      {/* the film on a camcorder's flip-out screen: the screen swings open on its hinge as the
+          section scrolls in; over the picture a viewfinder (REC / STBY, timecode, battery) */}
       <div ref={stage} className={styles.stage}>
-        {FRAME_ART && (
-          // eslint-disable-next-line @next/next/no-img-element -- a decorative cut-out frame round the screen
-          <img className={styles.frameArt} src={FRAME_ART} alt="" aria-hidden="true" />
-        )}
-        <div className={styles.frame} data-playing={playing || undefined}>
-          {media.video ? (
-            <>
-              <video
-                ref={video}
-                className={styles.video}
-                src={media.video}
-                poster={media.src || undefined}
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                aria-label={media.alt}
-                onPlay={() => setPlaying(true)}
-                onPause={() => setPlaying(false)}
-              />
-              <button
-                type="button"
-                className={styles.bigPlay}
-                onClick={togglePlay}
-                hidden={playing}
-                aria-label={reel.play}
-              >
-                <Slot3D object="play" className={styles.chrome} />
-              </button>
-            </>
-          ) : (
-            <div className={styles.soon} role="img" aria-label={`${media.alt}. ${reel.soon}`}>
-              <Slot3D object="play" className={styles.chrome} />
-              <p className={styles.note} aria-hidden="true">
-                <span className={styles.dot} />
-                {typo(reel.soon)}
-              </p>
+        <div className={styles.cam}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- the camera's body, a cut-out */}
+          <img className={styles.camBody} src="/brand/cam-body.webp" alt="" aria-hidden="true" width={651} height={1395} />
+          <div className={styles.camPanel}>
+            <div className={styles.frame} data-playing={playing || undefined}>
+              {media.video ? (
+                <>
+                  <video
+                    ref={video}
+                    className={styles.video}
+                    src={media.video}
+                    poster={media.src || undefined}
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    aria-label={media.alt}
+                    onPlay={() => setPlaying(true)}
+                    onPause={() => setPlaying(false)}
+                  />
+                  <button
+                    type="button"
+                    className={styles.bigPlay}
+                    onClick={togglePlay}
+                    hidden={playing}
+                    aria-label={reel.play}
+                  >
+                    <Slot3D object="play" className={styles.chrome} />
+                  </button>
+                </>
+              ) : (
+                <div className={styles.soon} role="img" aria-label={`${media.alt}. ${reel.soon}`}>
+                  <Slot3D object="play" className={styles.chrome} />
+                  <p className={styles.note} aria-hidden="true">
+                    {typo(reel.soon)}
+                  </p>
+                </div>
+              )}
+
+              {/* the viewfinder over the picture */}
+              <div className={styles.hud} aria-hidden="true">
+                <span className={styles.rec}>
+                  <i />
+                  {playing ? 'REC' : 'STBY'}
+                </span>
+                <span className={styles.spec}>4K · 25p</span>
+                <span ref={timecode} className={styles.tc}>
+                  00:00:00:00
+                </span>
+                <span className={styles.battery}>
+                  <i />
+                </span>
+              </div>
             </div>
-          )}
+            {/* eslint-disable-next-line @next/next/no-img-element -- the flip-out screen's bezel, a cut-out over the film */}
+            <img className={styles.camPanelImg} src="/brand/cam-panel.webp" alt="" aria-hidden="true" width={1557} height={1395} />
+          </div>
         </div>
 
         {media.video && (
