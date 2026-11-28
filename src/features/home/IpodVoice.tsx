@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import dynamic from 'next/dynamic'
 import { useContent } from '@/content/client'
 import { detectTier } from '@/three/quality'
@@ -131,17 +131,34 @@ export function IpodVoice({ src, title, sub, soon, cover }: Props) {
     else setPlaying(true)
   }
 
-  // a small 3D tilt toward the pointer (not on touch, not under reduced motion)
-  const onMove = (e: PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType !== 'mouse' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const r = e.currentTarget.getBoundingClientRect()
-    root.current?.style.setProperty('--mx', ((e.clientX - r.left) / r.width - 0.5).toFixed(3))
-    root.current?.style.setProperty('--my', ((e.clientY - r.top) / r.height - 0.5).toFixed(3))
-  }
-  const onLeave = () => {
-    root.current?.style.setProperty('--mx', '0')
-    root.current?.style.setProperty('--my', '0')
-  }
+  // the reflections follow the pointer while it is over the iPod itself (measured against the
+  // iPod, not the stage: on wide screens the stage spans the playlist too and lets clicks through)
+  useEffect(() => {
+    const el = root.current
+    if (!el) return
+    let raf = 0
+    const set = (x: number, y: number) => {
+      el.style.setProperty('--mx', x.toFixed(3))
+      el.style.setProperty('--my', y.toFixed(3))
+    }
+    const onMove = (e: globalThis.PointerEvent) => {
+      if (e.pointerType !== 'mouse') return
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        const r = el.getBoundingClientRect()
+        const x = (e.clientX - r.left) / r.width - 0.5
+        const y = (e.clientY - r.top) / r.height - 0.5
+        if (Math.abs(x) > 0.5 || Math.abs(y) > 0.5) set(0, 0)
+        else set(x, y)
+      })
+    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    window.addEventListener('pointermove', onMove, { passive: true })
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('pointermove', onMove)
+    }
+  }, [])
 
   // lay the screen onto the glass for the iPod's current size
   const screen = useRef<HTMLDivElement>(null)
@@ -162,7 +179,7 @@ export function IpodVoice({ src, title, sub, soon, cover }: Props) {
   const p = dur ? Math.min(1, now / dur) : 0
 
   return (
-    <div className={styles.stage} onPointerMove={onMove} onPointerLeave={onLeave}>
+    <div className={styles.stage}>
       <div ref={root} className={styles.ipod} data-ipod="" data-playing={playing || undefined}>
         {HEADPHONES_ART && <Earphones />}
         {/* eslint-disable-next-line @next/next/no-img-element -- a cut-out photo of the player */}
